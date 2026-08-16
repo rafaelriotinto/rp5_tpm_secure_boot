@@ -115,7 +115,15 @@ IMAGE_INSTALL:append = " file binutils tpm2-tools tpm2-tss libtss2-tcti-device t
 
 # config.txt extras
 RPI_EXTRA_CONFIG = "enable_uart=0"
+
+# SSH access for development (lab bench only: together with debug-tweaks this
+# gives passwordless root over the network -- do not use outside the lab)
+EXTRA_IMAGE_FEATURES += "ssh-server-dropbear"
 ```
+
+Networking note: no extra configuration is needed for wired Ethernet — the
+image ships systemd-networkd with a default DHCP-on-Ethernet config
+(`80-wired.network`), so the board obtains a lease as soon as it is cabled.
 
 ## 5. Build the image
 
