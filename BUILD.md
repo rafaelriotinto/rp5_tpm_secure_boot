@@ -112,7 +112,6 @@ RPI_USE_U_BOOT = "1"
 # TPM 2.0 userspace (tpm2-tools + TSS) and supporting utilities
 DISTRO_FEATURES:append = " tpm2"
 IMAGE_INSTALL:append = " file binutils tpm2-tools tpm2-tss libtss2-tcti-device tpm2-tools-env"
-PACKAGECONFIG:append:pn-tpm2-tss = " tcti-device"
 
 # config.txt extras
 RPI_EXTRA_CONFIG = "enable_uart=0"
