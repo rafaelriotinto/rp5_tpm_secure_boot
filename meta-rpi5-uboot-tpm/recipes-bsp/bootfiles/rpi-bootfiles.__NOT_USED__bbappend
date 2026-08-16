@@ -1,0 +1,19 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+DEPENDS:append = " dtc-native"
+
+SRC_URI:append = " \
+    file://letstrust-tpm-overlay.dts \
+"
+
+do_compile:append() {
+    dtc -@ -I dts -O dtb \
+        -o ${WORKDIR}/letstrust-tpm.dtbo \
+        ${WORKDIR}/letstrust-tpm-overlay.dts
+}
+
+# CHANGE: Use do_deploy to place the file where the image builder can find it
+do_deploy:append() {
+    install -d ${DEPLOYDIR}/overlays
+    install -m 0644 ${WORKDIR}/letstrust-tpm.dtbo \
+        ${DEPLOYDIR}/overlays/letstrust-tpm.dtbo
+}

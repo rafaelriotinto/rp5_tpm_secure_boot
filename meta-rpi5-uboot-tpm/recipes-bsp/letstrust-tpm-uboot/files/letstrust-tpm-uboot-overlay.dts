@@ -1,0 +1,40 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "raspberrypi,5-model-b", "brcm,bcm2712";
+
+    fragment@0 {
+        target-path = "/";
+        __overlay__ {
+            spi_gpio: spi-gpio {
+                compatible = "spi-gpio";
+                #address-cells = <1>;
+                #size-cells = <0>;
+                
+                /* 
+                 * Use RP1 GPIO controller (expansion header GPIOs)
+                 * Standard SPI0 pins on 40-pin header:
+                 * - GPIO 9  (pin 21) = MISO
+                 * - GPIO 10 (pin 19) = MOSI  
+                 * - GPIO 11 (pin 23) = SCLK
+                 * - GPIO 7  (pin 26) = CE1 (chip select)
+                 */
+                gpio-sck = <&rp1_gpio 11 0>;
+                gpio-mosi = <&rp1_gpio 10 0>;
+                gpio-miso = <&rp1_gpio 9 0>;
+                cs-gpios = <&rp1_gpio 7 1>;  /* Active low */
+                
+                num-chipselects = <1>;
+                
+                slb9670: tpm@0 {
+                    compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+                    reg = <0>;  /* First (and only) CS on soft-SPI bus */
+                    spi-max-frequency = <100000>;  /* 1 MHz for soft-SPI */
+                    reset-gpios = <&rp1_gpio 24 1>;  /* GPIO 24, active low */
+                    status = "okay";
+                };
+            };
+        };
+    };
+};

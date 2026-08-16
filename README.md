@@ -30,9 +30,10 @@ Linux
 | Path | Contents |
 |------|----------|
 | `docker/` | Ubuntu 22.04 Yocto build container (Dockerfile + usage commands) |
+| `meta-rpi5-uboot-tpm/` | Custom Yocto layer (Scarthgap): machine `raspberrypi5-uboot-tpm`, U-Boot/kernel TPM config fragments, LetsTrust TPM device tree overlays (Linux hardware-SPI + U-Boot soft-SPI variants), tpm2-tools environment |
 
-*(More components — Yocto layer, U-Boot configuration, device tree overlays,
-provisioning scripts — will be added as the work progresses.)*
+*(More components — U-Boot measured-boot patches, signing/provisioning
+scripts — will be added as the work progresses.)*
 
 ## Build environment quick start
 
