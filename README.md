@@ -52,4 +52,5 @@ docker run -it \
   ubuntu-$(whoami) /bin/bash
 ```
 
-See `docker/instructions.sh` for the full build / flash / TPM command reference.
+See [`docker/README.md`](docker/README.md) for full setup, build, flash, and TPM
+command reference.
