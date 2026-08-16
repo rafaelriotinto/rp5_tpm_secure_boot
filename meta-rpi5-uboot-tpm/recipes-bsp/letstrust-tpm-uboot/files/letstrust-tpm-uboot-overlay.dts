@@ -30,7 +30,7 @@
                 slb9670: tpm@0 {
                     compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
                     reg = <0>;  /* First (and only) CS on soft-SPI bus */
-                    spi-max-frequency = <100000>;  /* 1 MHz for soft-SPI */
+                    spi-max-frequency = <100000>;  /* 100 kHz for soft-SPI */
                     reset-gpios = <&rp1_gpio 24 1>;  /* GPIO 24, active low */
                     status = "okay";
                 };
