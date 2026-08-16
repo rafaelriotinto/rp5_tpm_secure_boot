@@ -35,22 +35,14 @@ Linux
 *(More components — U-Boot measured-boot patches, signing/provisioning
 scripts — will be added as the work progresses.)*
 
-## Build environment quick start
+## Building
 
-```bash
-cd docker
-docker build \
-  --build-arg UNAME=$(whoami) \
-  --build-arg UID=$(id -u) \
-  --build-arg GID=$(id -g) \
-  -t ubuntu-$(whoami) .
+Full from-scratch instructions: [`BUILD.md`](BUILD.md). Container details:
+[`docker/README.md`](docker/README.md).
 
-docker run -it \
-  -v $HOME/LINUX_DOCKER_SHARE:/LINUX_DOCKER_SHARE \
-  -w /LINUX_DOCKER_SHARE \
-  --name linux_build \
-  ubuntu-$(whoami) /bin/bash
-```
+## Related repositories
 
-See [`docker/README.md`](docker/README.md) for full setup, build, flash, and TPM
-command reference.
+- [rafaelriotinto/u-boot](https://github.com/rafaelriotinto/u-boot) — fork of
+  [xen-troops/u-boot](https://github.com/xen-troops/u-boot) (RP1 PCIe/GPIO/clock
+  support for the Pi 5); branch `rpi5-tpm-measured-boot` carries this project's
+  TPM measured-boot work.

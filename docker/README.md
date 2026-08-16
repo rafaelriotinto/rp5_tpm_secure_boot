@@ -16,7 +16,7 @@ The container is stateless: all sources and build artifacts live in a host
 directory bind-mounted into the container. Create it first:
 
 ```bash
-mkdir -p $HOME/LINUX_DOCKER_SHARE
+mkdir -p $HOME/LINUX_YOCTO_RP5_TPM_ENV
 ```
 
 Everything (Yocto tree, U-Boot sources, build output) will live under this
@@ -40,28 +40,28 @@ docker build \
 
 ```bash
 docker run -it \
-  -v $HOME/LINUX_DOCKER_SHARE:/LINUX_DOCKER_SHARE \
-  -w /LINUX_DOCKER_SHARE \
-  --name linux_build \
+  -v $HOME/LINUX_YOCTO_RP5_TPM_ENV:/LINUX_YOCTO_RP5_TPM_ENV \
+  -w /LINUX_YOCTO_RP5_TPM_ENV \
+  --name rp5_tpm_build \
   ubuntu-$(whoami) /bin/bash
 ```
 
 Exit with `exit`. On subsequent sessions, reuse the same container:
 
 ```bash
-docker start -ai linux_build
+docker start -ai rp5_tpm_build
 ```
 
 To discard and recreate it (no work is lost — everything is on the shared volume):
 
 ```bash
-docker rm -f linux_build
+docker rm -f rp5_tpm_build
 ```
 
 ## 4. Yocto quick reference (inside the container)
 
 ```bash
-cd /LINUX_DOCKER_SHARE/poky
+cd /LINUX_YOCTO_RP5_TPM_ENV/poky
 source oe-init-build-env        # sets up build/ and puts bitbake on PATH
 
 bitbake core-image-base         # full image build
@@ -70,12 +70,12 @@ bitbake core-image-base         # full image build
 bitbake -c cleansstate u-boot && bitbake core-image-base
 ```
 
-(See the top-level README for obtaining the Yocto tree and layers.)
+(See [`../BUILD.md`](../BUILD.md) for obtaining the Yocto tree and layers.)
 
 ## 5. Flashing the image (on the host)
 
 The generated image is at
-`$HOME/LINUX_DOCKER_SHARE/poky/build/tmp/deploy/images/raspberrypi5-uboot-tpm/`.
+`$HOME/LINUX_YOCTO_RP5_TPM_ENV/poky/build/tmp/deploy/images/raspberrypi5-uboot-tpm/`.
 
 ```bash
 # Unmount any auto-mounted SD card partitions first (device name may vary):
