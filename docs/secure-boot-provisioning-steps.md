@@ -113,20 +113,107 @@ CRITICAL: `private.pem` must be backed up in ≥2 safe locations and NEVER place
 in the OS image or boot.img. The key dir is outside any git repo. The thesis
 records only the public hash, never the private key.
 
-## Phase B (dev mode, reversible) — NOT YET STARTED
+## Phase B (dev mode, reversible) — DETAILED RECIPE
 
-1. ~~Generate/locate RSA-2048 key~~ DONE (above). Back up private.pem.
-2. Build + sign boot.img (rpi-make-boot-image → rpi-eeprom-digest → boot.sig).
-3. Sign EEPROM WITHOUT program_pubkey (`update-pieeprom.sh -f -k KEY`), flash
-   via rpiboot → signature checking active, key hash NOT yet in OTP. Reversible.
-4. Validate: signed boot works, tampered boot.img rejected. Days of testing.
+Reversibility guarantee: the Pi 5 secure-boot flow only becomes irreversible
+when `program_pubkey=1` is set in `secure-boot-recovery5/config.txt` and
+flashed. That line is COMMENTED OUT for all of Phase B. Signing + flashing the
+EEPROM here activates signature *verification* and embeds our public key, but
+does NOT burn OTP → the factory EEPROM can be restored at any time.
+
+### B.0 Host prerequisite (one-time)
+```bash
+sudo apt install -y python3-pycryptodome   # required by update-pieeprom.sh for RSA signing
+```
+
+### B.1 Back up the current (factory) EEPROM — DO BEFORE ANY WRITE
+Enter RPIBOOT mode (power button hold + USB-C), then expose storage via the
+mass-storage gadget and read the SPI flash:
+```bash
+cd usbboot && ./rpiboot -d mass-storage-gadget64
+# board appears on host as a USB block device (dmesg → /dev/sdX);
+# the bootloader SPI flash is one of the small exposed devices.
+# Save a full backup image:
+sudo dd if=/dev/sdX of=pieeprom-factory-backup.bin bs=1M
+```
+(Exact device node recorded when executed. Keep this backup — it restores the
+original bootloader if anything goes wrong.)
+
+### B.2 Build the signed EEPROM image (dev mode, no OTP)
+Work in a copy of `usbboot/secure-boot-recovery5/` (Pi 5 / BCM2712 dir):
+- `boot.conf` — bootloader config to embed. Default is sensible:
+  `BOOT_ORDER=0xf2461` (SD first, then USB/NVMe/network),
+  `ENABLE_SELF_UPDATE=0` (block unsigned bootloader auto-updates),
+  `BOOT_UART=1`, `POWER_OFF_ON_HALT=1`.
+- `config.txt` — MUST keep `program_pubkey=1` COMMENTED (dev mode).
+
+Sign the EEPROM + counter-sign firmware with our key:
+```bash
+KEY=$LINUX_YOCTO_RP5_TPM_ENV/secure-boot-keys/private.pem
+cd usbboot/secure-boot-recovery5
+../tools/update-pieeprom.sh -f -k "${KEY}"
+# produces signed pieeprom.bin (+ pieeprom.sig); embeds our public key.
+```
+(`-f` counter-signs the firmware, required on BCM2712. `-r`/`-fr` counter-signs
+recovery.bin — only needed AFTER secure boot is enabled, not in dev mode.)
+
+### B.3 Flash the signed EEPROM via rpiboot (reversible)
+Enter RPIBOOT mode again, then:
+```bash
+cd usbboot/secure-boot-recovery5
+mkdir -p metadata
+../rpiboot -d . -j metadata
+```
+After this the bootloader verifies boot.img/boot.sig against our key, but OTP
+is still virgin (nvmem_cust0 all zero — re-check to confirm).
+
+### B.4 Build + sign boot.img
+```bash
+# build the Pi5 boot.img (see docs/research-bootimg-blkmap.md level-2):
+usbboot/tools/rpi-make-boot-image -d bootfs/ -o boot.img -a 64
+# sign it → boot.sig (SHA256 digest + RSA signature):
+usbboot/tools/rpi-eeprom-digest -i boot.img -o boot.sig -k "${KEY}"
+# place boot.img + boot.sig on the SD boot partition (scp/SSH).
+```
+
+### B.5 Validate (days of testing before Phase C)
+- Signed boot.img boots normally.
+- A TAMPERED or UNSIGNED boot.img is REJECTED by the bootloader (capture the
+  serial log of the rejection — thesis evidence).
+- Re-confirm `nvmem_cust0` still all-zero (OTP untouched).
+- Optionally restore the factory EEPROM (B.1 backup) to prove full
+  reversibility, then re-flash the signed one.
 
 ## Phase C (OTP burn, IRREVERSIBLE) — GATED
 
-Only after Phase B is validated: set `program_pubkey=1` in the recovery
-config, flash via rpiboot → SHA-256 of public key written to OTP, secure boot
-permanently enforced. Requires the pre-burn checklist (EEPROM backup, key
-backed up in 2 places, N clean dev-mode boots).
+Only after Phase B is validated (several clean dev-mode boots).
+
+Pre-burn checklist (ALL must be true):
+- [ ] Factory EEPROM backup exists (B.1) and restore was rehearsed.
+- [ ] private.pem backed up in >=2 safe locations (DONE 2026-08-17).
+- [ ] Signed boot works AND tampered boot rejected in dev mode.
+- [ ] nvmem_cust0 confirmed still zero before the burn.
+- [ ] Tutor sign-off on burning the sacrificial board.
+
+Burn:
+```bash
+cd usbboot/secure-boot-recovery5
+# edit config.txt: uncomment  program_pubkey=1
+# (optional: recovery_reboot=1 to auto-reboot after flashing)
+../tools/update-pieeprom.sh -f -k "${KEY}"   # re-sign with program_pubkey set
+mkdir -p metadata && ../rpiboot -d . -j metadata   # flashes + programs OTP
+```
+IRREVERSIBLE: writes SHA256(N||e) of our key to OTP customer rows, permanently
+enforces signed boot, and disables loading recovery.bin from SD/EMMC.
+
+Proof of burn:
+```bash
+# after reboot, from Linux:
+hexdump -C /sys/bus/nvmem/devices/nvmem_cust0/nvmem
+# must now contain: 0e4da3d85c697bf14d80c93d4257754edc7ab80290b0ce317823182b782160b0
+```
+Final test: an unsigned/wrong-key boot.img must fail to boot even after power
+cycle (enforcement is now in OTP, not just EEPROM config).
 
 ## Status
 
