@@ -181,7 +181,31 @@ DONE 2026-08-17. Verified:
 - Reverting later = flash the unsigned reference `pieeprom.original.bin`
   (2026-05-26) via rpiboot (Option A: no per-board backup; generic recovery).
 
-### B.3 Flash the signed EEPROM via rpiboot (reversible)
+### B.3 Flash the signed EEPROM via rpiboot (reversible) — DONE (2026-08-17)
+
+Executed:
+- Board entered RPIBOOT mode (power-button method); enumerated as 0a5c:2712.
+- Final safety check before flashing: `program_pubkey=1` confirmed absent
+  from config.txt (dev mode).
+- Flash required root for raw USB access; either run rpiboot with sudo or add
+  a udev rule for vendor 0a5c (first unprivileged attempt failed with
+  "Permission to access USB device denied").
+- `sudo ../rpiboot -d . -j metadata` output: bootcode5.bin sent -> second
+  stage boot server -> config.txt/pieeprom.bin/pieeprom.sig loaded ->
+  "Second stage boot server done".
+- rpiboot wrote a per-device metadata JSON (saved:
+  `provisioning/baseline/flash-metadata-devmode-0af4f481.json`), the device's
+  own record of the flash:
+  - EEPROM_UPDATE: "success"
+  - EEPROM_HASH: 50257d797c803383095209e66908ee61ecc08bc4eb0f5aa69b4150cda084e2de
+  - CUSTOMER_KEY_HASH: all zeros  -> OTP untouched (dev mode confirmed)
+  - SIGNATURE_MODE: 0, JTAG_LOCKED: 0
+  - USER_BOARDREV: a04171; FACTORY_UUID: 000000911045808726 = the DUID read
+    earlier from /chosen/rpi-duid (cross-channel identity confirmation);
+    MAC_ADDR/WIFI/BT: 88:a2:9e:82:bb:4d/4f/52.
+
+(original planned commands below)
+
 Enter RPIBOOT mode again, then:
 ```bash
 cd usbboot/secure-boot-recovery5
