@@ -172,6 +172,15 @@ cd usbboot/secure-boot-recovery5
 (`-f` counter-signs the firmware, required on BCM2712. `-r`/`-fr` counter-signs
 recovery.bin — only needed AFTER secure boot is enabled, not in dev mode.)
 
+DONE 2026-08-17. Verified:
+- Safety: `program_pubkey=1` confirmed COMMENTED in config.txt before signing
+  → this image does NOT burn OTP.
+- Outputs: pieeprom.bin (2 MB) + pieeprom.sig produced.
+- Read-back config (`rpi-eeprom-config pieeprom.bin`) shows our boot.conf.
+- Confirmed OUR public key modulus (little-endian) is embedded in pieeprom.bin.
+- Reverting later = flash the unsigned reference `pieeprom.original.bin`
+  (2026-05-26) via rpiboot (Option A: no per-board backup; generic recovery).
+
 ### B.3 Flash the signed EEPROM via rpiboot (reversible)
 Enter RPIBOOT mode again, then:
 ```bash
