@@ -48,19 +48,34 @@ Key tools in `usbboot/tools/`:
 (If the host USB-C port cannot supply ≥900 mA, power the board via the 40-pin
 5V header and use USB-C for data only.)
 
-## Read-only state capture (before any changes) — PENDING
+## Read-only state capture (before any changes) — DONE (2026-08-17)
 
-Purpose: record the virgin state for the thesis (customer key hash = 0 →
-secure boot not yet enabled) and back up the EEPROM before modification.
+The minimal Yocto image has no `vcgencmd`, but the kernel exposes OTP directly
+via nvmem sysfs (raspberrypi-firmware nvmem driver). Captured from the running
+OS over SSH — pure reads:
 
-Planned commands (mass-storage-gadget exposes EEPROM without writing):
 ```bash
-# boot the board into the USB mass-storage gadget via rpiboot
-cd usbboot && ./rpiboot -d mass-storage-gadget64
-# ... then read EEPROM / dump OTP (exact commands recorded when executed)
+# Customer OTP rows (where the secure-boot public-key SHA-256 goes):
+hexdump -C /sys/bus/nvmem/devices/nvmem_cust0/nvmem   # 32 bytes
+# Device-specific private key region:
+hexdump -C /sys/bus/nvmem/devices/nvmem_priv0/nvmem   # 64 bytes
+# Full OTP:
+hexdump -C /sys/bus/nvmem/devices/nvmem_otp0/nvmem    # 768 bytes
+# Also available: nvmem_mac0 (MAC).
 ```
-Also: `vcgencmd otp_dump` from the running OS captures OTP rows (customer rows
-0..7 should be zero pre-provisioning). Recorded as the "before" baseline.
+
+**Baseline result (virgin board, serial cceddb120af4f481):**
+- `nvmem_cust0`: ALL ZERO → secure boot NOT enabled (no customer key hash).
+- `nvmem_priv0`: ALL ZERO → device-specific key unused.
+- Full OTP 768 bytes; the only non-zero rows are board identity/config
+  (revision a04171, SoC serial, MAC-derived bytes) — NOT secure-boot data.
+
+Artifacts saved: `provisioning/baseline/otp_baseline.txt`, `otp_full.txt`.
+This is the "before" evidence; re-reading `nvmem_cust0` after Phase C must show
+the public-key hash, proving the burn.
+
+EEPROM image backup (via rpiboot/mass-storage-gadget) still to be done before
+the first EEPROM write in Phase B.
 
 ## Phase B (dev mode, reversible) — NOT YET STARTED
 
