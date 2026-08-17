@@ -113,3 +113,22 @@ Notes:
 4. boot.scr-inside-boot.img (re-signable flexibility) vs compiled-in bootcmd
    (immutable) — both inside the signature envelope.
 5. Verify nothing depends on saveenv/uboot.env before ENV_IS_NOWHERE.
+
+## Level-1 validation — DONE (2026-08-17, on hardware)
+
+Interactive test at the U-Boot prompt (blkmap-enabled build of the same day),
+with a hand-made 40 MB FAT boot.img (Image + DTB) placed as a plain file on
+the normal boot partition:
+
+- `fatload mmc 0:1 0x20000000 boot.img` — 40 MB in 1.7 s
+- `blkmap create` + `map ... mem` — mapped (0x14000 blocks)
+- `fatls blkmap <dev>` — lists Image + DTB from inside the RAM image
+- `fatload blkmap <dev> ${kernel_addr_r} Image` — 27.9 MB in 8 ms (3.2 GiB/s)
+- `booti` with marker bootargs — Linux booted; `/proc/cmdline` shows the
+  marker (kernel provably from inside boot.img)
+- PCR8 unchanged (same kernel bytes); PCR1 changed due to the marker —
+  incidental live proof that cmdline tampering is measurement-visible.
+
+FAT autodetect on the partition-table-less image worked without a partition
+suffix (open question 1 resolved). Next: level 2 — full boot.img with inner
+config.txt, boot_ramdisk=1, digest boot.sig; then Yocto packaging recipe.
