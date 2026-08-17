@@ -29,6 +29,19 @@ Official required contents of boot.img:
 For us the "kernel" inside boot.img is U-Boot (kernel_2712.img); our Image +
 DTB + overlays + our two TPM overlays also go in. This is the level-2 image.
 
+**Pi 5 correction (verified on hardware Aug 17 2026):** the "GPU firmware
+start.elf/fixup.dat inside boot.img" requirement is PI 4 context. On the Pi 5
+(BCM2712) the GPU firmware is embedded in the EEPROM bootloader (bootmain), NOT
+loaded from the card. Our board's boot log shows the firmware reads only
+config.txt, bcm2712-rpi-5-b.dtb, overlays, cmdline.txt, kernel_2712.img
+(U-Boot) — it NEVER loads any start*.elf. So the Pi 5 boot.img does NOT need
+start.elf/fixup.dat. The official secure-boot-example/boot.img contains
+start4.elf (Pi 4 firmware) only because it is a multi-board image with
+[cm4]/[cm5] sections. Pi 5 boot.img contents: config.txt, cmdline.txt,
+bcm2712-rpi-5-b.dtb, overlays/ (incl. our two TPM overlays + overlay_map.dtb +
+bcm2712d0.dtbo), kernel_2712.img (U-Boot), and Image (Linux, read by U-Boot
+via blkmap).
+
 Builder: `usbboot/tools/rpi-make-boot-image -d <bootfs_dir> -o boot.img`
 (uses mtools, no root needed; -b pi5 prunes to board files). This replaces my
 hand-rolled mformat/mcopy approach — use the official tool for the real image.
