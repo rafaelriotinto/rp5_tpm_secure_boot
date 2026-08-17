@@ -114,18 +114,30 @@ Attestation note: the event log carries the sanitized blob's digest; document
 the strip+pack rule so a verifier can reproduce the expected hash from a golden
 DT.
 
-## Hardware verification TODO (after flashing the new image)
+## Hardware verification — DONE (2026-08-17, on the clean-build image)
 
-On two consecutive boots (one power cycle, one warm reset):
+Method: `fdt print /` at the U-Boot prompt (warm boot) + md5sum diff of all
+2924 files under `/proc/device-tree` between a cold boot and a warm reboot.
 
-```
-fdt addr ${fdtcontroladdr}
-fdt header
-fdt print /chosen
-fdt print /                      # capture full serial log
-hash sha256 ${fdtcontroladdr} <totalsize-from-fdt-header>
-```
+**Results:**
 
-Diff the dumps to enumerate every varying property (including any outside
-/chosen); confirm whether totalsize itself varies; decide whether whole-/chosen
-deletion fits the attestation policy.
+- `fdt_totalsize` is stable: 0x144ea (83178 bytes) on both boot types.
+- Exactly TWO properties differ between cold and warm boot, both under
+  `/chosen/bootloader`:
+  - `rsts` — reset reason flags: `0x1000` (power-on) vs `0x1020` (soft reset)
+  - `count` — resets since power-on: 1 on cold boot, increments each warm boot
+    (varies EVERY boot, not just cold-vs-warm)
+- `/chosen/kaslr-seed` and `/chosen/rng-seed` are firmware-injected random
+  values (observed at U-Boot time; the kernel consumes/zeroes them so they
+  don't appear in the Linux-level diff).
+- Everything else in the tree (2920+ files) is bit-identical across boot types.
+- The U-Boot `hash` command is not enabled in the current config
+  (`CONFIG_CMD_HASH` — add to uboot-tpm.cfg for convenience).
+
+**Final strip list** for the sanitizer:
+`/chosen/kaslr-seed`, `/chosen/rng-seed`, and the whole `/chosen/bootloader`
+node (covers rsts + count and is future-proof against new firmware state
+there). Note `/chosen/bootloader/version`/`build-timestamp` are firmware
+identity — deleting the node loses them from PCR0; they are still attestable
+via other channels (EEPROM version is fixed by the signed BL2). Everything
+else stays measured.
