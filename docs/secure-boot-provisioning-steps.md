@@ -1,0 +1,84 @@
+# Secure-Boot Provisioning — Executed Steps (RPi 5)
+
+*Live log of the actual commands run to provision secure boot on the 1 GB
+sacrificial board (serial cceddb120af4f481). Every step recorded for thesis
+reproduction. Host: Ubuntu desktop. Target: Pi 5 in RPIBOOT mode over USB-C.*
+
+## Terminology / safety
+
+- **RPIBOOT mode**: the BootROM waits for the host to send boot code over USB
+  instead of booting from SD/EEPROM. Entered on a regular Pi 5 by holding the
+  power button while applying power, then releasing. Momentary — nothing to
+  revert. Enumerates on the host as USB `0a5c:2712 Broadcom BCM2712D0 Boot`.
+- Nothing is written to EEPROM/OTP until `rpiboot -d <dir>` is run against an
+  EEPROM image, and the OTP key-hash burn happens ONLY if `program_pubkey=1`
+  is set in that image's config.txt. All steps below up to Phase B/dev-mode
+  are read-only or reversible.
+
+## Host tooling: building rpiboot
+
+Source: github.com/raspberrypi/usbboot (cloned to
+`$LINUX_YOCTO_RP5_TPM_ENV/usbboot`).
+
+```bash
+sudo apt install -y libusb-1.0-0-dev pkg-config   # build deps (gcc/make already present)
+cd usbboot
+make                                              # builds ./rpiboot + firmware headers
+./rpiboot -h                                       # sanity check
+```
+
+Built rpiboot version: `e50a7096` (2026/08/17). The build also embeds the
+mass-storage-gadget and recovery firmware used below.
+
+Key tools in `usbboot/tools/`:
+- `rpi-eeprom-config` — read/modify the config embedded in a pieeprom image
+- `rpi-eeprom-digest` — produce boot.sig (hash + RSA signature)
+- `update-pieeprom.sh` — apply config + sign the EEPROM image (`-f` counter-
+  signs firmware; `-fr` also counter-signs recovery.bin)
+- `rpi-otp-private-key` — OTP private-key helper (device-specific key feature)
+
+## Entering RPIBOOT mode (Pi 5)
+
+1. Board off; connect USB-C from host desktop to the Pi's USB-C (power) port.
+2. Press and hold the Pi power button.
+3. While holding, apply power (the host USB-C provides it).
+4. Release the button ~1 s after power-on.
+5. Verify on host: `lsusb | grep 0a5c:2712` → `Broadcom BCM2712D0 Boot`.
+
+(If the host USB-C port cannot supply ≥900 mA, power the board via the 40-pin
+5V header and use USB-C for data only.)
+
+## Read-only state capture (before any changes) — PENDING
+
+Purpose: record the virgin state for the thesis (customer key hash = 0 →
+secure boot not yet enabled) and back up the EEPROM before modification.
+
+Planned commands (mass-storage-gadget exposes EEPROM without writing):
+```bash
+# boot the board into the USB mass-storage gadget via rpiboot
+cd usbboot && ./rpiboot -d mass-storage-gadget64
+# ... then read EEPROM / dump OTP (exact commands recorded when executed)
+```
+Also: `vcgencmd otp_dump` from the running OS captures OTP rows (customer rows
+0..7 should be zero pre-provisioning). Recorded as the "before" baseline.
+
+## Phase B (dev mode, reversible) — NOT YET STARTED
+
+1. Generate/locate RSA-2048 key (`openssl genrsa 2048 > private.pem`), back up.
+2. Build + sign boot.img (rpi-make-boot-image → rpi-eeprom-digest → boot.sig).
+3. Sign EEPROM WITHOUT program_pubkey (`update-pieeprom.sh -f -k KEY`), flash
+   via rpiboot → signature checking active, key hash NOT yet in OTP. Reversible.
+4. Validate: signed boot works, tampered boot.img rejected. Days of testing.
+
+## Phase C (OTP burn, IRREVERSIBLE) — GATED
+
+Only after Phase B is validated: set `program_pubkey=1` in the recovery
+config, flash via rpiboot → SHA-256 of public key written to OTP, secure boot
+permanently enforced. Requires the pre-burn checklist (EEPROM backup, key
+backed up in 2 places, N clean dev-mode boots).
+
+## Status
+
+- 2026-08-17: rpiboot built (e50a7096). Board enters RPIBOOT mode via USB-C +
+  power-button. Read-only state capture is the next action; no EEPROM/OTP
+  writes performed yet.
