@@ -132,3 +132,22 @@ the normal boot partition:
 FAT autodetect on the partition-table-less image worked without a partition
 suffix (open question 1 resolved). Next: level 2 — full boot.img with inner
 config.txt, boot_ramdisk=1, digest boot.sig; then Yocto packaging recipe.
+
+## Level-2 validation — DONE (2026-08-17, on the 1GB secure-boot board)
+
+Built a proper Pi5 boot.img with the OFFICIAL builder
+(usbboot/tools/rpi-make-boot-image -d bootfs -o boot.img -a 64), containing
+only Pi5-relevant files (config.txt, cmdline.txt, bcm2712-rpi-5-b.dtb,
+overlays/ incl. our two TPM overlays + overlay_map.dtb + bcm2712d0.dtbo,
+kernel_2712.img=U-Boot, Image) — NO start.elf (Pi5 GPU firmware is in EEPROM).
+Tool produced a minimal FAT16 (28 MB) vs the hand-rolled 40 MB.
+
+Result at the U-Boot prompt on the target: fatload boot.img -> blkmap map ->
+fatls lists Image+dtb -> fatload blkmap Image (4.3 GiB/s) -> booti with marker
+-> Linux up, /proc/cmdline shows bootimg.level2=1, PCR8 unchanged.
+
+So the official boot.img structure boots correctly via the U-Boot blkmap path.
+Remaining for full secure boot (Phase B): sign boot.img (rpi-eeprom-digest ->
+boot.sig), sign+flash EEPROM in dev mode (update-pieeprom.sh -f, WITHOUT
+program_pubkey) via rpiboot, validate BL2-verified ramdisk boot, then the
+gated OTP burn. See docs/secure-boot-official-notes.md.
