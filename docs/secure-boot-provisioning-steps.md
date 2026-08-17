@@ -236,6 +236,53 @@ usbboot/tools/rpi-eeprom-digest -i boot.img -o boot.sig -k "${KEY}"
 # place boot.img + boot.sig on the SD boot partition (scp/SSH).
 ```
 
+### B.3b FAILURE + FIX (2026-08-17) — counter-signing pitfall (IMPORTANT)
+
+The first B.3 flash used `update-pieeprom.sh -f` (firmware counter-signing per
+the Pi5 README). Result: UNBOOTABLE board — solid red LED, zero serial output,
+because the BCM2712 ROM rejects a customer-counter-signed second stage when the
+OTP customer key hash is still zero (the ROM "checks against a key hash of
+zero" — documented for recovery.bin in secure-boot-recovery5/README.md; applies
+equally to the flashed bootsys). The `-f` flow implicitly assumes OTP is being
+programmed in the same operation.
+
+Recovery + correct dev mode (from the Pi4 secure-boot-recovery README):
+- `SIGNED_BOOT=1` added to boot.conf → bootloader ONLY loads boot.img and
+  verifies it against boot.sig (development mode; becomes implicit+permanent
+  once OTP is burned).
+- Sign WITHOUT `-f`:  `../tools/update-pieeprom.sh -k "$KEY"`  (config signed,
+  public key embedded, bootsys NOT counter-signed → ROM accepts on zero-OTP).
+- Reflash via rpiboot (board recovered; RPIBOOT lives in ROM and always works).
+- After flashing, firmware signals success with a FAST-BLINKING GREEN LED and
+  waits for power cycle (no recovery_reboot set).
+
+LESSON (thesis): `-f`/`-fr` counter-signing belongs exclusively to the Phase C
+OTP-burn flash. Dev mode = config-signature only + SIGNED_BOOT=1.
+
+### B.3c First verified boot — SUCCESS (2026-08-17)
+
+Serial evidence of the complete chain (new EEPROM 2026-05-26):
+```
+RPi: BOOTLOADER release VERSION:086b83e3 DATE: 2026/05/26
+secure-boot
+Loading boot.img ...
+boot.sig
+rsa2048: 76603a6c...            <- our signature
+Verifying / RSA verify
+rsa-verify pass (0x0)           <- BL2 verified boot.img with OUR key
+U-Boot 2024.04 (Aug 17 2026)    <- booted from inside the verified image
+[MBOOT] ... -> PCR 0            <- measured boot active
+Created "bi" ... 5.2 GiB/s      <- Image loaded from inside boot.img (blkmap)
+Starting kernel ...
+```
+
+Post-boot state:
+- PCR8/9 unchanged golden values (kernel/initrd identical).
+- PCR0/PCR1 have NEW values (bootloader version in DT; secure-boot state in
+  /chosen; expected) and are STABLE across two consecutive verified boots →
+  these are the golden values for the secure-boot configuration.
+- nvmem_cust0 re-checked: ALL ZERO (OTP untouched; dev mode fully reversible).
+
 ### B.5 Validate (days of testing before Phase C)
 - Signed boot.img boots normally.
 - A TAMPERED or UNSIGNED boot.img is REJECTED by the bootloader (capture the
