@@ -191,7 +191,19 @@ mkdir -p metadata
 After this the bootloader verifies boot.img/boot.sig against our key, but OTP
 is still virgin (nvmem_cust0 all zero — re-check to confirm).
 
-### B.4 Build + sign boot.img
+### B.4 Build + sign boot.img — DONE (2026-08-17)
+
+Executed and validated (details below). Key architectural addition: the whole
+U-Boot->Linux boot path is COMPILED INTO U-Boot (CONFIG_BOOTCOMMAND with the
+blkmap sequence + bootflow-scan fallback) and CONFIG_ENV_IS_NOWHERE=y closes
+the unsigned-uboot.env override hole (verified live: a stale uboot.env with the
+old bootcmd silently overrode the built-in one until removed). boot.img now
+contains config.txt, cmdline.txt, DTB, overlays, kernel_2712.img (U-Boot with
+built-in bootcmd), Image. Autonomous boot from inside boot.img verified on
+serial ("Loading Environment from nowhere", blkmap map, Image read at RAM
+speed, kernel starts). PCR0 note: rebuilt U-Boot => new S-CRTM version string
+=> new PCR0 golden value (stable per binary; record per-build at provisioning).
+
 ```bash
 # build the Pi5 boot.img (see docs/research-bootimg-blkmap.md level-2):
 usbboot/tools/rpi-make-boot-image -d bootfs/ -o boot.img -a 64
