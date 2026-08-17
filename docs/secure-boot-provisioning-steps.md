@@ -121,10 +121,25 @@ flashed. That line is COMMENTED OUT for all of Phase B. Signing + flashing the
 EEPROM here activates signature *verification* and embeds our public key, but
 does NOT burn OTP → the factory EEPROM can be restored at any time.
 
-### B.0 Host prerequisite (one-time)
+### B.0 Host prerequisite (one-time) — DONE (2026-08-17)
 ```bash
-sudo apt install -y python3-pycryptodome   # required by update-pieeprom.sh for RSA signing
+sudo apt install -y python3-pycryptodome   # provides the 'Cryptodome' namespace
 ```
+Notes learned:
+- The package installs as `Cryptodome` (not `Crypto`); the current
+  `rpi-eeprom/rpi-eeprom-config` imports `Cryptodome` → compatible.
+- usbboot was cloned with `--depth 1`; the firmware binaries
+  (`firmware/2712/pieeprom.bin`, `secure-boot-recovery5/pieeprom.original.bin`)
+  are symlinks into the `rpi-eeprom` SUBMODULE. Initialize it:
+  `cd usbboot && git submodule update --init --depth 1 rpi-eeprom`.
+- Toolchain verified read-only: `python3 rpi-eeprom/rpi-eeprom-config
+  secure-boot-recovery5/pieeprom.original.bin` prints the config.
+- OTP hash cross-checked with the official Cryptodome method → matches
+  `0e4da3d8...782160b0`.
+- The bundled reference EEPROM is `pieeprom-2026-05-26` — NEWER than the
+  board's running May-2025 bootloader; flashing the signed image also updates
+  the bootloader firmware to this version (expected; secure boot needs a
+  recent bootloader).
 
 ### B.1 Back up the current (factory) EEPROM — DO BEFORE ANY WRITE
 Enter RPIBOOT mode (power button hold + USB-C), then expose storage via the
