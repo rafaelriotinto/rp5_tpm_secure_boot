@@ -89,10 +89,54 @@ version, image build id + BUILD.md git rev, boot.img sha256, pubkey sha256
 (OTP value), AK public key, NV index + attributes, golden PCR set, NV golden
 value, lockout params, operator, dates per stage, validation results.
 
+## 3b. NV authorization threat analysis (resolved, Aug 17 2026) — THESIS-CRITICAL
+
+Governing principle: **measured boot has no integrity of its own — whoever
+controls the extend path controls the measurements.** A hacked U-Boot can
+extend the NV index (and PCRs 0/1/8/9) with any chosen values, including
+replaying the real board's public identity (serial/DUID from the DTB), and
+produce a "clean" attestation while running malicious software. Neither a
+PolicyPCR condition nor an authValue prevents this, because the malicious
+extender either satisfies the policy legitimately (public PCR state is
+replayable) or already holds the secret.
+
+Consequences:
+- The ONLY thing preventing a hacked U-Boot from running is **secure boot**
+  (OTP-fused signed-U-Boot enforcement). Measured boot's integrity is entirely
+  contingent on it.
+- Phase binding (U-Boot capping PCRs 0-7 with EV_SEPARATOR before OS handoff)
+  protects only WITHIN one honest boot — it does not stop an attacker who
+  controls U-Boot from extending before the separators fire.
+- A discrete, external SPI TPM **cannot authenticate the platform it is
+  attached to**. Relocating the TPM to an attacker-controlled (unfused) board
+  lets a hacked U-Boot forge all measurements; the stolen AK still signs a
+  clean-looking quote. This is the classic TPM relocation / bus-interposer
+  attack, aggravated here by an unencrypted, bit-banged SPI bus and the
+  absence of any on-device root-unreachable secret store (OTP is root-readable
+  via `vcgencmd otp_dump`; the boot chain has no TrustZone secure world).
+
+Scoping statement for the thesis threat model:
+**The proposed mechanism defends against a SOFTWARE adversary on an intact,
+secure-boot-enforced device: unsigned U-Boot cannot run, so runtime
+measurements cannot be forged. It does NOT withstand an adversary who obtains
+the extend-path secret or control — via root access, memory/SPI bus probing,
+TPM relocation, or equivalent. This is intrinsic to a discrete external TPM
+with no authenticated platform binding, not a defect of the implementation;
+mitigation would require an integrated/firmware TPM or an authenticated TPM
+bus with a platform-bound secret, neither available on this hardware.**
+
+What the server-held authValue realistically buys (narrow but real): it stops
+on-device root from administratively resetting/redefining the NV index (which
+would let it hide history by starting clean). It does NOT make boot-time
+extends unforgeable against a platform-breach adversary.
+
 ## 4. Open decisions
 
-1. Mix a server-side factory secret into nv_auth (stronger against on-device
-   root) — or accept DUID-only (simpler, matches Feb design)?
+1. ~~Mix a server-side factory secret into nv_auth?~~ RESOLVED (see 3b):
+   NV-extend justified on durability + admin-lifecycle-control grounds, not on
+   "resists a moved TPM". Admin ops gated by server-held authValue; DUID
+   demoted to device-ID/derivation salt, not a security anchor. Relocation
+   limitation stated openly in the threat model.
 2. NV index read policy: open read vs authValue-gated read.
 3. OTP stage on the 1 GB sacrificial board only, or eventually also the 16 GB
    dev board? (current plan: sacrificial only)
