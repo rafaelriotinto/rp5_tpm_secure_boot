@@ -77,9 +77,45 @@ the public-key hash, proving the burn.
 EEPROM image backup (via rpiboot/mass-storage-gadget) still to be done before
 the first EEPROM write in Phase B.
 
+## Signing key — DONE (2026-08-17)
+
+Generated a fresh RSA-2048 key set (not reusing the Nov 2025 experimental key,
+for clean provenance) in `$LINUX_YOCTO_RP5_TPM_ENV/secure-boot-keys/`
+(dir 700, private.pem 600):
+
+```bash
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -pubout -out public.pem
+openssl rsa -in private.pem -pubout -outform DER -out public.der
+```
+
+**OTP key hash — the value programmed into OTP** (customer key hash):
+It is NOT a plain SHA-256 of the DER file. Per the official
+`rpi-eeprom/tools/rpi-sign-bootcode` (line ~111), it is:
+
+```
+SHA256( N[256 bytes, little-endian] || e[8 bytes, little-endian] )
+```
+
+Computed for our key (openssl to extract N/e, no pycryptodome needed):
+```bash
+N=$(openssl rsa -in private.pem -noout -modulus | sed 's/Modulus=//')
+E=$(openssl rsa -in private.pem -noout -text | grep -oE 'publicExponent: [0-9]+' | grep -oE '[0-9]+')
+python3 -c "import hashlib; n=int('$N',16); e=int('$E'); \
+  print(hashlib.sha256(n.to_bytes(256,'little')+e.to_bytes(8,'little')).hexdigest())"
+```
+
+**Our OTP key hash: `0e4da3d85c697bf14d80c93d4257754edc7ab80290b0ce317823182b782160b0`**
+(exponent 65537). After the Phase C burn, `nvmem_cust0` must contain this value
+→ that is the proof-of-burn check.
+
+CRITICAL: `private.pem` must be backed up in ≥2 safe locations and NEVER placed
+in the OS image or boot.img. The key dir is outside any git repo. The thesis
+records only the public hash, never the private key.
+
 ## Phase B (dev mode, reversible) — NOT YET STARTED
 
-1. Generate/locate RSA-2048 key (`openssl genrsa 2048 > private.pem`), back up.
+1. ~~Generate/locate RSA-2048 key~~ DONE (above). Back up private.pem.
 2. Build + sign boot.img (rpi-make-boot-image → rpi-eeprom-digest → boot.sig).
 3. Sign EEPROM WITHOUT program_pubkey (`update-pieeprom.sh -f -k KEY`), flash
    via rpiboot → signature checking active, key hash NOT yet in OTP. Reversible.
