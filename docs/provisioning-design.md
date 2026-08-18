@@ -141,10 +141,20 @@ identifier / derivation salt, never a security anchor. Secrets live only in
 TPM shielded storage (server-held authValue) or off-device (RSA private key)
 -- neither reachable via RPIBOOT.
 
-Post-OTP-burn, the ROM only executes customer-counter-signed second stages ->
-RPIBOOT becomes keyholder-only; a physical attacker's USB access yields only
-ROM-level USB descriptor data. The OTP burn thus also closes the RPIBOOT
-arbitrary-code door: an extra hardening argument for Phase C in the thesis.
+HYPOTHESIS (NOT yet validated — do not state as fact): post-OTP-burn the ROM
+may require customer-counter-signing for the USB/RPIBOOT second stage too,
+which would close the RPIBOOT arbitrary-code door. BUT rpiboot is the most
+primitive BL1/ROM function; it is unclear whether the ROM rejects an unsigned
+USB payload at LOAD or only refuses to EXECUTE it, and the docs only state that
+`program_pubkey=1` disables recovery.bin from SD/EMMC (not explicitly the USB
+path). MUST validate empirically after the burn:
+  - enter RPIBOOT, run `rpiboot -d mass-storage-gadget64` (UNSIGNED 2nd stage);
+  - if it refuses to run / no MSD device appears -> channel locked (hardening
+    confirmed);
+  - if the gadget still boots and OTP is dumpable -> channel NOT locked; the
+    DUID/OTP remain physically extractable even post-burn. Report whichever
+    actually happens. Rafael's point (Aug 18): rpiboot is BL1-managed and may
+    still execute regardless of OTP.
 
 ## 4. Open decisions
 
