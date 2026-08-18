@@ -130,6 +130,22 @@ on-device root from administratively resetting/redefining the NV index (which
 would let it hide history by starting clean). It does NOT make boot-time
 extends unforgeable against a platform-breach adversary.
 
+### 3c. RPIBOOT disclosure (added Aug 18 2026)
+
+Observed from our own provisioning run: the rpiboot metadata JSON contains
+FACTORY_UUID = the DUID (plus serial, boardrev, all MACs). Pre-OTP-burn,
+RPIBOOT executes ANY host-supplied second stage -> arbitrary code execution
+with full hardware access for anyone with physical USB access; the DUID (and
+all OTP) is disclosed. This CONFIRMS the 3b decision: DUID is a public
+identifier / derivation salt, never a security anchor. Secrets live only in
+TPM shielded storage (server-held authValue) or off-device (RSA private key)
+-- neither reachable via RPIBOOT.
+
+Post-OTP-burn, the ROM only executes customer-counter-signed second stages ->
+RPIBOOT becomes keyholder-only; a physical attacker's USB access yields only
+ROM-level USB descriptor data. The OTP burn thus also closes the RPIBOOT
+arbitrary-code door: an extra hardening argument for Phase C in the thesis.
+
 ## 4. Open decisions
 
 1. ~~Mix a server-side factory secret into nv_auth?~~ RESOLVED (see 3b):
