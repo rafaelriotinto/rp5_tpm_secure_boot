@@ -12,17 +12,16 @@ Verified on hardware (Aug 2026, two boards):
 | Identifier | Where stored | Exposure | Role in this design |
 |---|---|---|---|
 | SoC serial (64-bit, e.g. `cceddb120af4f481`) | OTP | PUBLIC: firmware boot banner, DT `/chosen/rpi-serial64`, `/serial-number`, and the Ethernet MAC is derived from it (broadcast on LAN) | **Device unique ID** in the attestation database |
-| DUID (`/chosen/rpi-duid`, e.g. `0000911045808726`) | OTP | Not in the boot log; readable from the DT by root on-device | **HMAC key material** for TPM NV authValue derivation |
+| DUID (`/chosen/rpi-duid`, e.g. `0000911045808726`) | OTP | PUBLIC: readable by on-device root AND via rpiboot metadata (FACTORY_UUID) on unprovisioned boards — see 3c | Secondary device ID / derivation salt ONLY (NOT a secret — see 3b/3c) |
 | Board revision (`a04171`, bit-packed: memory/manufacturer/type/rev) | OTP | public | recorded in provisioning manifest |
 | Customer key hash (OTP rows) | OTP | public (hash only) | secure boot root of trust (written in step 6) |
 
-HMAC key derivation (per February design, refined):
-`nv_auth = HMAC-SHA256(key=DUID, msg="rp5-nv-auth" || soc_serial)`.
-Caveat recorded for the threat model: the DUID is readable by root on the
-running device; it protects against remote/parted attackers (stolen SD card,
-cloned image, other boards) but not against an attacker with root on the live
-device. Optionally strengthen with a server-side factory secret mixed into the
-HMAC (decision pending).
+NV authValue source (SUPERSEDES the February DUID-HMAC idea — see 3b/3c):
+the DUID is PUBLIC and cannot anchor security. The NV index authValue is a
+random secret generated on and held only by the provisioning/attestation
+server, stored in TPM shielded storage on the device (never on its
+filesystem, never derived from OTP). Boot-time extends use a PolicyPCR leg
+(no secret needed); admin ops use the server-held authValue.
 
 ## 2. Provisioning stages
 
@@ -60,9 +59,10 @@ order; each stage writes its results into the provisioning manifest.
 - `tpm2_clear` (explicit operator confirmation), set hierarchy auth values.
 - Create EK + AK (attestation identity); export AK public → enrollment record
   for the attestation server.
-- Create NV extend index 0x01C00000 (NT=Extend, SHA-256) with authValue =
-  derived nv_auth; policy: authValue-gated extend (PolicyAuthValue), read
-  without auth (or per policy decision).
+- Create NV extend index 0x01C00000 (NT=Extend, SHA-256). Policy:
+  PolicyOR(PolicyPCR for boot-time extends, server-held PolicyAuthValue for
+  admin/redefine). authValue is a server-generated random secret, NOT derived
+  from DUID (see 3b/3c).
 - Record dictionary-attack lockout parameters.
 
 **Stage 6 — OTP programming (IRREVERSIBLE — gated)**
@@ -84,7 +84,7 @@ order; each stage writes its results into the provisioning manifest.
 
 ## 3. Provisioning record (manifest) fields
 
-device_serial, board_revision, duid_check (HMAC of DUID, not raw), eeprom
+device_serial, board_revision, duid (public id), eeprom
 version, image build id + BUILD.md git rev, boot.img sha256, pubkey sha256
 (OTP value), AK public key, NV index + attributes, golden PCR set, NV golden
 value, lockout params, operator, dates per stage, validation results.
