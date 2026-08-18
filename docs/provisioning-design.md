@@ -195,6 +195,21 @@ SOURCE-CODE EVIDENCE (usbboot main.c / decode_duid.c, examined Aug 18 2026):
   USB-reachable; it does not matter because the only secret is the TPM-shielded
   NV authValue, not the DUID.
 
+EXPERIMENT (Aug 18 2026) — bad-signature EEPROM does NOT leak DUID:
+Fed rpiboot an EEPROM image with a corrupted pieeprom.sig (pieeprom.bin left
+good, no brick risk). Result on the unburned board:
+- The on-board second stage read pieeprom.sig, found it invalid, and ABORTED
+  BEFORE reading pieeprom.bin (never flashed) AND before reading OTP.
+- NO metadata JSON was written -> FACTORY_UUID / DUID NOT reported.
+Comparison: the successful (good-sig) flash DID read pieeprom.bin and DID emit
+the DUID metadata. => the DUID report is gated behind successful signature
+validation; a bad-signature firmware is rejected before any OTP read/report.
+This is also a firmware-level tamper-rejection result (complements the boot.img
+tamper test). Caveat: unburned board, so bootcode5.bin ran freely (RPi-signed);
+what was rejected here is the EEPROM-image signature. Post-burn adds an EARLIER
+gate (bootcode5/recovery.bin must be customer-counter-signed) — to be validated
+post-burn.
+
 ## 4. Open decisions
 
 1. ~~Mix a server-side factory secret into nv_auth?~~ RESOLVED (see 3b):
