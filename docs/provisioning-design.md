@@ -36,8 +36,8 @@ order; each stage writes its results into the provisioning manifest.
 
 **Stage 1 — Identity harvest**
 - Read SoC serial, DUID, board revision (via SSH/serial from DT).
-- Create the device's provisioning manifest (JSON): identities (DUID never
-  a public id, recorded as-is; the secret is the TPM authValue, not the DUID),
+- Create the device's provisioning manifest (JSON): identities (DUID is a
+  public id, recorded as-is; the secret is the TPM authValue, not the DUID),
   timestamps, operator, image build id.
 
 **Stage 2 — Key material (host side, offline)**
