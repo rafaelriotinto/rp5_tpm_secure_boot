@@ -171,6 +171,25 @@ the TPM NV authValue, lives in TPM SHIELDED STORAGE on a separate chip/bus that
 no BCM2712 ROM command can reach. The architecture contains the unknowable USB
 surface by never placing a secret anywhere the ROM can address.
 
+SOURCE-CODE EVIDENCE (usbboot main.c / decode_duid.c, examined Aug 18 2026):
+- The rpiboot USB protocol after the boot handshake is a passive 3-command FILE
+  SERVER, and the commands are issued BY THE DEVICE, not the host:
+  0=GetFileSize, 1=ReadFile, 2=Done (main.c:848,889,918,966). The host cannot
+  ask the ROM for anything; it only answers file requests from the running
+  second stage.
+- There is NO host-initiated "read OTP" / "get DUID" command in the protocol.
+- The DUID (FACTORY_UUID) reaches the host because the SECOND-STAGE CODE WE FED
+  the board computes it (decode_duid.c is a c40 decoder) and writes it into a
+  metadata FILE returned via the same ReadFile path. DUID disclosure therefore
+  depends on EXECUTING a second stage that chooses to report it.
+- Implication: post-burn, only a customer-counter-signed second stage runs, so
+  the DOCUMENTED metadata-extraction path is gated by our key.
+- Caveat kept: this is a LOWER BOUND (rpiboot only calls the commands it knows).
+  A hidden ROM-level vendor control-transfer answered before any second stage
+  cannot be excluded from source. Net position unchanged: assume DUID/OTP may be
+  USB-reachable; it does not matter because the only secret is the TPM-shielded
+  NV authValue, not the DUID.
+
 ## 4. Open decisions
 
 1. ~~Mix a server-side factory secret into nv_auth?~~ RESOLVED (see 3b):
