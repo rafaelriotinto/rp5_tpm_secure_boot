@@ -178,10 +178,15 @@ SOURCE-CODE EVIDENCE (usbboot main.c / decode_duid.c, examined Aug 18 2026):
   ask the ROM for anything; it only answers file requests from the running
   second stage.
 - There is NO host-initiated "read OTP" / "get DUID" command in the protocol.
-- The DUID (FACTORY_UUID) reaches the host because the SECOND-STAGE CODE WE FED
-  the board computes it (decode_duid.c is a c40 decoder) and writes it into a
-  metadata FILE returned via the same ReadFile path. DUID disclosure therefore
-  depends on EXECUTING a second stage that chooses to report it.
+- Precise mechanism: the second-stage firmware RUNS ON THE BOARD during
+  flashing (RPIBOOT = ROM loads+executes host-supplied code with full hardware
+  access). That on-board code reads the raw OTP and emits it as `*`-prefixed
+  METADATA MESSAGES over the same file-server channel (main.c:867 treats a
+  filename starting with '*' as a metadata key:value, not a file request). The
+  host's rpiboot then c40-DECODES the raw DUID (duid_decode_c40, main.c:798)
+  into FACTORY_UUID and writes the JSON. So DUID disclosure requires EXECUTING
+  a second stage that chooses to read OTP and report it — it is NOT a host-side
+  query of the ROM.
 - Implication: post-burn, only a customer-counter-signed second stage runs, so
   the DOCUMENTED metadata-extraction path is gated by our key.
 - Caveat kept: this is a LOWER BOUND (rpiboot only calls the commands it knows).
