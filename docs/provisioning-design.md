@@ -156,6 +156,21 @@ path). MUST validate empirically after the burn:
     actually happens. Rafael's point (Aug 18): rpiboot is BL1-managed and may
     still execute regardless of OTP.
 
+DEEPER POINT (Rafael, Aug 18): even if second-stage EXECUTION is locked to our
+key post-burn, that is a different ROM function from the ROM's own USB PROTOCOL
+HANDLERS. The RPIBOOT USB command set is UNDOCUMENTED and partly in immutable
+mask ROM. OTP gates code AUTHORIZATION, not ROM message handlers — so a
+hypothetical ROM-level "read OTP / get device info" command would be ungated by
+any burn. We therefore CANNOT prove the DUID is confidential over USB, before
+OR after burn (cannot prove a negative over an undocumented API; usbboot source
+only enumerates the commands IT uses — a lower bound, not a ceiling).
+
+CONCLUSION (thesis): treat the DUID and ALL OTP as physically extractable over
+USB, permanently. This does NOT harm the design because the only true secret,
+the TPM NV authValue, lives in TPM SHIELDED STORAGE on a separate chip/bus that
+no BCM2712 ROM command can reach. The architecture contains the unknowable USB
+surface by never placing a secret anywhere the ROM can address.
+
 ## 4. Open decisions
 
 1. ~~Mix a server-side factory secret into nv_auth?~~ RESOLVED (see 3b):
