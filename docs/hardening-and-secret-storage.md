@@ -111,7 +111,26 @@ cmdline / DTB.
    (wic verity vs initramfs), and how to anchor the root hash in the signed
    boot.img so it is covered by secure boot.
 
-## Decision pending
+## Decision — RESOLVED (2026-08-18): DUID-derived (Option A), for now
+
+Implemented and validated: the NV authValue is derived from the DUID as
+  authValue = SHA256("rp5-nv-auth-v1" || <bytes of /chosen/rpi-duid>)
+computed identically by the provisioning script (Linux) and U-Boot at boot
+(fork commit 016123c6). The DUID is in OTP, not on the SD; U-Boot reads it from
+the firmware device tree inside the SoC, so the secret is never on removable
+media. Reading the SD yields only the derivation method + context string, not
+the DUID. Correctness is self-proven: NV extend succeeds ONLY if U-Boot's
+derived authValue equals the provisioned one (else TPM auth failure) -- it
+succeeds, and NV value == PCR8.
+
+Residual (still true, drives the remaining hardening #3): the DUID is
+otp_dump-visible / DT-readable by on-device code, so this holds against
+stolen-SD / stolen-TPM-module / remote attackers, but NOT against an attacker
+with code execution on the device -- until rootfs integrity + OS lockdown close
+that (see checklist). Stronger option B (custom secret in the private-key OTP
+store, hidden from otp_dump) remains available pending the U-Boot mailbox spike.
+
+## (superseded) Decision pending
 
 Anchor the NV authValue on: (A) the DUID (free in U-Boot, otp_dump-visible,
 modest entropy) or (B) a custom secret burned to the private-key OTP store
