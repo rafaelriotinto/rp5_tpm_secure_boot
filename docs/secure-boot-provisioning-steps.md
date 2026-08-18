@@ -328,6 +328,45 @@ board cannot SSH while refusing to boot.
 - Optionally restore the factory EEPROM (B.1 backup) to prove full
   reversibility, then re-flash the signed one.
 
+## Phase C (OTP burn, IRREVERSIBLE) — DONE 2026-08-18 ✅ SECURE BOOT ENFORCED
+
+Board cceddb12-0af4f481. Burn image: `update-pieeprom.sh -f -k KEY` (firmware
+counter-signed) with `program_pubkey=1` in secure-boot-recovery5/config.txt and
+`SIGNED_BOOT=1` in boot.conf; flashed via `sudo rpiboot -d . -j metadata`.
+
+KEY LESSON confirmed: `-f` (counter-sign bootsys) is REQUIRED for the burn and
+MUST be paired with program_pubkey=1. Alone (dev mode) it bricks (ROM checks
+countersig vs key-hash-zero); with program_pubkey the OTP is written in the same
+op so the countersigned bootsys validates.
+
+PROOF OF BURN — three independent confirmations:
+1. rpiboot metadata (provisioning/baseline/flash-metadata-BURN-0af4f481.json):
+   SECURE_BOOT_PROVISION: "success" (absent in dev-mode flashes),
+   CUSTOMER_KEY_HASH: 0e4da3d85c697bf14d80c93d4257754edc7ab80290b0ce317823182b782160b0
+2. Firmware boot log: "Customer key hash 0e4da3d8...782160b0" (was all zeros).
+3. Linux OTP readback: the hash is in nvmem_otp0 at offset 0x94 (NOT nvmem_cust0
+   -- correction: the secure-boot key hash lives in the protected OTP rows read
+   via nvmem_otp0 @0x94, not the general-purpose nvmem_cust0). Followed by a
+   01 flag (secure-boot-enabled). Archived: otp-post-burn-keyhash.txt.
+
+POST-BURN VALIDATION:
+- Board boots the signed image under ENFORCED secure boot: counter-signed
+  bootsys verifies, boot.img rsa-verify pass, U-Boot + kernel + Linux up.
+- Measured boot still works; ENFORCED-mode golden PCRs (stable across reboots):
+  PCR0=0x579F4260C0C63D378280600AFAD994C0770B589A59C985CB9B1093B6B4FB3167
+  PCR1=0xFBF3642E972E016E33B8776E33F8EE3656BD7C15EB31C00AC13EFA190932A434
+  PCR8=0xB7CFBBAF... (kernel, unchanged)  PCR9=0xCFC7D804... (initrd, unchanged)
+  Note PCR0 differs from dev mode because the firmware now embeds the customer
+  public key into the DT (not stripped by the sanitizer) -- a stable, expected,
+  per-configuration change.
+- JTAG left UNLOCKED (program_jtag_lock not set) for failure analysis.
+
+REMAINING post-burn tests:
+- RPIBOOT lockdown check: does an unsigned 2nd stage (mass-storage-gadget) still
+  run post-burn? (validates the 3c hypothesis).
+- Full attestation demo (quote/verify) using these golden PCRs.
+
+## (original Phase C plan retained below)
 ## Phase C (OTP burn, IRREVERSIBLE) — GATED
 
 Only after Phase B is validated (several clean dev-mode boots).
