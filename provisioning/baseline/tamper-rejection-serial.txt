@@ -1,0 +1,265 @@
+[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system         Stopping [0;1;39mNetwork Configuration[0m...
+         Stopping [0;1;39mLoad/Save OS Random Seed[0m...
+[[0;32m  OK  [0m] Stopped [0;1;39mNetwork Configuration[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mAvahi mDNS/DNS-SD Stack[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mKernel Logging Service[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mSystem Logging Service[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mD-Bus System Message Bus[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mGetty on tty1[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mTelephony service[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mSerial Getty on ttyAMA10[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mUser Login Management[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mBluetooth service[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mSSH Per-Connection Server (192.168.8.224:57918)[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mLoad/Save OS Random Seed[0m.
+[  418.196448] audit: type=1334 audit(1787044406.380:19): prog-id=14 op=UNLOAD
+[  418.203461] audit: type=1334 audit(1787044406.380:20): prog-id=11 op=UNLOAD
+[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system/dropbear[0m.
+[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system/getty[0m.
+[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system/serial-getty[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mPreparation for Network[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mRaspberry Pi bluetooth helper[0m.
+[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system/bthelper[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mBasic System[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mPath Units[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mDispatch Password Requests to Console Directory Watch[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mForward Password Requests to Wall Directory Watch[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSlice Units[0m.
+[[0;32m  OK  [0m] Removed slice [0;1;39mUser and Session Slice[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSocket Units[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mAvahi mDNS/DNS-SD Stack Activation Socket[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mD-Bus System Message Bus Socket[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mdropbear.socket[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSystem Initialization[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mSyslog Socket[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mNetwork Service Netlink Socket[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mGenerate network units from Kernel command line[0m.
+         Stopping [0;1;39mNetwork Name Resolution[0m...
+         Stopping [0;1;39mNetwork Time Synchronization[0m...
+         Stopping [0;1;39mRecord System Boot/Shutdown in UTMP[0m...
+[[0;32m  OK  [0m] Stopped [0;1;39mNetwork Name Resolution[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mNetwork Time Synchronization[0m.
+[  418.625891] audit: type=1334 audit(1787044406.812:21): prog-id=12 op=UNLOAD
+[[0;32m  OK  [0m] Stopped [0;1;39mApply Kernel Variables[0m.
+[  418.637282] audit: type=1334 audit(1787044406.824:22): prog-id=13 op=UNLOAD
+[[0;32m  OK  [0m] Stopped [0;1;39mRecord System Boot/Shutdown in UTMP[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mCreate System Files and Directories[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mLocal File Systems[0m.
+         Unmounting [0;1;39m/boot[0m...
+         Unmounting [0;1;39mTemporary Directory /tmp[0m...
+         Unmounting [0;1;39m/var/volatile[0m...
+[[0;32m  OK  [0m] Unmounted [0;1;39m/boot[0m.
+[[0;32m  OK  [0m] Unmounted [0;1;39mTemporary Directory /tmp[0m.
+[[0;32m  OK  [0m] Unmounted [0;1;39m/var/volatile[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mPreparation for Local File Systems[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSwaps[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mUnmount All Filesystems[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mRemount Root and Kernel File Systems[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mFile System Check on Root Device[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mCreate Static Device Nodes in /dev[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mCreate Static Device Nodes in /dev gracefully[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Shutdown[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mLate Shutdown Services[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mSystem Reboot[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Reboot[0m.
+[  418.993933] audit: type=1334 audit(1787044407.180:23): prog-id=5 op=UNLOAD
+[  419.000879] audit: type=1334 audit(1787044407.180:24): prog-id=4 op=UNLOAD
+[  419.007799] audit: type=1334 audit(1787044407.180:25): prog-id=3 op=UNLOAD
+[  419.014708] audit: type=1334 audit(1787044407.180:26): prog-id=16 op=UNLOAD
+[  419.021706] audit: type=1334 audit(1787044407.180:27): prog-id=15 op=UNLOAD
+[  419.028700] audit: type=1334 audit(1787044407.180:28): prog-id=10 op=UNLOAD
+[  419.053445] watchdog: watchdog0: watchdog did not stop!
+[  419.065385] systemd-shutdown[1]: Using hardware watchdog 'Broadcom BCM2835 Watchdog timer', version 0, device /dev/watchdog0
+[  419.076698] systemd-shutdown[1]: Watchdog running with a hardware timeout of 1min.
+[  419.194411] systemd-shutdown[1]: Syncing filesystems and block devices.
+[  419.204176] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+[  419.215979] systemd-journald[135]: Received SIGTERM from PID 1 (systemd-shutdow).
+[  419.224188] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
+[  419.234503] systemd-shutdown[1]: Unmounting file systems.
+[  419.240573] (sd-remount)[450]: Remounting '/' read-only with options ''.
+[  419.277011] EXT4-fs (mmcblk0p2): re-mounted 42ac91d6-5160-4462-94e5-3c5099c38986 ro. Quota mode: none.
+[  419.286730] systemd-shutdown[1]: All filesystems unmounted.
+[  419.292343] systemd-shutdown[1]: Deactivating swaps.
+[  419.297356] systemd-shutdown[1]: All swaps deactivated.
+[  419.302603] systemd-shutdown[1]: Detaching loop devices.
+[  419.309167] systemd-shutdown[1]: All loop devices detached.
+[  419.314773] systemd-shutdown[1]: Stopping MD devices.
+[  419.319981] systemd-shutdown[1]: All MD devices stopped.
+[  419.325324] systemd-shutdown[1]: Detaching DM devices.
+[  419.330529] systemd-shutdown[1]: All DM devices detached.
+[  419.335996] systemd-shutdown[1]: All filesystems, swaps, loop devices, MD devices and DM devices detached.
+[  419.351078] systemd-shutdown[1]: Syncing filesystems and block devices.
+[  419.357748] systemd-shutdown[1]: Rebooting.
+[  419.413266] macb 1f00100000.ethernet eth0: Link is Down
+[  419.419179] macb 1f00100000.ethernet: gem-ptp-timer ptp clock unregistered.
+[  419.427537] kvm: exiting hardware virtualization
+[  419.432184] reboot: Restarting system
+
+  1.26 RPi: BOOTSYS release VERSION:086b83e3 DATE: 2026/05/26 TIME: 16:01:25
+  1.27 MFG_VER: 1
+  1.27 BOOTMODE: 0x06 partition 0 build-ts BUILD_TIMESTAMP=1779807685 serial 0af4f481 boardrev a04171 stc 1275120
+  1.28 AON_RESET: 00000003 PM_RSTS 00000020
+  1.28 POWER_OFF_ON_HALT: 1 WAIT_FOR_POWER_BUTTON 0 power-on-reset 0
+  1.29 EEPROM ID 0xef4015
+  1.29 SFDP v1.5 Param v1.5
+  1.30 RP1_BOOT chip ID: 0x20001927
+  1.30 PCIEx1: PWR 0 DET_WAKE 0
+  1.30 part 00000000 reset_info 00000000
+  1.31 PMIC reset-event 00000000 rtc 6a842238 alarm 00000000 enabled 0
+  1.31 uSD voltage 3.3V
+  1.32 SDRAM_CONFIG: 07 board-rev 00000001
+  1.32 Initialising SDRAM rank 1 total-size: 8Gbit part: 0 (0x07 0x07) odt: 0
+  1.33 memsys_init: 0 8Gbit MCB 0x80015ff0: 7092
+  1.33 DDR 4267 Mbps dual-rank:0 byte-mode:0 size-gbit:8 part-config:0 odt:0
+  1.84 RP1 FW: load 0
+  1.85 RP1_BOOT chip ID: 0x20001927
+  2.65 RP1 FW: load 1
+  3.06 OTP boardrev a04171 bootrom a a
+  3.06 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+  3.07 VC-JTAG unlocked
+  3.09 RP1_BOOT chip ID: 0x20001927
+
+  3.73 AB: P:N C:1
+  3.75 PCI2 init
+  3.75 PCI2 reset
+  3.80 PCIe scan 00001de4:00000001
+  3.80 RP1_CHIP_INFO 20001927
+
+  3.80 RPi: BOOTLOADER release VERSION:086b83e3 DATE: 2026/05/26 TIME: 16:01:25
+  3.81 MFG_VER: 1
+  3.81 BOOTMODE: 0x06 partition 0 build-ts BUILD_TIMESTAMP=1779807685 serial 0af4f481 boardrev a04171 stc 3816594
+  3.82 EEPROM ID 0xef4015
+  3.82 SFDP v1.5 Param v1.5
+  3.83 PCIEx1: PWR 0 DET_WAKE 0
+  3.34 M.2 PCIe HAT not detected.
+  3.84 usb_pd_init status 2
+  3.88 SD_OC: 0
+  3.81 Boot mode: SD (01) order f24
+  3.89 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  3.90 SD HOST: 200000000 CTL0: 0x00800f00 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.22 SD retry 1 oc 501
+  4.25 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.26 OCR c0ff8000 [13]
+CID: 00563456534400000000000004ba01a2
+CSD: 400e00325b590001d1eb7f8006400000
+  4.28 SD: bus-width: 4 spec: 2 SCR: 0x02858483 0x00000000
+  4.29 SD HOST: 200000000 CTL0: 0x00800f04 BUS: 50000000 Hz actual: 50000000 HZ div: 4 (2) status: 0x1fff0000 delay: 2
+  4.30 MBR: 0x00002000,  266240 type: 0x0c
+  4.30 MBR: 0x00044000,  702872 type: 0x83
+  4.30 MBR: 0x00000000,       0 type: 0x00
+  4.31 MBR: 0x00000000,       0 type: 0x00
+  4.15 Trying partition: 0
+  4.19 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 33241 (8)
+  4.32 rsc 8 fat-sectors 136 root dir cluster 1 sectors 32 entries 512
+  4.33 FAT16 clusters 33241
+  4.34 [sdcard] autoboot.txt not found
+  4.34 Select partition rsts 0 C(boot_partition) 0 EEPROM config 0 result 1
+  4.56 Trying partition: 1
+  4.59 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 33241 (8)
+  4.36 rsc 8 fat-sectors 136 root dir cluster 1 sectors 32 entries 512
+  4.37 FAT16 clusters 33241
+  4.74 secure-boot
+  4.75 Loading boot.img ...
+  4.38 boot.sig
+  4.38 hash: d3340344e9bab099f5f703a0acc293237ce1fe67d960add88ca9c71af6a0d558
+  4.38 ts: 1786991564
+  4.38 rsa2048: 76603a6cb0b799fe1dc96dc791ef4d141f9666dec21f671c34ed91182a43e7fa0871cdb87e0674102d3799a7a2cfac02523186130b0fd6716ff2ebd4be30c596c47df5e418ca4d43f90c385a8575ea5588dcd99a6282a636e8bd317b0e1f777a8e6221570eeabd384f19b4ba199a7116ccb5bd843533b2224bf33b86a499b3bd3ccb8ff64f22fa1492888f84cef0c99703ea5c14650a97d6b4764b06e42fe79cbd2fe497284abe72b720ca311c9ef3e7f87a1eece8e0f0b332e48296f927a01810b0e44c9e283b2d7787c9a7de82d7a7a0f93745ad5422b1e13d6bb725b2f6163ae9ffdb06051f764bda83213a6198b02b1c3af96d5e918108a42a8bbd74d1a7
+  8.38 Verifying
+ 11.01 Bad signature boot.img
+ 11.01 Error 12 loading boot.img
+ 11.50 Select partition rsts 0 C(boot_partition) 0 EEPROM config 0 result 1
+ 11.51 Partition walk: 1
+ 11.13 Trying partition: 1
+ 11.18 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 33241 (8)
+ 11.52 rsc 8 fat-sectors 136 root dir cluster 1 sectors 32 entries 512
+ 11.53 FAT16 clusters 33241
+ 11.32 secure-boot
+ 11.33 Loading boot.img ...
+ 11.53 boot.sig
+ 11.53 hash: d3340344e9bab099f5f703a0acc293237ce1fe67d960add88ca9c71af6a0d558
+ 11.54 ts: 1786991564
+ 11.54 rsa2048: 76603a6cb0b799fe1dc96dc791ef4d141f9666dec21f671c34ed91182a43e7fa0871cdb87e0674102d3799a7a2cfac02523186130b0fd6716ff2ebd4be30c596c47df5e418ca4d43f90c385a8575ea5588dcd99a6282a636e8bd317b0e1f777a8e6221570eeabd384f19b4ba199a7116ccb5bd843533b2224bf33b86a499b3bd3ccb8ff64f22fa1492888f84cef0c99703ea5c14650a97d6b4764b06e42fe79cbd2fe497284abe72b720ca311c9ef3e7f87a1eece8e0f0b332e48296f927a01810b0e44c9e283b2d7787c9a7de82d7a7a0f93745ad5422b1e13d6bb725b2f6163ae9ffdb06051f764bda83213a6198b02b1c3af96d5e918108a42a8bbd74d1a7
+ 15.42 Verifying
+ 18.03 Bad signature boot.img
+ 18.37 Error 12 loading boot.img
+ 18.37 Trying partition: 2
+ 18.40 Non FAT partition 2 sectors 702872 type 04
+ 18.44 Failed to open partition 2
+ 18.47 Trying partition: 3
+ 18.50 Non FAT partition 3 sectors 0 type 04
+ 18.54 Failed to open partition 3
+ 18.57 Trying partition: 4
+ 18.59 Non FAT partition 4 sectors 0 type 04
+ 18.63 Failed to open partition 4
+ 18.66 Trying partition: 5
+ 18.69 Failed to open partition 5
+ 18.77 Finished partition walk
+ 18.77 Retry SD 1
+ 18.80 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+ 18.81 SD HOST: 200000000 CTL0: 0x00800f00 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+ 18.82 OCR c0ff8000 [2]
+CID: 00563456534400000000000004ba01a2
+CSD: 400e00325b590001d1eb7f8006400000
+ 18.83 SD: bus-width: 4 spec: 2 SCR: 0x02858483 0x00000000
+ 18.85 SD HOST: 200000000 CTL0: 0x00800f04 BUS: 50000000 Hz actual: 50000000 HZ div: 4 (2) status: 0x1fff0000 delay: 2
+ 18.86 MBR: 0x00002000,  266240 type: 0x0c
+ 18.86 MBR: 0x00044000,  702872 type: 0x83
+ 18.86 MBR: 0x00000000,       0 type: 0x00
+ 18.87 MBR: 0x00000000,       0 type: 0x00
+ 18.74 Trying partition: 0
+ 18.77 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 33241 (8)
+ 18.88 rsc 8 fat-sectors 136 root dir cluster 1 sectors 32 entries 512
+ 18.89 FAT16 clusters 33241
+ 18.94 [sdcard] autoboot.txt not found
+ 18.94 Select partition rsts 0 C(boot_partition) 0 EEPROM config 0 result 1
+ 18.49 Trying partition: 1
+ 18.53 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 33241 (8)
+ 18.95 rsc 8 fat-sectors 136 root dir cluster 1 sectors 32 entries 512
+ 18.96 FAT16 clusters 33241
+ 18.68 secure-boot
+ 18.69 Loading boot.img ...
+ 18.97 boot.sig
+ 18.97 hash: d3340344e9bab099f5f703a0acc293237ce1fe67d960add88ca9c71af6a0d558
+ 18.98 ts: 1786991564
+ 18.98 rsa2048: 76603a6cb0b799fe1dc96dc791ef4d141f9666dec21f671c34ed91182a43e7fa0871cdb87e0674102d3799a7a2cfac02523186130b0fd6716ff2ebd4be30c596c47df5e418ca4d43f90c385a8575ea5588dcd99a6282a636e8bd317b0e1f777a8e6221570eeabd384f19b4ba199a7116ccb5bd843533b2224bf33b86a499b3bd3ccb8ff64f22fa1492888f84cef0c99703ea5c14650a97d6b4764b06e42fe79cbd2fe497284abe72b720ca311c9ef3e7f87a1eece8e0f0b332e48296f927a01810b0e44c9e283b2d7787c9a7de82d7a7a0f93745ad5422b1e13d6bb725b2f6163ae9ffdb06051f764bda83213a6198b02b1c3af96d5e918108a42a8bbd74d1a7
+ 22.66 Verifying
+ 26.27 Bad signature boot.img
+ 26.62 Error 12 loading boot.img
+ 26.16 Finished partition walk
+ 26.20 SD_OC: 0
+ 26.05 Boot mode: USB-MSD (04) order f2
+ 26.22 XHCI-STOP
+ 26.22 xHC0 ver: 272 HCS: 03000440 140000f1 07ff000a HCC: 0240fe6d
+ 26.23 USBSTS 1
+ 26.23 xHC0 ver: 272 HCS: 03000440 140000f1 07ff000a HCC: 0240fe6d
+ 26.23 xHC0 ports 3 slots 64 intrs 4
+ 26.24 XHCI-STOP
+ 26.24 xHC1 ver: 272 HCS: 03000440 140000f1 07ff000a HCC: 0240fe6d
+ 26.25 USBSTS 1
+ 26.25 xHC1 ver: 272 HCS: 03000440 140000f1 07ff000a HCC: 0240fe6d
+ 26.26 xHC1 ports 3 slots 64 intrs 4
+ 51.26 XHCI-STOP
+ 51.26 xHC0 ver: 272 HCS: 03000440 140000f1 07ff000a HCC: 0240fe6d
+ 51.27 USBSTS 0
+ 51.27 XHCI-STOP
+ 51.27 xHC1 ver: 272 HCS: 03000440 140000f1 07ff000a HCC: 0240fe6d
+ 51.28 USBSTS 0
+ 51.86 USB MSD stopped. Timeout: 25 seconds
+ 51.32 SD_OC: 0
+ 51.28 Boot mode: NETWORK (02) order f
+ 51.20 NETWORK: 88:a2:9e:82:bb:4d wait for link TFTP: 0.0.0.0
+ 54.07 LINK STATUS: speed: 1000 full duplex
+ 54.72 Link ready
+ 54.11 RX: 0 IP: 0 IPV4: 0 MAC: 0 UDP: 0 UDP RECV: 0 IP_CSUM_ERR: 0 UDP_CSUM_ERR: 0
+ 62.20 DHCP src: 94:83:c4:91:99:af 192.168.8.1
+ 62.22 YI_ADDR 192.168.8.198
+ 62.24 SI_ADDR 192.168.8.1
+ 62.12 OPTIONS:-
+	op: 53 len:   1 DHCP recv OFFER (2) expect OFFER 62.13 
+	op: 54 len:   4 192.168.8.1 62.13 
+	op: 51 len:   4  62.13 
+	op: 58 len:   4  62.14 
+	op: 59 len:   4  62.14 
+	op:  1 len:   4 255.255.255.0 62.14 
+	op: 28 len:   4 192.168.8.255 62.15 
+	op:  3 len:   4 192.168.8.1 62.15 

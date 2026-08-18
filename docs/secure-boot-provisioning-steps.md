@@ -283,7 +283,44 @@ Post-boot state:
   these are the golden values for the secure-boot configuration.
 - nvmem_cust0 re-checked: ALL ZERO (OTP untouched; dev mode fully reversible).
 
-### B.5 Validate (days of testing before Phase C)
+### B.5 Tamper-rejection test — DONE (2026-08-18), the "prevention" evidence
+
+Goal: prove the bootloader REFUSES a tampered boot.img while still reversible.
+
+PITFALL first (documented so nobody repeats it): initial attempts to corrupt
+boot.sig ON THE BOARD silently failed -> board kept booting fine (false
+negative). Causes: (a) BusyBox `dd` has NO `conv=notrunc` (write no-op'd);
+(b) a nested-quoted python one-liner over SSH mangled and errored. ALWAYS
+verify the on-card md5 actually changed before concluding anything.
+
+Reliable method: corrupt on the HOST, scp over, VERIFY on-board md5 == bad,
+then reboot:
+```bash
+scp root@dev:/boot/boot.sig boot.sig.bad
+python3 -c "d=bytearray(open('boot.sig.bad','rb').read());   [d.__setitem__(i,d[i]^1) for i in range(8)]; open('boot.sig.bad','wb').write(d)"
+scp boot.sig.bad root@dev:/boot/boot.sig
+ssh root@dev 'sync; md5sum /boot/boot.sig'   # confirm == corrupted md5
+```
+
+RESULT (serial, archived provisioning/baseline/tamper-rejection-serial.txt):
+```
+secure-boot
+Loading boot.img ...
+boot.sig
+Verifying
+Bad signature boot.img
+Error 12 loading boot.img
+... Failed to open partition 2/3/4/5 ... Retry SD 1 ...
+(loops; NEVER reaches U-Boot or kernel)
+```
+The bootloader detected the signature mismatch, refused boot.img, fell through
+the entire BOOT_ORDER (all fail), and retried indefinitely. U-Boot/kernel/login
+never appeared. This is the secure-boot PREVENTION proof, complementing the
+firmware-level bad-sig rejection (3c experiment). Recovery: restore boot.sig
+(a good copy was kept as /boot/boot.sig.good) via the SD reader, since the
+board cannot SSH while refusing to boot.
+
+### B.5b Extended validation (days of testing before Phase C)
 - Signed boot.img boots normally.
 - A TAMPERED or UNSIGNED boot.img is REJECTED by the bootloader (capture the
   serial log of the rejection — thesis evidence).
