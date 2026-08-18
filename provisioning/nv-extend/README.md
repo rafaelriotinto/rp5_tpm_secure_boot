@@ -67,3 +67,26 @@ attacker who steals ONLY the TPM module (they lack the secret) and any
 remote/software attacker, but not one who reads the SD or probes the bus. The
 mechanism raises the bar and enforces authorized-only extension; it is not an
 absolute defense against a full-platform physical compromise.
+
+## U-Boot C implementation — VALIDATED ON HARDWARE (2026-08-18)
+
+The protocol above is now implemented in raw C in the U-Boot fork
+(commit 589f1443e7, lib/tpm-v2.c + include/tpm-v2.h + cmd/tpm-v2.c):
+hmac_sha256, tpm2_start_auth_session, tpm2_policy_auth_value,
+tpm2_nv_read_public, tpm2_nv_extend, tpm2_flush_context, plus a
+`tpm2 nvextend` console command for testing.
+
+Validation: a signed boot.img running this U-Boot extended 32 bytes of 0xAB
+into the (zeroed, clear_stclear) NV index. The TPM ACCEPTED the session HMAC
+(secret proven, never sent on the bus), and Linux read back
+`debb3e7acfff6dd18d501042273629f0b79cb206bb8c24f59f62ddb80849403b`
+= SHA256(0^32 || 0xAB*32), matching the tpm2-tools reference bit for bit.
+So the cpHash and session-authHMAC computations are correct.
+
+NOTE on the NV index handle: the U-Boot functions follow the existing
+lib/tpm-v2.c convention where `index` is the OFFSET (HR_NV_INDEX = 0x01000000
+is added internally). So NV index 0x01C00000 is passed as 0x00C00000.
+
+Next: wire tpm2_nv_extend into bootm_measure() to extend the real kernel/DTB
+measurements at boot; source the factory secret from the DUID/OTP (see
+docs/hardening-and-secret-storage.md) instead of the hardcoded demo string.
