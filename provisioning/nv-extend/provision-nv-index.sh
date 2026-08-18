@@ -21,10 +21,19 @@ set -e
 
 NV_INDEX=0x01C00000
 NV_SIZE=32
-# In production the factory secret is a per-device random value held only by
-# the provisioning/attestation server (see docs/provisioning-design.md 3b).
-# For the demo it is passed via env or defaults to a placeholder.
-FACTORY_SECRET="${FACTORY_SECRET:-demo-factory-secret}"
+# NV auth domain-separation context; MUST match U-Boot MEASURE_NV_AUTH_CTX.
+AUTH_CTX="rp5-nv-auth-v1"
+
+# The NV index authValue ("factory secret") is derived from the SoC DUID that
+# the firmware exposes at /chosen/rpi-duid. The DUID lives in OTP (not on the
+# SD card); U-Boot derives the same value inside the SoC at boot, so the secret
+# never travels on removable media. See docs/hardening-and-secret-storage.md.
+#   authValue = SHA256( AUTH_CTX || <bytes of /chosen/rpi-duid incl. NUL> )
+FACTORY_SECRET=$(
+	{ printf '%s' "${AUTH_CTX}"; cat /proc/device-tree/chosen/rpi-duid; } |
+	sha256sum | cut -d' ' -f1
+)
+echo "[*] DUID-derived authValue = ${FACTORY_SECRET}"
 
 echo "[*] Building PolicyAuthValue digest via a trial session"
 tpm2_startauthsession -S /tmp/trial.ctx
@@ -35,7 +44,7 @@ echo "[*] Defining NV extend index ${NV_INDEX}"
 tpm2_nvundefine "${NV_INDEX}" 2>/dev/null || true
 tpm2_nvdefine "${NV_INDEX}" -C o -s "${NV_SIZE}" \
     -a "nt=extend|policywrite|authread|ownerread|no_da|clear_stclear" \
-    -p "${FACTORY_SECRET}" \
+    -p "hex:${FACTORY_SECRET}" \
     -L /tmp/authval.policy
 
 echo "[*] NV public area:"
