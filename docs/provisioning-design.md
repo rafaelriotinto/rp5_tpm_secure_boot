@@ -59,10 +59,21 @@ order; each stage writes its results into the provisioning manifest.
 - `tpm2_clear` (explicit operator confirmation), set hierarchy auth values.
 - Create EK + AK (attestation identity); export AK public → enrollment record
   for the attestation server.
-- Create NV extend index 0x01C00000 (NT=Extend, SHA-256). Policy:
-  PolicyOR(PolicyPCR for boot-time extends, server-held PolicyAuthValue for
-  admin/redefine). authValue is a server-generated random secret, NOT derived
-  from DUID (see 3b/3c).
+- Create NV extend index 0x01C00000 (NT=Extend, SHA-256, clear_stclear).
+  Policy: **PolicyAuthValue** (Option A) -- extend requires proving the index
+  authValue via an HMAC policy session; POLICYWRITE blocks cleartext auth.
+  authValue is a server-generated random secret (the "factory secret"),
+  available to U-Boot at boot; NOT derived from DUID (see 3b/3c).
+  Admin actions (undefine/reset the index) are separately gated by the OWNER
+  hierarchy auth (locked to a random value held off-device) -- so "who may
+  extend" (factory secret, in U-Boot) and "who may wipe" (owner auth, server)
+  are already governed by different secrets WITHOUT needing PolicyOR.
+- REJECTED alternative (Option B: PolicyOR(PolicyPCR, PolicyAuthValue)): the
+  PolicyPCR branch is circular for boot-time extends -- binding extension to
+  the measurement PCRs means a tampered boot cannot extend at all, leaving the
+  index indistinguishable from "never booted"; binding to an earlier PCR adds
+  no security since a hacked U-Boot reproduces that state (only secure boot
+  stops hacked U-Boot, per 3b). Validated design is Option A.
 - Record dictionary-attack lockout parameters.
 
 **Stage 6 — OTP programming (IRREVERSIBLE — gated)**
