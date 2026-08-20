@@ -32,6 +32,14 @@ within the in-scope threat model (remote + moderate physical access).
 4. **Lock down the OS.** Remove `debug-tweaks` (we currently have PASSWORDLESS
    ROOT). Drop dropbear or make it key-only. No interactive login in
    production. Restrict `/dev/vcio` (mailbox path to OTP).
+6. **Attestation secret exposure** (see threat-model 4b). The attestation
+   service must use a board secret each round (fundamental). Mitigations:
+   run it as a DEDICATED NON-ROOT user (tss group; it does NOT need root);
+   STRIP /chosen/rpi-duid from the Linux DT in U-Boot (currently WORLD-readable,
+   mode 0444); and a PER-BOOT DELEGATED CREDENTIAL (U-Boot re-keys the
+   attestation NV index to a fresh per-boot secret so the permanent DUID never
+   enters Linux). Honest limit: no TEE on Pi5 -> a normal-world component must
+   touch a secret; a TEE would isolate it. State as a thesis contribution.
 5. **RPIBOOT-post-burn test — MUST settle empirically.** If an unsigned second
    stage still runs over USB after the burn, a physical attacker extracts the
    DUID via USB regardless of all Linux hardening. Deferred test.
