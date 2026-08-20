@@ -88,6 +88,50 @@ bus -- add confidentiality against bus READ-probing. The rolling-nonce HMAC
 already prevents the replay/forgery that matters for board-binding, so salted
 sessions are an add-on, not the core mechanism.
 
+## 4b. Attestation-time secret exposure and the platform limit (THESIS-CRITICAL)
+
+The board-binding (section 3) requires proving the DUID-derived secret AT
+ATTESTATION TIME, not just at boot. This is FUNDAMENTAL, not an implementation
+choice: proving the genuine board is present *now* (defeating the warm-TPM-move)
+means using the genuine SoC's secret *now*. So some component on the running
+device must access a board secret on every attestation. This is a genuine
+limitation and the thesis states it plainly rather than hiding it.
+
+Facts on the current device (verified Aug 20 2026):
+- /proc/device-tree/chosen/rpi-duid is world-readable (mode 0444) -- ANY process
+  can read the DUID today. This is worse than root-only and must be fixed.
+- /dev/tpmrm0 is group `tss`; TPM use needs the tss group, NOT root. So the
+  attestation service does NOT need root.
+
+Mitigations (reduce exposure; none fully eliminates it on this platform):
+1. Run the attestation service as a DEDICATED NON-ROOT user in the tss group.
+   Limits the blast radius of a service compromise.
+2. Strip /chosen/rpi-duid from the device tree U-Boot passes to Linux (as the
+   sanitizer already does for the measured copy), so no Linux process sees the
+   DUID in the DT.
+3. PER-BOOT DELEGATED CREDENTIAL (the real improvement): U-Boot, which is
+   secure-boot-protected and derives the DUID inside the SoC, uses the DUID
+   ONCE at boot to re-key the attestation NV index to a FRESH RANDOM per-boot
+   secret, wipes the DUID, and hands only that ephemeral secret to userspace.
+   The attestation service then uses the per-boot secret, never the DUID. Effect:
+   the PERMANENT, silicon-burned DUID never enters Linux; a userspace compromise
+   leaks only that boot's ephemeral secret (rotated every reboot). It still
+   defeats the warm-move (the fake board has neither the per-boot secret -- it
+   lived in the real board's RAM -- nor the ability to derive it from its wrong
+   DUID). To be designed/implemented alongside the OS hardening.
+
+The fundamental limit (state as such in the thesis): even with all of the above,
+SOME normal-world component must touch a board secret, because the Pi 5 has NO
+TEE / secure enclave (the BCM2712 Cortex-A76 cores support TrustZone but the SoC
+lacks the required secure-world peripherals -- already noted in the background
+chapter). On a TEE-equipped platform this board-binding would live in the secure
+world, invisible to the normal OS and to root. So the Pi 5 CAN achieve
+board-bound attestation but CANNOT fully isolate the board secret the way a
+TEE-equipped platform could; it must instead minimize exposure (dedicated
+non-root service, ephemeral per-boot credential, DUID stripped from Linux) and
+rely on OS hardening. This precise boundary -- what is and is not achievable on a
+TEE-less discrete-TPM platform -- is itself a contribution of the thesis.
+
 ## 5. Attestation protocol (to implement, userspace/Linux + tpm2-tools)
 
 Provisioning (one-time, trusted env):
