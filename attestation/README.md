@@ -25,9 +25,9 @@ tpm2_readpublic -c 0x81010002 -f pem -o ak.pem     # export AK pub for the serve
 # attestation nonce NV index, write-protected by the DUID secret:
 AUTH=$( { printf 'rp5-nv-auth-v1'; cat /proc/device-tree/chosen/rpi-duid; } | sha256sum | cut -d' ' -f1)
 tpm2_startauthsession -S s.ctx; tpm2_policyauthvalue -S s.ctx -L av.policy; tpm2_flushcontext s.ctx
-tpm2_nvdefine 0x01C00002 -C o -s 32 -a "policywrite|authread|ownerread|no_da" -p "hex:$AUTH" -L av.policy
+tpm2_nvdefine 0x01800001 -C o -s 32 -a "policywrite|authread|ownerread|no_da" -p "hex:$AUTH" -L av.policy
 ```
-(The measured-boot NV extend index 0x01C00000 is provisioned separately, see
+(The measured-boot NV extend index 0x01800000 is provisioned separately, see
 ../provisioning/nv-extend/.)
 
 ## Protocol (per attestation round)
@@ -35,9 +35,9 @@ tpm2_nvdefine 0x01C00002 -C o -s 32 -a "policywrite|authread|ownerread|no_da" -p
 ```
 server -> device: fresh 32-byte nonce N
 device:
-  1. write N into the DUID-protected NV index 0x01C00002  (HMAC session, DUID secret)
+  1. write N into the DUID-protected NV index 0x01800001  (HMAC session, DUID secret)
   2. tpm2_quote  PCRs 0,1,8,9 with q=N                    (AK-signed)
-  3. tpm2_nvcertify 0x01C00002 and 0x01C00000, q=N        (AK-signed)
+  3. tpm2_nvcertify 0x01800001 and 0x01800000, q=N        (AK-signed)
 device -> server: quote(.msg/.sig), attn_cert(.msg/.sig), meas_cert(.msg/.sig)
 server verifies (attest-server.py):
   - AK signatures on all three  -> genuine ENROLLED TPM

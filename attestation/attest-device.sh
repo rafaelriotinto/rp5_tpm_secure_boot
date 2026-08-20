@@ -14,8 +14,8 @@ set -e
 NONCE="${1:?nonce file}"
 OUT="${2:-/tmp/attest}"
 AK=0x81010002            # persistent AK handle
-ATTN=0x01C00002          # attestation (nonce) NV index, DUID-write-protected
-MEAS=0x01C00000          # measured-boot NV extend index
+ATTN=0x01800001          # attestation (nonce) NV index, DUID-write-protected
+MEAS=0x01800000          # measured-boot NV extend index
 AUTH_CTX="rp5-nv-auth-v1"
 
 mkdir -p "$OUT"; cd "$OUT"

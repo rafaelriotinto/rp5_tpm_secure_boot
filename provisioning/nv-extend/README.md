@@ -15,7 +15,7 @@ HMAC session. See thesis background (TPM 2.0 NV storage + Enhanced Authorization
 
 ## Design (validated 2026-08-18, RPi5 + SLB9670)
 
-Index `0x01C00000`, 32 bytes, attributes
+Index `0x01800000`, 32 bytes, attributes
 `nt=extend | policywrite | authread | ownerread | no_da | clear_stclear`:
 - `nt=extend` — value only updatable via `NV_Extend`.
 - `policywrite` — writing requires a **policy session** (blocks cleartext auth).
@@ -49,7 +49,7 @@ Per component, every boot:
 ```
 TPM2_StartAuthSession(TPM_SE_POLICY)     -> policySession, nonceTPM
 TPM2_PolicyAuthValue(policySession)
-TPM2_NV_Extend(index=0x01C00000, data=SHA256(component),
+TPM2_NV_Extend(index=0x01800000, data=SHA256(component),
     session auth = HMAC-SHA256(factory_secret,
                      cpHash || nonceNewer || nonceOlder || sessionAttrs))
     where cpHash = SHA256(CC_NV_Extend || nvIndexName || nvIndexName || data)
@@ -85,7 +85,7 @@ So the cpHash and session-authHMAC computations are correct.
 
 NOTE on the NV index handle: the U-Boot functions follow the existing
 lib/tpm-v2.c convention where `index` is the OFFSET (HR_NV_INDEX = 0x01000000
-is added internally). So NV index 0x01C00000 is passed as 0x00C00000.
+is added internally). So NV index 0x01800000 is passed as 0x00C00000.
 
 Next: wire tpm2_nv_extend into bootm_measure() to extend the real kernel/DTB
 measurements at boot; source the factory secret from the DUID/OTP (see

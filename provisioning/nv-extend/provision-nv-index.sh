@@ -19,7 +19,7 @@
 # Validated on hardware (RPi5, SLB9670) 2026-08-18.
 set -e
 
-NV_INDEX=0x01C00000
+NV_INDEX=0x01800000
 NV_SIZE=32
 # NV auth domain-separation context; MUST match U-Boot MEASURE_NV_AUTH_CTX.
 AUTH_CTX="rp5-nv-auth-v1"
