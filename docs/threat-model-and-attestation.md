@@ -135,12 +135,17 @@ TEE-less discrete-TPM platform -- is itself a contribution of the thesis.
 ## 5. Attestation protocol (to implement, userspace/Linux + tpm2-tools)
 
 Provisioning (one-time, trusted env):
-- tpm2_createek / tpm2_createak; enroll AK public with the server.
-- measured-boot NV extend index 0x01C00000 (exists, DUID-auth).
-- attestation NV index 0x01C00002 (ordinary, ownerread, DUID-write via
-  PolicyAuthValue). [index number TBD]
+- tpm2_createek (ECC, to match the Infineon manufacturer EK certs) /
+  tpm2_createak (RSA-2048, rsassa/sha256, parented by the ECC EK); enroll the AK
+  public key with the server.
+- measured-boot NV extend index 0x01800000 (owner range, DUID-auth).
+- attestation NV index 0x01800001 (ordinary, ownerread, DUID-write via
+  PolicyAuthValue).
 - record golden PCRs (0,1,8,9) and golden measured-boot NV value per
   device+image.
+  NOTE: the earlier 0x01C0xxxx indices were in the TCG-reserved handle range
+  (0x01c00000-0x01c0ffff, where the manufacturer EK certs live); moved to the
+  owner range 0x0180xxxx to avoid colliding with the EK cert slots.
 
 Per round:
   server -> device: nonce N
@@ -157,8 +162,31 @@ Demo tampering to show detection:
 (A real warm-TPM-move needs two boards + physical move; the mechanism is shown
 by the DUID-secret write succeeding only with the correct secret.)
 
+## TODO — thesis EK/AK background + implementation consistency
+
+- [ ] Correct the EK/AK background paragraph in the thesis (Overleaf, ~/projs/MsCS/
+      thesis/src/). Current draft has two defects: (a) claims the AK is exported
+      "along with a certificate binding it to the EK" — NO such certificate exists
+      (the EK is a decryption key, cannot sign); (b) omits that the EK↔AK binding
+      is proven by CREDENTIAL ACTIVATION (TPM2_MakeCredential/ActivateCredential;
+      TPM_ActivateIdentity in 1.2), a challenge-response, not a certificate. Also
+      add that the EK by template CANNOT sign (not merely "shouldn't" for privacy).
+      Corrected paragraph drafted (in session 51ef3e89 transcript) — apply it.
+- [ ] Consistency: the corrected background describes the standard Privacy-CA
+      model. The IMPLEMENTATION currently takes the trusted-environment shortcut
+      (trusts exported ak.pem directly; no credential activation). Either (preferred)
+      implement credential activation (tpm2_makecredential on desktop using the
+      saved Infineon EK cert -> tpm2_activatecredential on the Pi; ~15 lines) so the
+      demo matches the background, OR state the shortcut explicitly in the impl
+      chapter. Do NOT write the impl paragraph until the chosen path is validated
+      on hardware (validate-before-writing rule).
+
 ## Status
 
-- 2026-08-20: threat model + attestation design documented. Next: implement
-  EK/AK provisioning + the attestation client/server. Full confidentiality of
-  the DUID depends on OS hardening (separate work item).
+- 2026-08-20: threat model + attestation design documented, and the protocol
+  IMPLEMENTED AND VALIDATED ON HARDWARE (RPi5 + Infineon SLB9670). ECC EK + RSA
+  AK, owner-range NV indices 0x01800000/0x01800001. Full attestation passes all
+  9 server-side checks; negative tests (tampered golden / wrong DUID secret)
+  correctly REJECT. See ../attestation/ (attest-device.sh, attest-server.py,
+  README.md). Full confidentiality of the DUID still depends on OS hardening
+  (separate work item).

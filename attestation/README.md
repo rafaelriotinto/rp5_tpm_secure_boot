@@ -18,7 +18,7 @@ GENUINE BOARD (not a substituted one), and (5) the report is fresh. See
 ## Provisioning (one-time, in a trusted environment)
 
 ```sh
-tpm2_createek -c ek.ctx -G rsa -u ek.pub
+tpm2_createek -c ek.ctx -G ecc -u ek.pub        # ECC, to match the Infineon EK certs
 tpm2_createak -C ek.ctx -c ak.ctx -G rsa -s rsassa -g sha256 -u ak.pub -n ak.name
 tpm2_evictcontrol -C o -c ak.ctx 0x81010002        # persist AK
 tpm2_readpublic -c 0x81010002 -f pem -o ak.pem     # export AK pub for the server
