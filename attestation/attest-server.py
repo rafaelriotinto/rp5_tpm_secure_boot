@@ -38,7 +38,11 @@ SECURITY NOTES (why checks 2, 4 and 6 exist -- see docs/red-team-findings.md):
 """
 import hashlib, json, os, struct, subprocess, sys, tempfile, typing
 
-DEVICE   = os.environ.get("DEVICE", "root@192.168.10.198")
+# The device side runs as a dedicated NON-ROOT user ("attest", member of group
+# tss for /dev/tpmrm0). It needs no secret and no privilege: quote + NV certify
+# with empty platform auth. Root is deliberately not used -- a compromise of
+# the attestation path must not hand over the box.
+DEVICE   = os.environ.get("DEVICE", "root@192.168.10.198")   # TODO.md C1b: switch to attest@
 AK_PEM   = os.environ.get("AK_PEM", "ak.pem")
 REMOTE   = "/tmp/attest"
 # Option B: where we remember the last resetCount, and whether this round is
@@ -56,7 +60,7 @@ GOLDEN_PCR = {
     # PCR0 unchanged) -> the DTB sanitizer is stripping the boot-varying fields.
     # NOTE: ideally derived from the build system, not captured from the device
     # (capturing trusts the very board being attested); see TODO.md.
-    0: "8dc4a286d94a88631ec4be6410d474dd0877a3182ff72163b7babbc2c22e990c",
+    0: "827480c31fce5335284983691e01efe48e23a602e7dc389adbbb4a7e98a1c9f7",
     1: "fbf3642e972e016e33b8776e33f8ee3656bd7c15eb31c00ac13efa190932a434",
     8: "b7cfbbaf255cafaab638a36d00f96a11e6d6ee16e89c0f1e48b4416a19f6a41a",
     9: "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6",
@@ -65,7 +69,7 @@ GOLDEN_PCR = {
 # (after the EV_SEPARATOR events), with SHA256(PCR0||PCR1||PCR8||PCR9) -- the
 # same composite the TPM puts in a quote. So this equals SHA256(0*32||pcrDigest),
 # which the cross-check below verifies. Recaptured 2026-09-06.
-GOLDEN_MEAS_NV = "a3ab72bc9d442a4a369a371b0603d6a54bc8ac7a43f1ecb9f00d24714b919232"
+GOLDEN_MEAS_NV = "292de90b3b44bf35818eb9334f06d5f93ee6cb633f7747bc59ec575e1b279842"
 PCR_SET = (0, 1, 8, 9)
 
 # Golden NV index NAMES, captured at enrollment (C1). The Name is
