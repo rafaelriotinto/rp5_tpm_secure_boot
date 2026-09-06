@@ -1,0 +1,91 @@
+RPIBOOT: build-date 2026/08/17 pkg-version local e50a7096
+
+Please fit the EMMC_DISABLE / nRPIBOOT jumper before connecting the power and USB cables to the target device.
+If the device fails to connect then please see https://rpltd.co/rpiboot for debugging tips.
+
+Boot directory 'mass-storage-gadget64'
+Loading: mass-storage-gadget64/bootfiles.bin
+Using mass-storage-gadget64/bootfiles.bin
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+libusb_bulk_transfer sent 24 bytes; returned 0
+Writing 78332 bytes
+libusb_bulk_transfer sent 78332 bytes; returned 0
+Successful read 4 bytes 
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 4
+last_serial -1 serial 4
+Second stage boot server
+Received message GetFileSize: mcb.bin
+Completed file-read 2712/mcb.bin in archive mass-storage-gadget64/bootfiles.bin length 7092
+File size = 7092 bytes
+Received message ReadFile: mcb.bin
+File read: mcb.bin
+libusb_bulk_transfer sent 7092 bytes; returned 0
+Received message GetFileSize: memsys00.bin
+Completed file-read 2712/memsys00.bin in archive mass-storage-gadget64/bootfiles.bin length 40972
+File size = 40972 bytes
+Received message ReadFile: memsys00.bin
+File read: memsys00.bin
+libusb_bulk_transfer sent 40972 bytes; returned 0
+Received message GetFileSize: memsys01.bin
+Completed file-read 2712/memsys01.bin in archive mass-storage-gadget64/bootfiles.bin length 40972
+File size = 40972 bytes
+Received message ReadFile: memsys01.bin
+File read: memsys01.bin
+libusb_bulk_transfer sent 40972 bytes; returned 0
+Received message GetFileSize: rp1c0fw1.bin
+Completed file-read 2712/rp1c0fw1.bin in archive mass-storage-gadget64/bootfiles.bin length 16384
+File size = 16384 bytes
+Received message ReadFile: rp1c0fw1.bin
+File read: rp1c0fw1.bin
+libusb_bulk_transfer sent 16384 bytes; returned 0
+Received message GetFileSize: memsys02.bin
+Completed file-read 2712/memsys02.bin in archive mass-storage-gadget64/bootfiles.bin length 40972
+File size = 40972 bytes
+Received message ReadFile: memsys02.bin
+File read: memsys02.bin
+libusb_bulk_transfer sent 40972 bytes; returned 0
+Received message GetFileSize: rp1c0fw2.bin
+Completed file-read 2712/rp1c0fw2.bin in archive mass-storage-gadget64/bootfiles.bin length 14864
+File size = 14864 bytes
+Received message ReadFile: rp1c0fw2.bin
+File read: rp1c0fw2.bin
+libusb_bulk_transfer sent 14864 bytes; returned 0
+Received message GetFileSize: memsys03.bin
+Completed file-read 2712/memsys03.bin in archive mass-storage-gadget64/bootfiles.bin length 40972
+File size = 40972 bytes
+Received message ReadFile: memsys03.bin
+File read: memsys03.bin
+libusb_bulk_transfer sent 40972 bytes; returned 0
+Received message GetFileSize: bootmain
+Completed file-read 2712/bootmain in archive mass-storage-gadget64/bootfiles.bin length 556668
+File size = 556668 bytes
+Received message ReadFile: bootmain
+File read: bootmain
+libusb_bulk_transfer sent 556668 bytes; returned 0
+Received message GetFileSize: config.txt
+Loading: mass-storage-gadget64/config.txt
+File size = 238 bytes
+Received message ReadFile: config.txt
+File read: config.txt
+libusb_bulk_transfer sent 238 bytes; returned 0
+Received message GetFileSize: boot.img
+Loading: mass-storage-gadget64/boot.img
+File size = 29360640 bytes
+Received message ReadFile: boot.img
+File read: boot.img
+libusb_bulk_transfer sent 29360640 bytes; returned 0
+Received message Done: boot.img
+CMD exit
+Second stage boot server done

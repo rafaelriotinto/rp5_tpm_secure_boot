@@ -3,3 +3,16 @@
 secure-boot-keys/
 *.pem
 *private*
+
+# Python
+__pycache__/
+*.pyc
+
+# ---------------------------------------------------------------------------
+# DELIBERATELY UNTRACKED — this repository is PUBLIC on GitHub and these files
+# describe UNFIXED security weaknesses on a live board. Publishing them would
+# publish a working attack recipe. Review before ever removing these lines.
+# ---------------------------------------------------------------------------
+docs/red-team-findings.md
+docs/TODO.md
+docs/experimental-results.md

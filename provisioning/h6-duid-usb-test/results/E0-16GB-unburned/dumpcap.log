@@ -1,0 +1,2 @@
+Capturing on 'usbmon0'
+dumpcap: The file to which the capture would be saved ("/home/rafaelrt/projs/MsCS/rp5_tpm_secure_boot/provisioning/h6-duid-usb-test/results/E0-16GB-unburned/usb.pcapng") could not be opened: Permission denied.

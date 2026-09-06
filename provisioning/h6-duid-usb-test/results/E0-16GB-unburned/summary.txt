@@ -1,0 +1,36 @@
+[*] rpiboot exit 0
+--- detector 1: rpiboot -v message log ---
+  FACTORY_UUID in rpiboot log:                   0 hit(s)
+  DUID digits (911045808726) in log:             0 hit(s)
+    -- messages the DEVICE sent (first 25) --
+      Received message GetFileSize: mcb.bin
+      Received message ReadFile: mcb.bin
+      Received message GetFileSize: memsys00.bin
+      Received message ReadFile: memsys00.bin
+      Received message GetFileSize: memsys01.bin
+      Received message ReadFile: memsys01.bin
+      Received message GetFileSize: rp1c0fw1.bin
+      Received message ReadFile: rp1c0fw1.bin
+      Received message GetFileSize: memsys02.bin
+      Received message ReadFile: memsys02.bin
+      Received message GetFileSize: rp1c0fw2.bin
+      Received message ReadFile: rp1c0fw2.bin
+      Received message GetFileSize: memsys03.bin
+      Received message ReadFile: memsys03.bin
+      Received message GetFileSize: bootmain
+      Received message ReadFile: bootmain
+      Received message GetFileSize: config.txt
+      Received message ReadFile: config.txt
+      Received message GetFileSize: boot.img
+      Received message ReadFile: boot.img
+      Received message Done: boot.img
+
+--- detector 2: raw USB capture ---
+  (no usb.pcapng)
+
+--- metadata JSON written by rpiboot (if any) ---
+
+--- VERDICT ---
+  No DUID disclosure detected (log=0 wire=0).
+  Meaningful ONLY if the positive control (E0, unburned board) showed hits
+  with this same tooling. Otherwise the capture may simply be blind.

@@ -152,20 +152,49 @@ identifier / derivation salt, never a security anchor. Secrets live only in
 TPM shielded storage (server-held authValue) or off-device (RSA private key)
 -- neither reachable via RPIBOOT.
 
-HYPOTHESIS (NOT yet validated — do not state as fact): post-OTP-burn the ROM
-may require customer-counter-signing for the USB/RPIBOOT second stage too,
-which would close the RPIBOOT arbitrary-code door. BUT rpiboot is the most
-primitive BL1/ROM function; it is unclear whether the ROM rejects an unsigned
-USB payload at LOAD or only refuses to EXECUTE it, and the docs only state that
-`program_pubkey=1` disables recovery.bin from SD/EMMC (not explicitly the USB
-path). MUST validate empirically after the burn:
-  - enter RPIBOOT, run `rpiboot -d mass-storage-gadget64` (UNSIGNED 2nd stage);
-  - if it refuses to run / no MSD device appears -> channel locked (hardening
-    confirmed);
-  - if the gadget still boots and OTP is dumpable -> channel NOT locked; the
-    DUID/OTP remain physically extractable even post-burn. Report whichever
-    actually happens. Rafael's point (Aug 18): rpiboot is BL1-managed and may
-    still execute regardless of OTP.
+HYPOTHESIS — ✅ **VALIDATED 2026-09-06 (H6). CHANNEL IS LOCKED.** Full method,
+logs and caveats: `provisioning/h6-duid-usb-test/RESULTS.md`.
+
+Identical command / host / payload against two boards differing ONLY in the OTP
+burn, `rpiboot -v -d mass-storage-gadget64` (an UNSIGNED, host-supplied second
+stage — exactly what a physical attacker would use):
+
+| | 16 GB UNBURNED (control) | 1 GB BURNED |
+|---|---|---|
+| bootcode5.bin executed | YES | **NO** |
+| file requests from device | 21 | **0** |
+| final USB ID | 0a5c:0104 (gadget) | 0a5c:2712 (still ROM) |
+| USB block device | sda 29.5 GB | **none** |
+| rpiboot exit | 0 | 124 (timeout) |
+
+Decisive lines from the burned board:
+```
+Sending bootcode.bin
+libusb_bulk_transfer sent 78332 bytes; returned 0   <- ROM ACCEPTED the bytes
+Successful read 4 bytes
+Waiting for BCM2835/6/7/2711/2712...                <- reset; did NOT execute
+Sending bootcode.bin
+Failed control transfer (-7,24)                     <- loops indefinitely
+```
+So the ROM answers the question Rafael raised on Aug 18 ("does it reject at LOAD
+or only refuse to EXECUTE?"): it **accepts the transfer and then refuses to
+execute**, resetting instead. The board never reaches the file-server phase.
+
+⇒ The RPIBOOT arbitrary-code door is CLOSED post-burn. An attacker with physical
+USB access cannot run code on the provisioned board, hence cannot use that
+channel to read OTP / report the DUID.
+
+CAVEAT (do not overclaim): this proves unsigned CODE cannot run. It does not
+prove the absence of an undocumented ROM-level command that discloses OTP without
+executing a second stage — the host never issues such a command, so the 244 KB
+capture (no FACTORY_UUID, no DUID digits) is a lower bound, not a proof.
+
+METHODOLOGICAL NOTE: `mass-storage-gadget64` does NOT emit FACTORY_UUID even on
+an UNBURNED board — DUID metadata comes only from the EEPROM recovery flow (both
+JSONs in provisioning/baseline/ are from EEPROM flashes). So "no FACTORY_UUID on
+the wire" is NOT the load-bearing evidence; the REFUSAL TO EXECUTE is. The first
+run of this experiment wrongly treated absent metadata as meaningful — the
+positive control is what caught it. Always run the control first.
 
 DEEPER POINT (Rafael, Aug 18): even if second-stage EXECUTION is locked to our
 key post-burn, that is a different ROM function from the ROM's own USB PROTOCOL
@@ -176,11 +205,68 @@ any burn. We therefore CANNOT prove the DUID is confidential over USB, before
 OR after burn (cannot prove a negative over an undocumented API; usbboot source
 only enumerates the commands IT uses — a lower bound, not a ceiling).
 
-CONCLUSION (thesis): treat the DUID and ALL OTP as physically extractable over
-USB, permanently. This does NOT harm the design because the only true secret,
-the TPM NV authValue, lives in TPM SHIELDED STORAGE on a separate chip/bus that
-no BCM2712 ROM command can reach. The architecture contains the unknowable USB
-surface by never placing a secret anywhere the ROM can address.
+CONCLUSION — REVISED 2026-09-06 (Rafael). The previous wording said "treat the
+DUID and ALL OTP as physically extractable over USB, permanently". That is
+RETRACTED: it overstates what is known, and taken literally it would invalidate
+the proposed solution (whose board-binding rests on post-provisioning DUID
+confidentiality). What the evidence actually supports:
+
+- PRE-BURN: the DUID *is* disclosed over USB. Verified directly — our own
+  provisioning run's rpiboot metadata JSON contains FACTORY_UUID = the DUID.
+  This is fine: pre-burn/factory is the TRUSTED provisioning environment.
+- POST-BURN: the DOCUMENTED disclosure path is gated by the customer key. DUID
+  reporting requires EXECUTING a second stage that chooses to read OTP and emit
+  it; post-burn the ROM requires that second stage to be counter-signed with the
+  customer key. So an attacker without the private key should get nothing.
+- The honest residual is narrow and specific: we cannot PROVE the absence of an
+  undocumented ROM-level command, because the ROM is immutable and the protocol
+  is only partly documented (usbboot source enumerates the commands IT issues —
+  a lower bound, not a ceiling). This is a "not proven", NOT a demonstrated leak.
+
+=> State it as: post-provisioning, the DUID's confidentiality rests on the boot
+chain (secure boot + signed second stage) and OS hardening, exactly like any
+OTP-held key on a SoC without a TEE. Quantify the residual with the H6 experiment
+below rather than assuming the worst case.
+
+Note the DUID and the TPM NV authValue are NOT the same asset: the authValue
+lives in TPM shielded storage on a separate chip/bus that no BCM2712 ROM command
+can reach. Today the authValue is DERIVED from the DUID, so DUID confidentiality
+still matters; an anchor in the OTP private-key store (hidden from otp_dump)
+would decouple them (optional strengthening, TODO.md B1).
+
+### H6 EXPERIMENT PLAN (post-burn, designed 2026-09-06) — raise confidence
+
+Board cceddb12-0af4f481 is now BURNED, so the Aug-18 test can finally be redone
+under enforcement. Wire format to look for (from usbboot main.c:780-810): the
+device sends metadata as a MESSAGE FILENAME of the form
+    *FACTORY_UUID*<hex words separated by "_">
+which the host c40-decodes (decode_duid.c) into the printable DUID. So the
+literal ASCII "FACTORY_UUID" on the bus is a reliable leak detector.
+
+- **E0 POSITIVE CONTROL (do FIRST, else a null result proves nothing):** run the
+  capture against the UNBURNED 16 GB board. FACTORY_UUID *must* appear. This
+  validates that the capture pipeline would see a leak if one occurred.
+- **E1 unsigned second stage (no flash, lowest risk):**
+  `sudo ./rpiboot -d mass-storage-gadget64` on the burned board.
+  REFUSED => the arbitrary-code path is closed (attacker cannot run code to read
+  OTP). RUNS => critical finding, channel open.
+- **E2 bad-signature EEPROM, post-burn:** repeat the Aug-18 corrupt-pieeprom.sig
+  test (aborts before flashing; that is why it is low risk) with `-j metadata`.
+  Expect: no metadata JSON AND no FACTORY_UUID in the capture.
+- **E3 wrong-key-signed image:** sign an EEPROM with a DIFFERENT RSA key. This is
+  the closest analogue to a real attacker (they can sign, just not with OUR key).
+  Expect rejection with no DUID emitted.
+- **E4 USB capture across all of the above** — the methodological upgrade:
+  `sudo modprobe usbmon`, then capture the Pi's bus
+  (`sudo cat /sys/kernel/debug/usb/usbmon/<bus>u > cap.txt`) and grep for
+  "FACTORY_UUID" and for the decoded DUID digits. This shows what the board
+  actually SENT, rather than what rpiboot chose to write to a file.
+
+Scope of the claim these support (state precisely, do not overclaim): they show
+the ROM does not volunteer the DUID during the documented handshake, and that
+unsigned code cannot run to fetch it. They cannot exclude an undocumented command
+that the host never issues. That is a much narrower residual than "assume it
+always leaks", and it is empirical rather than assumed.
 
 SOURCE-CODE EVIDENCE (usbboot main.c / decode_duid.c, examined Aug 18 2026):
 - The rpiboot USB protocol after the boot handshake is a passive 3-command FILE

@@ -1,0 +1,308 @@
+RPIBOOT: build-date 2026/08/17 pkg-version local e50a7096
+
+Please fit the EMMC_DISABLE / nRPIBOOT jumper before connecting the power and USB cables to the target device.
+If the device fails to connect then please see https://rpltd.co/rpiboot for debugging tips.
+
+Boot directory 'mass-storage-gadget64'
+Loading: mass-storage-gadget64/bootfiles.bin
+Using mass-storage-gadget64/bootfiles.bin
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+libusb_bulk_transfer sent 24 bytes; returned 0
+Writing 78332 bytes
+libusb_bulk_transfer sent 78332 bytes; returned 0
+Successful read 4 bytes 
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Completed file-read 2712/bootcode5.bin in archive mass-storage-gadget64/bootfiles.bin length 78332
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin

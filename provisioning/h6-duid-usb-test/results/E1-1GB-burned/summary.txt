@@ -1,0 +1,23 @@
+[*] rpiboot exit 124
+[*] post-run USB: Bus 005 Device 005: ID 0a5c:2712 Broadcom Corp. BCM2712D0 Boot
+[*] usb block devices: none
+--- detector 1: rpiboot -v message log ---
+  FACTORY_UUID in rpiboot log:                   0 hit(s)
+  DUID digits (911045808726) in log:             0 hit(s)
+    -- messages the DEVICE sent (first 25) --
+
+--- detector 2: raw USB capture ---
+  capture size:                                  244580 bytes
+  'FACTORY_UUID' on the wire:                    0 hit(s)
+  '000000911045808726' on the wire:              0 hit(s)
+  '911045808726' on the wire:                    0 hit(s)
+    -- all '*'-prefixed metadata messages seen on the wire --
+      *H@m
+      *SfR@
+
+--- metadata JSON written by rpiboot (if any) ---
+
+--- VERDICT ---
+  No DUID disclosure detected (log=0 wire=0).
+  Meaningful ONLY if the positive control (E0, unburned board) showed hits
+  with this same tooling. Otherwise the capture may simply be blind.

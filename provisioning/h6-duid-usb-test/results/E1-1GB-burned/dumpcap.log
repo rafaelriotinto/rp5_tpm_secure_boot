@@ -1,0 +1,4 @@
+Capturing on 'usbmon0'
+File: /tmp/h6-E1-1GB-burned-540288.pcapng
+Packets captured: 1578
+Packets received/dropped on interface 'usbmon0': 1578/0 (pcap:0/dumpcap:0/flushed:0/ps_ifdrop:0) (100.0%)
