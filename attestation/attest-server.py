@@ -49,17 +49,23 @@ REQUIRE_REBOOT = os.environ.get("REQUIRE_REBOOT", "") not in ("", "0")
 # Enrollment record for this device+image (golden values). PCR0 is per U-Boot
 # build; capture the deployed build's value here.
 GOLDEN_PCR = {
-    # Re-captured 2026-09-06 for the deployed U-Boot build (Aug 20 2026 11:05:15).
+    # Re-captured 2026-09-06 for the U-Boot build with the CANONICAL devicetree
+    # digest (commit 6c55511a + traversal fix). Verified byte-identical across PSU
+    # and PC-USB power and across warm/cold reboots -- see docs/experimental-results.md E4.
     # Verified STABLE across a cold->warm reboot (count 1->2, rsts 0x1000->0x1020,
     # PCR0 unchanged) -> the DTB sanitizer is stripping the boot-varying fields.
     # NOTE: ideally derived from the build system, not captured from the device
     # (capturing trusts the very board being attested); see TODO.md.
-    0: "f63610324d6267ba700b59022f14dca708a38b3d386e4c07183ca4e18f82ec68",
+    0: "8dc4a286d94a88631ec4be6410d474dd0877a3182ff72163b7babbc2c22e990c",
     1: "fbf3642e972e016e33b8776e33f8ee3656bd7c15eb31c00ac13efa190932a434",
     8: "b7cfbbaf255cafaab638a36d00f96a11e6d6ee16e89c0f1e48b4416a19f6a41a",
     9: "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6",
 }
-GOLDEN_MEAS_NV = "b7cfbbaf255cafaab638a36d00f96a11e6d6ee16e89c0f1e48b4416a19f6a41a"
+# The index now commits to the WHOLE measured state: U-Boot extends it, last
+# (after the EV_SEPARATOR events), with SHA256(PCR0||PCR1||PCR8||PCR9) -- the
+# same composite the TPM puts in a quote. So this equals SHA256(0*32||pcrDigest),
+# which the cross-check below verifies. Recaptured 2026-09-06.
+GOLDEN_MEAS_NV = "a3ab72bc9d442a4a369a371b0603d6a54bc8ac7a43f1ecb9f00d24714b919232"
 PCR_SET = (0, 1, 8, 9)
 
 # Golden NV index NAMES, captured at enrollment (C1). The Name is
@@ -284,6 +290,16 @@ def main():
                                    nv_contents, B("meas_cert.msg"), meas_name)
     check("meas-cert freshness (nonce)", m_extra == nonce)
     check("boot record (measured-boot NV == golden)", m_val == bytes.fromhex(GOLDEN_MEAS_NV))
+
+    # 5b) CROSS-CHECK (D0b): U-Boot extends the index with the SAME composite the
+    #     TPM puts in a quote, so the certified NV value must equal
+    #     SHA256(0x00*32 || quote.pcrDigest). This ties "these measurements" to
+    #     "a board that holds the DUID secret" -- without it, the quote and the
+    #     NV certify are two signed artefacts related only by convention.
+    if q_pcr is not None and m_val is not None:
+        expect = hashlib.sha256(b"\x00" * 32 + q_pcr).digest()
+        check("NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))",
+              m_val == expect)
 
     # 6) restart evidence -- the linchpin of Option B. An attacker who keeps the
     #    TPM powered and ignores a reboot request cannot advance resetCount.

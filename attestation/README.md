@@ -125,12 +125,14 @@ the authValue is only ever an HMAC session key — proof of knowledge, never tra
   yields acceptable evidence, so the guarantee is "detected within the restart
   interval" rather than "cannot be forged". Cf. PCI PTS, which mandates a periodic
   firmware self-reset for the same reason. The interval is a policy choice.
-- **The index currently commits to the kernel only.** DTB, cmdline and initrd are in
-  ordinary PCRs, which a fake board can reproduce. Planned fix: extend the index with
-  `SHA256(PCR0 || PCR1 || PCR8 || PCR9)` — the quote's own `pcrDigest` — so the index
-  commits to the whole measured state (TODO.md D0b).
-- **Golden PCR0 is unstable across power sources** until the DTB sanitizer also strips
-  `/chosen/power` (USB-PD negotiation results) — TODO.md D0.
+- **The index commits to the whole measured state** (since 2026-09-06): U-Boot extends it,
+  last and after the EV_SEPARATOR events, with `SHA256(PCR0 || PCR1 || PCR8 || PCR9)` — the
+  quote's own `pcrDigest`. The verifier checks `NV == SHA256(0*32 || pcrDigest)`, tying the
+  two signed artefacts together.
+- **PCR0 is independent of the power source** (since 2026-09-06): the DTB measurement is a
+  canonical traversal hash that excludes `/chosen/power`, `/chosen/bootloader` and the
+  entropy seeds. Deleting nodes from the blob does NOT work (libfdt keeps deleted property
+  names in the string table) — see docs/experimental-results.md E4.
 - Golden PCR0 is also per-U-Boot-build; the enrollment record updates with the image
   (ties to OTA shipping new golden values).
 - The platform hierarchy must stay enabled, since `-c p` relies on it. This rules out
