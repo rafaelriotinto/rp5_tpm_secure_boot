@@ -16,3 +16,4 @@ __pycache__/
 docs/red-team-findings.md
 docs/TODO.md
 docs/experimental-results.md
+attestation/attest-state.json

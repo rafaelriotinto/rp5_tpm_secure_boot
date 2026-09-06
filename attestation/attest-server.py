@@ -36,11 +36,15 @@ SECURITY NOTES (why checks 2, 4 and 6 exist -- see docs/red-team-findings.md):
   Both checks are fail-closed: a malformed blob is a REJECT, never a crash and
   never a silently-skipped check (no bare `assert`, which `python -O` strips).
 """
-import hashlib, os, struct, subprocess, sys, tempfile
+import hashlib, json, os, struct, subprocess, sys, tempfile, typing
 
 DEVICE   = os.environ.get("DEVICE", "root@192.168.10.198")
 AK_PEM   = os.environ.get("AK_PEM", "ak.pem")
 REMOTE   = "/tmp/attest"
+# Option B: where we remember the last resetCount, and whether this round is
+# a post-reboot check (set REQUIRE_REBOOT=1 after asking the device to reboot).
+STATE_FILE     = os.environ.get("ATTEST_STATE", "attest-state.json")
+REQUIRE_REBOOT = os.environ.get("REQUIRE_REBOOT", "") not in ("", "0")
 
 # Enrollment record for this device+image (golden values). PCR0 is per U-Boot
 # build; capture the deployed build's value here.
@@ -66,19 +70,29 @@ PCR_SET = (0, 1, 8, 9)
 # Leave empty ONLY before enrollment: verification refuses to run without them.
 # Captured 2026-09-06 from board cceddb12-0af4f481.
 #   0x01800001: policywrite|ownerread|authread|no_da            (attrs 0x22060008)
-#   0x01800000: policywrite|nt=0x1(extend)|ownerread|authread|no_da|clear_stclear
-#                                                                (attrs 0x2A060048)
+#   0x01800000: policywrite|nt=extend|ppread|ownerread|authread|no_da|clear_stclear
+#                                                                (attrs 0x0A070048)
 # Both carry authPolicy 8FCD2169...DB0E (PolicyAuthValue over the board secret),
 # and the Name is a hash of that whole public area -> pinning the Name pins the
 # handle, the attributes AND the policy.
 GOLDEN_ATTN_NAME = "000b9a92c0bb9a925132a1dfc907558356e7ad0688d5a98f7c6116d08d265770fb60"
-GOLDEN_MEAS_NAME = "000bfe13a2bf87131dd2c6f293d803e85262b863243a38076fd27ab3376a389c83d7"
+# Re-provisioned 2026-09-06 with TPMA_NV_PPREAD added (attrs 0x0A070048|written),
+# so the device can certify with EMPTY PLATFORM auth and hold no secret.
+GOLDEN_MEAS_NAME = "000b6d77af9978cd18e8a30d502db09bb64056bb36e662620d39d06d1b56e5f867b4"
 
 # TPMS_ATTEST type tags (TPM 2.0 Part 2, TPMI_ST_ATTEST)
 ST_ATTEST_NV    = 0x8014
 ST_ATTEST_QUOTE = 0x8018
 TPM_GENERATED   = bytes.fromhex("ff544347")   # "\xffTCG"
 ALG_SHA256      = 0x000B
+
+
+class ClockInfo(typing.NamedTuple):
+    """TPMS_CLOCK_INFO. resetCount advances on a real TPM restart (Option B)."""
+    clock: int
+    reset_count: int
+    restart_count: int
+    safe: int
 
 
 class AttestError(Exception):
@@ -128,10 +142,17 @@ def parse_attest(m, expected_type):
                           f"expected 0x{expected_type:04x}")
     _, off = _tpm2b(m, off)              # qualifiedSigner
     extra, off = _tpm2b(m, off)          # extraData (our nonce)
-    off += 17 + 8                        # clockInfo (8+4+4+1) + firmwareVersion
-    if off > len(m):
-        raise AttestError("truncated before attested body")
-    return extra, m[off:]
+    # TPMS_CLOCK_INFO: clock u64, resetCount u32, restartCount u32, safe u8.
+    # resetCount is what proves a restart actually happened (Option B); an
+    # attacker who keeps the TPM powered and skips the reboot cannot advance it.
+    if off + 17 + 8 > len(m):
+        raise AttestError("truncated before clockInfo")
+    clock  = struct.unpack(">Q", m[off:off+8])[0]
+    resetc = struct.unpack(">I", m[off+8:off+12])[0]
+    restrt = struct.unpack(">I", m[off+12:off+16])[0]
+    safe   = m[off+16]
+    off += 17 + 8                        # clockInfo + firmwareVersion
+    return extra, m[off:], ClockInfo(clock, resetc, restrt, safe)
 
 
 def nv_contents(m, expected_name):
@@ -140,7 +161,7 @@ def nv_contents(m, expected_name):
     indexName pins WHICH index was certified. Without it any attacker-defined
     index passes.
     """
-    extra, tail = parse_attest(m, ST_ATTEST_NV)
+    extra, tail, clk = parse_attest(m, ST_ATTEST_NV)
     name, off = _tpm2b(tail, 0)          # indexName
     if not expected_name:
         raise AttestError("no golden NV index Name enrolled (cannot verify)")
@@ -149,7 +170,7 @@ def nv_contents(m, expected_name):
                           f"!= golden {expected_name.hex()}")
     _, off = _u16(tail, off)             # offset
     contents, off = _tpm2b(tail, off)    # nvContents
-    return extra, contents
+    return extra, contents, clk
 
 
 def pcr_digest(m):
@@ -159,7 +180,7 @@ def pcr_digest(m):
     digest against a golden composite computed over PCR_SET, so the selection
     must be pinned or the two need not describe the same registers.
     """
-    extra, tail = parse_attest(m, ST_ATTEST_QUOTE)
+    extra, tail, clk = parse_attest(m, ST_ATTEST_QUOTE)
     count, off = _u32(tail, 0)
     if count != 1:
         raise AttestError(f"expected exactly 1 PCR selection, got {count}")
@@ -179,7 +200,7 @@ def pcr_digest(m):
                           f"expected {bytes(want).hex()} (sha256:{','.join(map(str, PCR_SET))})")
 
     digest, off = _tpm2b(tail, off)      # pcrDigest
-    return extra, digest
+    return extra, digest, clk
 
 
 def main():
@@ -188,31 +209,36 @@ def main():
     outdir = tempfile.mkdtemp(prefix="attest-")
 
     try:
-        attn_name = bytes.fromhex(GOLDEN_ATTN_NAME)
         meas_name = bytes.fromhex(GOLDEN_MEAS_NAME)
     except ValueError:
-        print("[server] FATAL: GOLDEN_*_NAME is not valid hex"); sys.exit(2)
-    if not attn_name or not meas_name:
-        print("[server] FATAL: golden NV index Names not enrolled.\n"
-              "         Capture them on the device with:\n"
-              "           tpm2_nvreadpublic 0x01800001   # -> GOLDEN_ATTN_NAME\n"
+        print("[server] FATAL: GOLDEN_MEAS_NAME is not valid hex"); sys.exit(2)
+    if not meas_name:
+        print("[server] FATAL: golden NV index Name not enrolled.\n"
+              "         Capture it on the device with:\n"
               "           tpm2_nvreadpublic 0x01800000   # -> GOLDEN_MEAS_NAME\n"
-              "         Refusing to verify without them (this is the C1 fix).")
+              "         Refusing to verify without it (this is the C1 fix).")
         sys.exit(2)
+
+    # Option B state: the last resetCount we saw, so we can require it to ADVANCE
+    # after a requested reboot. Absent on a first run.
+    prev = {}
+    if os.path.exists(STATE_FILE):
+        try:
+            prev = json.load(open(STATE_FILE))
+        except (OSError, ValueError):
+            prev = {}
 
     user_host = DEVICE
     with open(os.path.join(outdir, "nonce.bin"), "wb") as f:
         f.write(nonce)
     sh("scp", "-O", os.path.join(outdir, "nonce.bin"), f"{user_host}:/tmp/nonce.bin")
 
-    # Run the device script (assumes attest-device.sh already on the device)
     subprocess.run(["ssh", user_host,
                     f"cp /tmp/nonce.bin {REMOTE}/nonce.bin 2>/dev/null; "
                     f"/usr/bin/attest-device.sh /tmp/nonce.bin {REMOTE}"],
                    check=True, stdout=subprocess.DEVNULL)
 
-    files = ["quote.msg", "quote.sig", "attn_cert.msg", "attn_cert.sig",
-             "meas_cert.msg", "meas_cert.sig"]
+    files = ["quote.msg", "quote.sig", "meas_cert.msg", "meas_cert.sig"]
     for fn in files:
         sh("scp", "-O", f"{user_host}:{REMOTE}/{fn}", os.path.join(outdir, fn))
     B = lambda fn: open(os.path.join(outdir, fn), "rb").read()
@@ -232,35 +258,57 @@ def main():
         except AttestError as e:
             print(f"  [FAIL] {name}: {e}")
             ok = False
-            return None, None
+            return None, None, None
 
     # 1) signatures (quote sig has a 6-byte TPMT_SIGNATURE header -> raw 256)
     check("AK signature on quote",     verify_sig(AK_PEM, B("quote.msg"), B("quote.sig")[-256:]))
-    check("AK signature on attn cert", verify_sig(AK_PEM, B("attn_cert.msg"), B("attn_cert.sig")))
     check("AK signature on meas cert", verify_sig(AK_PEM, B("meas_cert.msg"), B("meas_cert.sig")))
 
     # 2) structure: magic + type + PCR selection (H1), fail-closed
-    q_extra, q_pcr = parsed("quote structure (magic/type/PCR selection)",
-                            pcr_digest, B("quote.msg"))
+    q_extra, q_pcr, q_clk = parsed("quote structure (magic/type/PCR selection)",
+                                   pcr_digest, B("quote.msg"))
 
-    # 3) freshness: nonce echoed in quote and both certifies
+    # 3) freshness
     check("quote freshness (nonce)", q_extra == nonce)
 
-    # 4) software state: PCR composite matches golden
+    # 4) software state
     composite = hashlib.sha256(b"".join(bytes.fromhex(GOLDEN_PCR[i]) for i in PCR_SET)).digest()
     check("PCR state == golden", q_pcr == composite)
 
-    # 5) board identity: the RIGHT index (Name pinned, C1) holds our nonce
-    a_extra, a_val = parsed("attn-cert structure (type + index Name)",
-                            nv_contents, B("attn_cert.msg"), attn_name)
-    check("attn-cert freshness (nonce)", a_extra == nonce)
-    check("BOARD identity (nonce in board-protected index 0x01800001)", a_val == nonce)
-
-    # 6) boot record: measured-boot NV index == golden
-    m_extra, m_val = parsed("meas-cert structure (type + index Name)",
-                            nv_contents, B("meas_cert.msg"), meas_name)
+    # 5) boot record + BOARD BINDING (Option B). The measured-boot index is
+    #    clear_stclear, so TPM2_Startup(CLEAR) empties it at every boot, and only
+    #    a bootloader able to derive the board secret can extend it back. A
+    #    substituted board cannot -- so this value being golden AFTER a genuine
+    #    restart is what binds the evidence to the real board.
+    m_extra, m_val, m_clk = parsed("meas-cert structure (type + index Name)",
+                                   nv_contents, B("meas_cert.msg"), meas_name)
     check("meas-cert freshness (nonce)", m_extra == nonce)
     check("boot record (measured-boot NV == golden)", m_val == bytes.fromhex(GOLDEN_MEAS_NV))
+
+    # 6) restart evidence -- the linchpin of Option B. An attacker who keeps the
+    #    TPM powered and ignores a reboot request cannot advance resetCount.
+    if q_clk:
+        print(f"  [info] TPM clock={q_clk.clock} resetCount={q_clk.reset_count} "
+              f"restartCount={q_clk.restart_count} safe={q_clk.safe}")
+        if REQUIRE_REBOOT:
+            pr = prev.get("reset_count")
+            if pr is None:
+                check("restart evidence (no baseline yet -- recorded)", False)
+            else:
+                check(f"restart evidence (resetCount {pr} -> {q_clk.reset_count})",
+                      q_clk.reset_count > pr)
+        elif "reset_count" in prev:
+            same = q_clk.reset_count == prev["reset_count"]
+            print(f"  [info] resetCount {'unchanged' if same else 'ADVANCED'} "
+                  f"since last round (was {prev['reset_count']})")
+
+    if q_clk:
+        try:
+            json.dump({"reset_count": q_clk.reset_count,
+                       "restart_count": q_clk.restart_count,
+                       "clock": q_clk.clock}, open(STATE_FILE, "w"))
+        except OSError:
+            pass
 
     print(f"\n[server] ATTESTATION {'PASSED — device trusted' if ok else 'FAILED — device REJECTED'}")
     sys.exit(0 if ok else 1)

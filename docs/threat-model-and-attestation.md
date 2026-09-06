@@ -33,7 +33,7 @@ receives the good value -> attestation (which certifies that index) detects the
 substitution. PCRs alone would NOT catch this (a fake U-Boot can PCR-extend any
 value), which is precisely why the DUID-gated NV index is needed.
 
-## 3. Attack 2 — warm TPM move (DEFEATED at attestation)
+## 3. Attack 2 — warm TPM move (DEFEATED by attested reboot)
 
 Boot on the REAL board (secure boot on): real U-Boot loads correct PCRs AND the
 correct DUID-authorized NV value. Then, WITH POWER ON, physically move the TPM
@@ -49,21 +49,73 @@ The missing property: a TPM quote proves "a genuine TPM with these PCRs", NOT
 "this TPM is attached to the genuine BOARD". The AK lives in the (moved) TPM, so
 AK-signing proves TPM identity only.
 
-Defence -- bind attestation to the board secret AT ATTESTATION TIME:
-1. Provision an "attestation" NV index, write-authorized by the DUID secret
-   (PolicyAuthValue, same DUID derivation as the measured-boot index).
-2. Each round: server sends fresh nonce N. Device WRITES N into that index,
-   which requires an HMAC session proving the DUID secret.
-3. Device runs TPM2_NV_Certify on the index (AK-signed): the TPM signs
-   "index X contains N".
-4. Server requires BOTH a valid AK signature (genuine TPM) AND content == N
-   (fresh, and only writable by a holder of the DUID secret = genuine board).
+Defence -- SUPERSEDED 2026-09-06. Two designs were considered; the second was
+adopted. See attestation/README.md for the implemented protocol and the thesis
+scratchpad chapter for the write-up.
 
-On the fake board, step 2 fails (its software derives the secret from the FAKE
-DUID -> wrong authValue -> TPM rejects the write) -> no valid certify -> detected.
-The moved AK does not help: AK proves TPM identity; the DUID-gated write proves
-BOARD identity; the protocol mandates both. The attacker cannot replay a captured
-write (rolling nonceTPM) nor precompute it (N is fresh).
+### (a) REJECTED: bind at attestation time with a per-round secret
+
+Provision a second "attestation" NV index write-authorized by the DUID secret;
+each round the device writes the server nonce into it and NV_Certifies it, so a
+valid certify proves a holder of the board secret participated NOW.
+
+This works cryptographically and was implemented and hardware-validated (Aug 20),
+but it requires the RUNTIME agent in Linux to hold a board secret every round.
+That forced the DUID (or a per-boot derivative) into the OS, kept red-team finding
+H4 alive (authValue on argv), and the per-boot-derivative variant additionally
+required TPM2_NV_ChangeAuth -- which transmits the NEW authValue as a CLEARTEXT
+command parameter on the bit-banged SPI bus, i.e. on the cheapest attack surface
+the board has. Avoiding that needs salted sessions with parameter encryption
+(ECDH to the EK + KDFa + AES-CFB) and EK certificate verification in U-Boot;
+none of it exists, and it is far more new crypto than the measurement path needed.
+
+### (b) ADOPTED: attested reboot (no secret at attestation time)
+
+Keep the board secret entirely inside U-Boot and make FRESHNESS OF THE BOOT the
+thing the server checks:
+
+1. The measured-boot index 0x01800000 is `clear_stclear`, so TPM2_Startup(CLEAR)
+   empties it at every boot. Only a bootloader that can derive the DUID secret can
+   extend it back to the golden value -- proven by HMAC session, never transmitted.
+2. The server REQUESTS A REBOOT and then requires, in the next round, BOTH:
+   - the TPM's `resetCount` (in TPMS_CLOCK_INFO, inside every signed attest
+     structure) to have ADVANCED -- so the restart really happened; and
+   - the measured-boot index to be back at the golden value -- which only the
+     genuine board can achieve.
+3. Reading/certifying the index needs no secret: it carries TPMA_NV_PPREAD, so the
+   device authorizes with the EMPTY PLATFORM auth (`tpm2_nvcertify -c p`). That in
+   turn lets OWNER auth be set, which blocks the delete/redefine attack below.
+
+An attacker who keeps the TPM powered and ignores the reboot fails the resetCount
+check; one who genuinely restarts loses the NV value and cannot restore it.
+
+Validated on hardware 2026-09-06: resetCount 76->77 across a real reboot -> PASS;
+the same check without rebooting (77->77) -> REJECTED.
+
+COST, stated honestly: binding is now PERIODIC, not continuous. Between restarts a
+warm-moved TPM still produces acceptable evidence, so the guarantee weakens from
+"cannot be forged" to "detected within the restart interval". This is a recognised
+control rather than a concession -- PCI PTS mandates a periodic firmware self-reset
+for the same reason -- and the interval is a policy choice traded against the
+disruption of restarting. Section 4 previously dismissed periodic reboot as the
+"weaker" option; that judgement predated the analysis of (a)'s bus exposure and is
+withdrawn.
+
+### Necessary companion: block delete/redefine of the NV index
+
+Pinning the certified index Name is NOT sufficient on its own. The Name covers
+{nvIndex, nameAlg, attributes, authPolicy, dataSize} -- the authValue is NOT part
+of it. So an attacker with owner auth can undefine the index and recreate it with
+the same public area but their OWN authValue; once written, TPMA_NV_WRITTEN is set
+again and the Name is BYTE-IDENTICAL to golden. Demonstrated live 2026-09-06.
+The AK is untouched, so all signatures still verify.
+
+Fix: set OWNER auth (M1a), diversified as SHA256(context || factory_master || DUID)
+-- the factory master never leaves the provisioning host, and the DUID only
+diversifies it per board. Owner auth is PERSISTENT in TPM NV, so it keeps
+protecting the index even if the module is lifted off the board. Verified: after
+setting it, tpm2_nvundefine is refused, and attestation still passes with no secret
+on the device.
 
 ## 4. The load-bearing dependency
 
@@ -88,7 +140,22 @@ bus -- add confidentiality against bus READ-probing. The rolling-nonce HMAC
 already prevents the replay/forgery that matters for board-binding, so salted
 sessions are an add-on, not the core mechanism.
 
-## 4b. Attestation-time secret exposure and the platform limit (THESIS-CRITICAL)
+## 4b. Attestation-time secret exposure and the platform limit (LARGELY SUPERSEDED)
+
+> ⚠️ **UPDATE 2026-09-06.** This section's premise -- "some component on the running
+> device must access a board secret on every attestation, this is FUNDAMENTAL" -- was
+> true only of the attestation-time-binding design (section 3a), which has been
+> REPLACED. Under the adopted attested-reboot design the runtime agent uses NO secret
+> at all: the board secret is used only by U-Boot, only at boot, and only as an HMAC
+> session key. So mitigations 1-3 below are no longer needed to protect a runtime
+> secret; mitigation 2 (strip /chosen/rpi-duid) and the non-root service remain worth
+> doing as defence in depth, and become straightforward now that Linux never needs the
+> DUID. Mitigation 3 (per-boot delegated credential) is DROPPED -- it was design (a).
+>
+> What survives unchanged: the no-TEE platform limit at the end of the section, as it
+> applies to U-Boot holding the secret at boot. Retained below for the record.
+
+## 4b (original, for the record)
 
 The board-binding (section 3) requires proving the DUID-derived secret AT
 ATTESTATION TIME, not just at boot. This is FUNDAMENTAL, not an implementation
