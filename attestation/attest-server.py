@@ -42,9 +42,13 @@ import hashlib, json, os, struct, subprocess, sys, tempfile, typing
 # tss for /dev/tpmrm0). It needs no secret and no privilege: quote + NV certify
 # with empty platform auth. Root is deliberately not used -- a compromise of
 # the attestation path must not hand over the box.
-DEVICE   = os.environ.get("DEVICE", "root@192.168.10.198")   # TODO.md C1b: switch to attest@
+DEVICE   = os.environ.get("DEVICE", "attest@192.168.10.198")
 AK_PEM   = os.environ.get("AK_PEM", "ak.pem")
 REMOTE   = "/tmp/attest"
+# Path of the agent on the device. It is installed at /usr/bin by the
+# attestation-agent recipe; override (e.g. "sh /tmp/attest-device.sh") to test
+# a script copied by hand before an image rebuild.
+DEVICE_SCRIPT = os.environ.get("DEVICE_SCRIPT", "/usr/bin/attest-device.sh")
 # Option B: where we remember the last resetCount, and whether this round is
 # a post-reboot check (set REQUIRE_REBOOT=1 after asking the device to reboot).
 STATE_FILE     = os.environ.get("ATTEST_STATE", "attest-state.json")
@@ -60,16 +64,16 @@ GOLDEN_PCR = {
     # PCR0 unchanged) -> the DTB sanitizer is stripping the boot-varying fields.
     # NOTE: ideally derived from the build system, not captured from the device
     # (capturing trusts the very board being attested); see TODO.md.
-    0: "827480c31fce5335284983691e01efe48e23a602e7dc389adbbb4a7e98a1c9f7",
-    1: "fbf3642e972e016e33b8776e33f8ee3656bd7c15eb31c00ac13efa190932a434",
-    8: "b7cfbbaf255cafaab638a36d00f96a11e6d6ee16e89c0f1e48b4416a19f6a41a",
+    0: "1fc437a39bf0737bde60d0a863c2232467f59846f68518b3e430a8c7fa2c4dab",
+    1: "75660bcc680509428fea007d8c7c280ea2a6de7bd133d941b63dbdac03a13375",
+    8: "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
     9: "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6",
 }
 # The index now commits to the WHOLE measured state: U-Boot extends it, last
 # (after the EV_SEPARATOR events), with SHA256(PCR0||PCR1||PCR8||PCR9) -- the
 # same composite the TPM puts in a quote. So this equals SHA256(0*32||pcrDigest),
 # which the cross-check below verifies. Recaptured 2026-09-06.
-GOLDEN_MEAS_NV = "292de90b3b44bf35818eb9334f06d5f93ee6cb633f7747bc59ec575e1b279842"
+GOLDEN_MEAS_NV = "fcb09bd1f52fbebe535b82845fdf21642765d5b7c91167033fef15ab229b6c44"
 PCR_SET = (0, 1, 8, 9)
 
 # Golden NV index NAMES, captured at enrollment (C1). The Name is
@@ -245,7 +249,7 @@ def main():
 
     subprocess.run(["ssh", user_host,
                     f"cp /tmp/nonce.bin {REMOTE}/nonce.bin 2>/dev/null; "
-                    f"/usr/bin/attest-device.sh /tmp/nonce.bin {REMOTE}"],
+                    f"{DEVICE_SCRIPT} /tmp/nonce.bin {REMOTE}"],
                    check=True, stdout=subprocess.DEVNULL)
 
     files = ["quote.msg", "quote.sig", "meas_cert.msg", "meas_cert.sig"]

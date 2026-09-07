@@ -39,3 +39,18 @@ II. Misc
 ========
 
 --- replace with specific information about the meta-rpi5-uboot-tpm layer ---
+
+Build-host layer requirement (added 2026-09-07)
+-----------------------------------------------
+The image inherits meta-security's dm-verity-img class, so bblayers.conf must
+also list the meta-security BASE layer (not only meta-security/meta-tpm):
+
+  /path/to/poky/meta-security
+  /path/to/poky/meta-security/meta-tpm
+
+It depends only on core and meta-oe, both already required. The "security not
+in DISTRO_FEATURES" warning is benign for this use.
+
+Partition layout: boot (FAT, signed boot.img) | dm-verity rootfs (raw) | data
+(ext4, noexec,nosuid,nodev). See wic/rpi5-verity.wks.in and
+provisioning/verity/ for deriving the dm-mod.create= command line.

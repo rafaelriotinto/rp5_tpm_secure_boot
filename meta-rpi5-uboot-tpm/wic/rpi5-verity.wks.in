@@ -1,0 +1,9 @@
+# short-description: Raspberry Pi 5 SD image with a dm-verity read-only root and a data partition
+# long-description: boot (FAT, holds the signed boot.img) | root (raw copy of the
+# verity-protected ext4 image -- must be copied verbatim, the hash tree covers it
+# block for block) | data (writable, mounted noexec,nosuid,nodev).
+# Requires the dm-verity-img class (DM_VERITY_IMAGE / DM_VERITY_IMAGE_TYPE).
+
+part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot --active --align 4096 --size 130
+part /     --source rawcopy --ondisk mmcblk0 --align 4096 --sourceparams="file=${IMGDEPLOYDIR}/${DM_VERITY_IMAGE}-${MACHINE}${IMAGE_NAME_SUFFIX}.${DM_VERITY_IMAGE_TYPE}.verity"
+part /data --ondisk mmcblk0 --fstype=ext4 --label data --align 4096 --size 2048 --fsoptions "noexec,nosuid,nodev"
