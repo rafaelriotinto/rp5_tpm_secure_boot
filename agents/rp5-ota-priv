@@ -73,6 +73,14 @@ def dd(src, dst, size):
     return n
 
 
+def prepare(args):
+    """Create the staging directory for the unprivileged half (/data is root's)."""
+    import pwd
+    os.makedirs("/data/ota", mode=0o700, exist_ok=True)
+    pw = pwd.getpwnam("ota"); os.chown("/data/ota", pw.pw_uid, pw.pw_gid); os.chmod("/data/ota", 0o700)
+    return {"staging": "/data/ota"}
+
+
 def status(args):
     ab = read_autoboot()
     return {"partition": fw_partition(), "tryboot": fw_tryboot(), "counter": counter(),
@@ -155,4 +163,4 @@ if __name__ == "__main__":
         reply(ok=False, error="must run as root (via sudo)"); sys.exit(1)
     os.environ.pop("SSH_ORIGINAL_COMMAND", None)   # verbs come from argv here
     sys.exit(main({"status": status, "install": install, "tryboot": tryboot,
-                   "commit": commit, "reboot": reboot}))
+                   "commit": commit, "reboot": reboot, "prepare": prepare}))

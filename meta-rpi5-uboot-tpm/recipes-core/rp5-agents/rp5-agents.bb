@@ -43,11 +43,7 @@ do_install() {
     chown -R attest:attest ${D}/home/attest
     install -d -m 0750 ${D}${sysconfdir}/sudoers.d
     install -m 0440 ${WORKDIR}/sudoers-rp5-agents ${D}${sysconfdir}/sudoers.d/rp5-agents
-    # state for the OTA service (staged releases); /data is mounted noexec
-    install -d ${D}${sysconfdir}/tmpfiles.d
-    echo "d /data/ota 0700 ota ota -" > ${D}${sysconfdir}/tmpfiles.d/rp5-ota.conf
 }
 
-FILES:${PN} = "${bindir} ${libdir}/rp5agent /home/ota /home/provision /home/attest/.ssh ${sysconfdir}/sudoers.d ${sysconfdir}/tmpfiles.d"
 # attest-user installs an unrestricted key for attest; this recipe replaces it
 RCONFLICTS:${PN} = ""
