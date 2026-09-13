@@ -18,7 +18,7 @@ SRC_URI = "file://rp5agent/__init__.py \
 S = "${WORKDIR}"
 
 inherit useradd
-USERADD_DEPENDS = "tpm2-tss"
+USERADD_DEPENDS = "tpm2-tss attest-user"
 USERADD_PACKAGES = "${PN}"
 USERADD_PARAM:${PN} = "--system --home-dir /home/ota --no-create-home --shell /bin/sh --groups tss --user-group ota; \
                        --system --home-dir /home/provision --no-create-home --shell /bin/sh --groups tss --user-group provision"
