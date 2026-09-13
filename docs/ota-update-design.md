@@ -89,6 +89,87 @@ there can install any CUSTOMER-SIGNED image (i.e. downgrade within anti-rollback
 limits, or DoS by repeatedly failing updates) but cannot run unsigned code.
 This bounds the damage to availability, not integrity -- worth stating.
 
+
+## Settled design (2026-09-13): pairs by rule, one signed image per release
+
+The A/B flow above covers the BOOT image. With a dm-verity root the root
+filesystem is part of the release too (its root hash is inside the signed
+`cmdline.txt`), so a slot is a PAIR (boot partition + root partition), and the
+question was how one signed `boot.img` can name the root device for both slots.
+
+**Rule, not flavour.** `cmdline.txt` carries the placeholder `@ROOTDEV@`.
+U-Boot (`board_fdt_chosen_bootargs()` in `board/raspberrypi/rpi/rpi.c`, fork
+commit `8e021abd`) reads the partition the firmware booted from
+(`/chosen/bootloader/partition`) and substitutes by a fixed rule:
+
+| firmware booted from | root device | pair |
+|---|---|---|
+| partition 1 (boot A) | `/dev/mmcblk0p2` | A |
+| partition 5 (boot B) | `/dev/mmcblk0p3` | B |
+
+Anything else, or an unresolved placeholder, halts. Consequences:
+- one signed `boot.img` per release, identical bytes in both boot partitions;
+- the update always writes the INACTIVE pair, whatever version it holds
+  (a board two releases behind is updated exactly like one release behind);
+- a failed tryboot reverts to the untouched pair: nothing to swap back;
+- PCR1 measures the SUBSTITUTED line, so a release has two PCR1 goldens (one
+  per pair), both computable on the host from the template. PCR0 carries the
+  template (the firmware DT holds `cmdline.txt` verbatim) and is the same on
+  both pairs. Validated: `experimental-results.md` E12.
+
+**Layout (GPT), `meta-rpi5-uboot-tpm/wic/rpi5-verity-ab.wks.in`:**
+
+| # | label | content |
+|---|---|---|
+| p1 | boota | FAT: `boot.img` + `boot.sig`, `autoboot.txt` |
+| p2 | root A | raw verity image (fixed 512 MiB) |
+| p3 | root B | raw verity image (fixed 512 MiB) |
+| p4 | data | ext4, `noexec,nosuid,nodev` |
+| p5 | bootb | FAT: `boot.img` + `boot.sig` |
+
+`autoboot.txt` (recipe `rpi-autoboot`, read by the firmware from p1 only):
+
+```
+[all]
+tryboot_a_b=1
+boot_partition=1
+[tryboot]
+boot_partition=5
+```
+
+**Release = one monotonic version** covering U-Boot + kernel + DT + config +
+rootfs: the root hash in the signed cmdline binds the rootfs to the boot
+image, so there is nothing to version separately. Manifest: version,
+`boot.img` digest, verity image digest, PCR0, PCR1 (A and B), PCR8, PCR9.
+
+**Update procedure (agent, step 5 of the plan):**
+1. Read the active pair from `/chosen/bootloader/partition`; the target is the
+   other one. Refuse to touch the active pair (lesson from E11: writing the
+   running root corrupts the live system).
+2. Write the verity image to the target root, `fsync`, read back and compare
+   the digest against the manifest.
+3. Write `boot.img` + `boot.sig` to the target boot partition (FAT), read back.
+4. `reboot "0 tryboot"` -> firmware boots the `[tryboot]` partition once. The
+   firmware verifies that `boot.img` like any other (owner key in OTP).
+5. Health check in the new system (verity root mounted, attestation passes,
+   TPM anti-rollback counter advanced) -> COMMIT by rewriting `autoboot.txt`
+   on p1 with the two partition numbers swapped. Otherwise do nothing: the
+   next reboot returns to the committed pair.
+
+**First flash of the A/B card (host, card in reader as /dev/sdX):**
+1. `bmaptool copy` / `dd` the `.wic` image. wic populates the boot partitions
+   with the raw firmware files, NOT the signed `boot.img`: under secure boot
+   the card will not boot yet.
+2. Build the release `boot.img` from the deployed U-Boot, kernel, DTs,
+   overlays, `config.txt` and the TEMPLATE `cmdline.txt` (root hash and salt
+   of the `.verity` image just flashed, from its `.verity.env`; the
+   `dm-mod.create` string via `provisioning/verity/verity-cmdline.sh`);
+   sign with `rpi-eeprom-digest`.
+3. `mcopy` `boot.img` + `boot.sig` into BOTH p1 and p5.
+4. Boot; expect partition 1, root A, PCR1 = golden A. Then the tryboot spike:
+   `reboot "0 tryboot"` -> expect partition 5, root B, PCR1 = golden B, PCR0
+   unchanged; then a plain reboot -> back to pair A (nothing committed).
+
 ## Implementation plan
 
 - Yocto: partition layout with two boot slots (wic), `autoboot.txt`, and an
@@ -106,3 +187,7 @@ This bounds the damage to availability, not integrity -- worth stating.
 - 2026-08-19: design documented. Sequencing: after secure boot (done),
   anti-rollback, and attestation, since it composes with all three. First
   concrete spike: verify tryboot A/B under secure boot on hardware.
+- 2026-09-13: pairing-by-rule implemented in U-Boot and validated on the
+  existing card (E12). GPT A/B layout + `autoboot.txt` recipe committed;
+  first flash and the tryboot-under-secure-boot spike pending (needs the card
+  in a reader).
