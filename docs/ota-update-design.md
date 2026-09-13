@@ -191,3 +191,9 @@ image, so there is nothing to version separately. Manifest: version,
   existing card (E12). GPT A/B layout + `autoboot.txt` recipe committed;
   first flash and the tryboot-under-secure-boot spike pending (needs the card
   in a reader).
+- 2026-09-13 (later): E13 — firmware numbers GPT partitions by counting basic-data-typed
+  partitions only → layout reordered (boot A | boot B | root A | root B | data, roots typed
+  Linux fs; U-Boot rule 1 → p3, 2 → p4). tryboot under secure boot works. Boot command fixed to
+  load `boot.img` from the booted partition (`${rpi_bootpart}`). First real update r2 → r3
+  performed by hand exactly as in "Update procedure" and committed. Remaining: the agent script
+  (step 5), anti-rollback counter, event log to Linux.

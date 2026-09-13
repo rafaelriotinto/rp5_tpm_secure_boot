@@ -71,10 +71,12 @@ REQUIRE_REBOOT = os.environ.get("REQUIRE_REBOOT", "") not in ("", "0")
 # NOTE: ideally derived from the build system, not captured from the device
 # (capturing trusts the very board being attested); see TODO.md.
 GOLDEN_PCR = {
-    # r2 (reordered A/B card): captured 47a9f4a4..., identical on slot A and B and across
-    # reboots; it moved from bb17bc25... (r1) with the SAME cmdline template and a U-Boot
-    # differing by 5 bytes -- cause not yet identified (E13 open item).
-    0: "47a9f4a46f673dee4c2a9888aa2a0583edc367b3752f5eb4671ef29d5c6a22a5",
+    # PCR0 = extend(extend(0, SHA256(U-Boot version string incl. BUILD TIME)),
+    #        canonical devicetree digest), then EV_SEPARATOR -- so it changes with
+    # EVERY U-Boot build (tcg2_measurement_init measures EV_S_CRTM_VERSION first;
+    # E14). Per release, identical on both slots. r3 (U-Boot 5e1734a4, built
+    # 2026-09-13 09:18:22 UTC):
+    0: "c6708860d3d8405b2398598a941b85ff41807fdd8683c296e7dc562519a54a95",
     8: "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
     9: "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6",
 }
