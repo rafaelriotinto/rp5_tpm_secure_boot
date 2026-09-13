@@ -43,7 +43,8 @@ import hashlib, json, os, struct, subprocess, sys, tempfile, typing
 # with empty platform auth. Root is deliberately not used -- a compromise of
 # the attestation path must not hand over the box.
 DEVICE   = os.environ.get("DEVICE", "attest@192.168.10.198")
-AK_PEM   = os.environ.get("AK_PEM", "ak.pem")
+HERE     = os.path.dirname(os.path.abspath(__file__))   # files live next to this script, whatever the cwd
+AK_PEM   = os.environ.get("AK_PEM", os.path.join(HERE, "ak.pem"))
 REMOTE   = "/tmp/attest"
 # Path of the agent on the device. It is installed at /usr/bin by the
 # attestation-agent recipe; override (e.g. "sh /tmp/attest-device.sh") to test
@@ -55,7 +56,7 @@ AGENT = os.environ.get("AGENT", "0") not in ("", "0")
 AGENT_KEY = os.environ.get("AGENT_KEY", "")
 # Option B: where we remember the last resetCount, and whether this round is
 # a post-reboot check (set REQUIRE_REBOOT=1 after asking the device to reboot).
-STATE_FILE     = os.environ.get("ATTEST_STATE", "attest-state.json")
+STATE_FILE     = os.environ.get("ATTEST_STATE", os.path.join(HERE, "attest-state.json"))
 REQUIRE_REBOOT = os.environ.get("REQUIRE_REBOOT", "") not in ("", "0")
 
 # Enrollment record for this device+RELEASE (golden values). A release is one
@@ -79,15 +80,15 @@ GOLDEN_PCR = {
     #        canonical devicetree digest), then EV_SEPARATOR -- so it changes with
     # EVERY U-Boot build (tcg2_measurement_init measures EV_S_CRTM_VERSION first;
     # E14). Per release, identical on both slots. r3 (U-Boot 5e1734a4, built
-    # 2026-09-13 09:18:22 UTC); r5 (U-Boot 2b45cf05, anti-rollback v5, built 10:30:53 UTC):
-    0: "36faa1930e3f7fb0198912509fb510652411d746a18d02fb10ed029b39133acf",
+    # 2026-09-13 09:18:22 UTC); r7 (U-Boot 2b45cf05, anti-rollback v7, built 11:40:10 UTC, first release with the services):
+    0: "a0d5a3d204fe936a40a58e68ab3d49c57e0028b94461c73bdf05726842ec0cc3",
     8: "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
     9: "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6",
 }
 GOLDEN_PCR1_BY_SLOT = {
-    # r6: from the release manifest (host-computed from the cmdline template)
-    "A (/dev/mmcblk0p3)": "874312f8e26af0f474e214b074d81160c487cca97b8b63a12635b4289f9ab080",
-    "B (/dev/mmcblk0p4)": "71188a6be41867ba00195ee2e787755f2deb59a2ac6426a15baeb1889b6741b4",
+    # r7: from the release manifest (host-computed from the cmdline template)
+    "A (/dev/mmcblk0p3)": "d36edb62633d88162340219bb81170d308038359ba0b0a4164621f09a0f95663",
+    "B (/dev/mmcblk0p4)": "18814868aa178755cfcc66856fc8ae086d1156bd2d3647293cf5b9e87aa7f229",
 }
 # The index commits to the WHOLE measured state: U-Boot extends it, last (after
 # the EV_SEPARATOR events), with SHA256(PCR0||PCR1||PCR8||PCR9) -- the same
