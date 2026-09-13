@@ -96,6 +96,16 @@ GOLDEN_PCR1_BY_SLOT = {
 # It is therefore derived per slot from the goldens above, not captured.
 PCR_SET = (0, 1, 8, 9)
 
+# Enrollment from a file, so that a release's goldens come from its manifest
+# (written by agents/server/rp5.py after a successful update) instead of edits
+# to this script: {"pcr0": hex, "pcr1": {"A": hex, "B": hex}, "pcr8": hex, "pcr9": hex}
+GOLDENS_FILE = os.environ.get("GOLDENS_FILE", os.path.join(HERE, "current-goldens.json"))
+if os.path.exists(GOLDENS_FILE):
+    _g = json.load(open(GOLDENS_FILE))
+    GOLDEN_PCR = {0: _g["pcr0"], 8: _g["pcr8"], 9: _g["pcr9"]}
+    GOLDEN_PCR1_BY_SLOT = {"A (/dev/mmcblk0p3)": _g["pcr1"]["A"], "B (/dev/mmcblk0p4)": _g["pcr1"]["B"]}
+    print(f"[server] goldens from {GOLDENS_FILE}" + (f" (release {_g['release']})" if "release" in _g else ""))
+
 # Golden NV index NAMES, captured at enrollment (C1). The Name is
 # nameAlg || H_nameAlg(nvPublic), i.e. 2 + 32 bytes for SHA-256 = 34 bytes.
 # Capture with, on the device:

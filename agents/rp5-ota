@@ -46,10 +46,11 @@ def status(args):
 def install(args):
     if fw_tryboot():
         raise Fail("running a trial boot; commit or reboot before installing")
-    if not os.path.isdir(STAGING):
-        p0 = priv("prepare")      # /data is root-owned; the helper creates our directory
+    if not os.path.isdir(os.path.dirname(STAGING)):
+        p0 = priv("prepare")      # /data is root-owned; the helper creates /data/ota for us
         if not p0.get("ok"):
             raise Fail(p0.get("error", "prepare failed"))
+    os.makedirs(STAGING, mode=0o700, exist_ok=True)
     for fn in os.listdir(STAGING):
         os.remove(os.path.join(STAGING, fn))
     with tarfile.open(fileobj=sys.stdin.buffer, mode="r|*") as tar:

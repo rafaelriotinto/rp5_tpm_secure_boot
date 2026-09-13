@@ -47,10 +47,22 @@ def tar_release(d):
     return buf.getvalue()
 
 
-def attest():
+GOLDENS_CURRENT = os.path.join(HERE, "..", "..", "attestation", "current-goldens.json")
+PCR9_NO_INITRD = "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6"
+
+
+def attest(goldens_file=None):
     env = dict(os.environ, AGENT="1", AGENT_KEY=f"{KEYS}/attest_ed25519", DEVICE=f"attest@{BOARD}", REQUIRE_REBOOT="1")
+    if goldens_file:
+        env["GOLDENS_FILE"] = goldens_file
     r = subprocess.run([sys.executable, VERIFIER], env=env)
     return r.returncode == 0
+
+
+def goldens_for(man, pcr0, release):
+    g = man["goldens"]
+    return {"release": release, "pcr0": pcr0, "pcr1": g["pcr1"], "pcr8": g["pcr8"],
+            "pcr9": g.get("pcr9") or PCR9_NO_INITRD}
 
 
 def wait_up():
@@ -84,8 +96,21 @@ def update(release):
     print(f"[update] up: partition {st['partition']} tryboot {st['tryboot']} counter {st['counter']}")
     if not st["tryboot"] or st["partition"] != before["target"]:
         print("[update] NOT on the trial pair: the trial fell back or never happened; not committing"); return 1
+    # Goldens for the health check come from the manifest. PCR0 cannot be computed
+    # on the host yet (it includes the U-Boot build stamp, E14): if the manifest
+    # has none, it is taken from this trial boot and recorded -- trust on first
+    # use for that ONE value; PCR1/8/9, the NV commitment, the AK signature and
+    # the reset counter are all still checked against host-side values.
+    pcr0 = man["goldens"].get("pcr0")
+    if not pcr0:
+        pcr0 = st["pcr"]["0"]
+        print(f"[update] manifest has no PCR0: capturing {pcr0[:16]}... from the trial boot (TOFU, U-Boot build stamp)")
+        man["goldens"]["pcr0"] = pcr0
+        json.dump(man, open(os.path.join(release, "MANIFEST.json"), "w"), indent=2)
+    gfile = os.path.join(release, "goldens.json")
+    json.dump(goldens_for(man, pcr0, os.path.basename(os.path.abspath(release))), open(gfile, "w"), indent=2)
     print("[update] health check = attestation round")
-    if not attest():
+    if not attest(gfile):
         print("[update] attestation FAILED on the trial: not committing; a plain reboot returns to the committed pair"); return 1
     rep = ssh("ota", "commit")
     if not rep.get("ok"):
@@ -96,7 +121,10 @@ def update(release):
     if not st:
         print("[update] board did not come back after commit"); return 1
     print(f"[update] up: partition {st['partition']} tryboot {st['tryboot']} counter {st['counter']}")
-    ok = attest()
+    ok = attest(gfile)
+    if ok:
+        import shutil; shutil.copy(gfile, GOLDENS_CURRENT)
+        print(f"[update] goldens of release {man['version']} are now current ({GOLDENS_CURRENT})")
     print("[update] DONE" if ok else "[update] attestation FAILED on the committed boot")
     return 0 if ok else 1
 
