@@ -4,5 +4,6 @@
   "captured_pcr0": "1d52c2424bdc2f1fdc85950b29080cde59e010d5b2806ac0943078e9baab9fb7",
   "meas_name": "000b6d77af9978cd18e8a30d502db09bb64056bb36e662620d39d06d1b56e5f867b4",
   "meas_index": "0x01800000",
-  "counter_index": "0x01800002"
+  "counter_index": "0x01800002",
+  "bootargs_prefix": "reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=4 system_heap.max_order=0 iommu_dma_numa_policy=interleave smsc95xx.macaddr=88:A2:9E:82:BB:4D vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  "
 }

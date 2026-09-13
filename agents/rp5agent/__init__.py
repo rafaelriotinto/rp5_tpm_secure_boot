@@ -66,6 +66,16 @@ def dt_digest():
         return None
 
 
+def bootargs():
+    """The kernel command line as the firmware+U-Boot built it (the firmware prefix carries
+    board facts such as the MAC address, so PCR1 is per board as well as per release)."""
+    try:
+        with open("/proc/device-tree/chosen/bootargs", "rb") as f:
+            return f.read().rstrip(b"\0").decode(errors="replace")
+    except OSError:
+        return None
+
+
 def sha256_file(path, limit=None, bs=1 << 20):
     h = hashlib.sha256(); n = 0
     with open(path, "rb") as f:

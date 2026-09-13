@@ -23,7 +23,7 @@ WAIT = int(os.environ.get("REBOOT_WAIT", "90"))
 
 
 def ssh(service, verb, stdin=None, timeout=600):
-    cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "-i", f"{KEYS}/{service}_ed25519",
+    cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", "-o", "StrictHostKeyChecking=accept-new", "-i", f"{KEYS}/{service}_ed25519",
            f"{service}@{BOARD}", verb]
     r = subprocess.run(cmd, input=stdin, capture_output=True, timeout=timeout)
     lines = r.stdout.decode(errors="replace").strip().splitlines()
@@ -75,9 +75,23 @@ def attest(goldens_file=None):
     return r.returncode == 0
 
 
+def predict_pcr1(prefix, cmdline_template):
+    """PCR1 = extend(extend(0, H(firmware prefix + substituted cmdline + NUL)), H(separator)),
+    one value per root slot. The prefix (MAC address etc.) is enrolled per board."""
+    import hashlib
+    H = lambda b: hashlib.sha256(b).digest()
+    out = {}
+    for slot, dev in (("A", "/dev/mmcblk0p3"), ("B", "/dev/mmcblk0p4")):
+        s = (prefix + cmdline_template.replace("@ROOTDEV@", dev)).encode() + b"\0"
+        out[slot] = H(H(b"\0" * 32 + H(s)) + H(b"\xff" * 4)).hex()
+    return out
+
+
 def goldens_for(man, pcr0, release):
     g = man["goldens"]
-    return {"release": release, "pcr0": pcr0, "pcr1": g["pcr1"], "pcr8": g["pcr8"],
+    enr = json.load(open(ENROLLMENT)) if os.path.exists(ENROLLMENT) else {}
+    pcr1 = predict_pcr1(enr["bootargs_prefix"], man["cmdline"]) if enr.get("bootargs_prefix") and man.get("cmdline") else g["pcr1"]
+    return {"release": release, "pcr0": pcr0, "pcr1": pcr1, "pcr8": g["pcr8"],
             "pcr9": g.get("pcr9") or PCR9_NO_INITRD}
 
 
@@ -187,6 +201,8 @@ def main(argv):
             print("board reports no devicetree digest (release < r9?)"); return 1
         enr = json.load(open(ENROLLMENT)) if os.path.exists(ENROLLMENT) else {}
         enr.update({"board": BOARD, "dt_digest": st["dt_digest"], "captured_pcr0": st["pcr"]["0"]})
+        if st.get("bootargs") and "dwc_otg" in st["bootargs"]:
+            enr["bootargs_prefix"] = st["bootargs"][:st["bootargs"].find("dwc_otg")]
         json.dump(enr, open(ENROLLMENT, "w"), indent=2); print(json.dumps(enr, indent=2)); return 0
     print(__doc__); return 2
 

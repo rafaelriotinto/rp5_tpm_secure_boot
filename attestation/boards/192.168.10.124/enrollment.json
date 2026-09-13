@@ -1,0 +1,10 @@
+{
+  "dt_digest": "ea7fe1d3c270e36d2cbfe151a78d09923aa06155c846c7bd2002867285644f8e",
+  "meas_index": "0x01800000",
+  "meas_name": "000b90c6e48d406eb67a3576c3c81d307ef76b6e5d1f8c9743325513d210054a91bc",
+  "counter_index": "0x01800002",
+  "counter_name": "000b6327163fb5299798c95053c46c33226cc9db0eb76e9cdf9e3ffb8e39ca4f9195",
+  "counter": 1,
+  "board": "192.168.10.124",
+  "bootargs_prefix": "reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=8 system_heap.max_order=0 smsc95xx.macaddr=88:A2:9E:1D:A4:B9 vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  "
+}

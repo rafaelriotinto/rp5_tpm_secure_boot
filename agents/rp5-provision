@@ -24,7 +24,8 @@ PRIV = "/usr/bin/rp5-provision-priv"
 
 def forward(verb):
     def h(args):
-        out = run("sudo", "-n", PRIV, verb, input=sys.stdin.buffer.read() if verb == "provision" else None)
+        out = run("sudo", "-n", PRIV, verb, check=False,   # the helper's JSON carries the error
+                  input=sys.stdin.buffer.read() if verb in ("provision", "verify") else None)
         p = json.loads(out.decode().strip().splitlines()[-1])
         if not p.get("ok"):
             raise Fail(p.get("error", f"{verb} failed"))

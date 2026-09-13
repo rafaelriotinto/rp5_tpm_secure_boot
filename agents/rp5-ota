@@ -23,7 +23,7 @@ FILES = ("boot.img", "boot.sig", "rootfs.img")
 
 
 def priv(*args, **kw):
-    out = run("sudo", "-n", PRIV, *args, **kw)
+    out = run("sudo", "-n", PRIV, *args, check=False, **kw)   # the helper's JSON carries the error
     try:
         return json.loads(out.decode().strip().splitlines()[-1])
     except (ValueError, IndexError):
@@ -73,6 +73,8 @@ def install(args):
         have = sha256_file(f"{STAGING}/{fn}") if os.path.exists(f"{STAGING}/{fn}") else None
         if not want or want != have:
             raise Fail(f"{fn}: digest mismatch or missing (manifest {want}, got {have})")
+    if man.get("factory"):
+        raise Fail("this is the factory image, not a release; it is never installed in the field")
     ver = int(man.get("version", 0))
     c = counter()
     if ver < c:

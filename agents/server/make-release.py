@@ -41,6 +41,7 @@ def main():
     ap.add_argument("--key", default=f"{ENV}/secure-boot-keys/private.pem")
     ap.add_argument("--bootfs", required=True, help="template boot tree (config.txt, dtbs, overlays, Image)")
     ap.add_argument("--uboot", default=None)
+    ap.add_argument("--factory", action="store_true", help="factory image: version 0, flagged, never a release")
     ap.add_argument("--tools", default=f"{ENV}/usbboot/tools")
     a = ap.parse_args()
 
@@ -76,7 +77,7 @@ def main():
     uboot = open(a.uboot or f"{a.deploy}/u-boot.bin", "rb").read()
     import re
     ver = re.search(rb"U-Boot 2024\.04 \([^)]*\)", uboot)
-    man = {"version": a.version, "cmdline": cmdline,
+    man = {"version": 0 if a.factory else a.version, "factory": bool(a.factory), "cmdline": cmdline,
            "sha256": {fn: sha(f"{a.out}/{fn}") for fn in ("boot.img", "boot.sig", "rootfs.img")},
            "rootfs": {"root_hash": env["ROOT_HASH"], "size": os.path.getsize(f"{a.out}/rootfs.img")},
            "uboot_version_string": ver.group(0).decode() if ver else None,

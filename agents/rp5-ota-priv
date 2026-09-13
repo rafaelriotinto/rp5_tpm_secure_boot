@@ -83,7 +83,11 @@ def prepare(args):
 
 def status(args):
     ab = read_autoboot()
-    return {"partition": fw_partition(), "tryboot": fw_tryboot(), "counter": counter(),
+    try:
+        c = counter()
+    except Fail:
+        c = None        # unprovisioned (factory) board
+    return {"partition": fw_partition(), "tryboot": fw_tryboot(), "counter": c,
             "committed": ab["all"], "target": ab["tryboot"],
             "root": ROOT_PART[fw_partition()], "pcr": {str(i): pcr(i) for i in (0, 1, 8, 9)}}
 
