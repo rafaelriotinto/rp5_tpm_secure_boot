@@ -237,3 +237,5 @@ once per update, at commit.
   load `boot.img` from the booted partition (`${rpi_bootpart}`). First real update r2 → r3
   performed by hand exactly as in "Update procedure" and committed. Remaining: the agent script
   (step 5), anti-rollback counter, event log to Linux.
+- 2026-09-13 (evening): services implemented (`agents/`), first automated update r7→r8 by
+  `rp5.py update` (E16). Remaining: provisioning service test, PCR0 without TOFU.
