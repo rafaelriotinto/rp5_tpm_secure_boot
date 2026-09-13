@@ -47,8 +47,12 @@ def tar_release(d):
     return buf.getvalue()
 
 
-GOLDENS_CURRENT = os.path.join(HERE, "..", "..", "attestation", "current-goldens.json")
-ENROLLMENT = os.path.join(HERE, "..", "..", "attestation", "enrollment.json")   # per-board record
+# Per-board server state: attestation/boards/<BOARD>/{ak.pem, enrollment.json,
+# current-goldens.json, attest-state.json}. The verifier is pointed at them.
+BOARD_DIR = os.path.join(HERE, "..", "..", "attestation", "boards", BOARD)
+os.makedirs(BOARD_DIR, exist_ok=True)
+GOLDENS_CURRENT = os.path.join(BOARD_DIR, "current-goldens.json")
+ENROLLMENT = os.path.join(BOARD_DIR, "enrollment.json")
 
 
 def predict_pcr0(version_string, dt_digest_hex):
@@ -64,9 +68,9 @@ PCR9_NO_INITRD = "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517
 
 
 def attest(goldens_file=None):
-    env = dict(os.environ, AGENT="1", AGENT_KEY=f"{KEYS}/attest_ed25519", DEVICE=f"attest@{BOARD}", REQUIRE_REBOOT="1")
-    if goldens_file:
-        env["GOLDENS_FILE"] = goldens_file
+    env = dict(os.environ, AGENT="1", AGENT_KEY=f"{KEYS}/attest_ed25519", DEVICE=f"attest@{BOARD}", REQUIRE_REBOOT="1",
+               AK_PEM=os.path.join(BOARD_DIR, "ak.pem"), ATTEST_STATE=os.path.join(BOARD_DIR, "attest-state.json"),
+               GOLDENS_FILE=goldens_file or GOLDENS_CURRENT)
     r = subprocess.run([sys.executable, VERIFIER], env=env)
     return r.returncode == 0
 
@@ -163,10 +167,18 @@ def main(argv):
         return show(ssh("ota", v))
     if v == "update":
         return update(a[0])
-    if v == "provision":
-        return show(ssh("provision", "provision", stdin=open(a[0], "rb").read()))
-    if v in ("enroll", "verify"):
-        return show(ssh("provision", v))
+    if v in ("enroll", "provision"):
+        rep = ssh("provision", v, stdin=open(a[0], "rb").read() if v == "provision" else None)
+        if rep.get("ok") and rep.get("ak_pem"):
+            enr = json.load(open(ENROLLMENT)) if os.path.exists(ENROLLMENT) else {}
+            enr.update({k: rep[k] for k in ("dt_digest", "meas_index", "meas_name", "counter_index", "counter_name", "counter") if k in rep})
+            enr["board"] = BOARD
+            json.dump(enr, open(ENROLLMENT, "w"), indent=2)
+            open(os.path.join(BOARD_DIR, "ak.pem"), "w").write(rep["ak_pem"])
+            print(f"[{v}] enrollment record and AK saved under {BOARD_DIR}")
+        return show(rep)
+    if v == "verify":
+        return show(ssh("provision", v, stdin=open(ENROLLMENT, "rb").read() if os.path.exists(ENROLLMENT) else None))
     if v == "enroll-dt":
         # record the board's canonical devicetree digest (from the unprivileged status;
         # the provisioning record carries it too) so PCR0 can be predicted per release

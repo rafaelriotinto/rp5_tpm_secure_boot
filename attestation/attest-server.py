@@ -100,6 +100,11 @@ PCR_SET = (0, 1, 8, 9)
 # (written by agents/server/rp5.py after a successful update) instead of edits
 # to this script: {"pcr0": hex, "pcr1": {"A": hex, "B": hex}, "pcr8": hex, "pcr9": hex}
 GOLDENS_FILE = os.environ.get("GOLDENS_FILE", os.path.join(HERE, "current-goldens.json"))
+ENROLLMENT_FILE = os.path.join(os.path.dirname(GOLDENS_FILE), "enrollment.json")
+if os.path.exists(ENROLLMENT_FILE):
+    _e = json.load(open(ENROLLMENT_FILE))
+    if _e.get("meas_name"):
+        GOLDEN_MEAS_NAME = _e["meas_name"]     # per-board index Name (C1)
 if os.path.exists(GOLDENS_FILE):
     _g = json.load(open(GOLDENS_FILE))
     GOLDEN_PCR = {0: _g["pcr0"], 8: _g["pcr8"], 9: _g["pcr9"]}

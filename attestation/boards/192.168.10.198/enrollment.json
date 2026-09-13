@@ -1,0 +1,8 @@
+{
+  "board": "192.168.10.198",
+  "dt_digest": "1126fcdf20eb3c6389c5c3f923660d97f002a868c6f6f561943b0eeda727d2e7",
+  "captured_pcr0": "1d52c2424bdc2f1fdc85950b29080cde59e010d5b2806ac0943078e9baab9fb7",
+  "meas_name": "000b6d77af9978cd18e8a30d502db09bb64056bb36e662620d39d06d1b56e5f867b4",
+  "meas_index": "0x01800000",
+  "counter_index": "0x01800002"
+}
