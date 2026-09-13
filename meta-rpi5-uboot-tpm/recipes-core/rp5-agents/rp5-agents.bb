@@ -45,5 +45,6 @@ do_install() {
     install -m 0440 ${WORKDIR}/sudoers-rp5-agents ${D}${sysconfdir}/sudoers.d/rp5-agents
 }
 
+FILES:${PN} = "${bindir} ${libdir}/rp5agent /home/ota /home/provision /home/attest/.ssh ${sysconfdir}/sudoers.d"
 # attest-user installs an unrestricted key for attest; this recipe replaces it
 RCONFLICTS:${PN} = ""
