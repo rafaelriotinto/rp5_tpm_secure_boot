@@ -1,0 +1,51 @@
+  5.04 Current 1800 mA
+  5.04 Voltage 15000 mV
+  5.46 Trying partition: 0
+  5.05 GPT 0000000000000000000000004d9b9ef0 000000001 0006ac821 num-partitions 128 entry-size 128 pentry 2 first 0
+  5.06 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  5.06 Matched GUID bootable-part-idx 0 want partition 0
+  5.73 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  5.07 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  5.08 FAT16 clusters 43215
+  5.95 Read autoboot.txt bytes       64 hnd 0x1abd
+  5.09 Select partition rsts 5 C(boot_partition) 1 EEPROM config 0 result 5
+  5.03 Trying partition: 5
+  5.11 GPT 0000000000000000000000004d9b9ef0 000000001 0006ac821 num-partitions 128 entry-size 128 pentry 2 first 0
+  5.12 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  5.12 Matched GUID bootable-part-idx 0 want partition 4
+  5.13 GPT partition: 1 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000058000..000157fff
+  5.13 Matched GUID bootable-part-idx 1 want partition 4
+  5.14 GPT partition: 2 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000158000..000257fff
+  5.15 Matched GUID bootable-part-idx 2 want partition 4
+  5.15 GPT partition: 3 0fc63daf-8483-4772-8e79-3d69d8477de4 000258000..000657fff
+  5.16 GPT partition: 4 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000658000..0006ac7ff
+  5.17 Matched GUID bootable-part-idx 3 want partition 4
+  5.83 GPT: No bootable partitions
+  5.83 Failed to open partition 5
+  5.28 Select partition rsts 5 C(boot_partition) 1 EEPROM config 0 result 5
+  5.29 Partition walk: 5
+  5.95 Trying partition: 5
+  5.30 GPT 0000000000000000000000004d9b9ef0 000000001 0006ac821 num-partitions 128 entry-size 128 pentry 2 first 0
+  5.31 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  5.31 Matched GUID bootable-part-idx 0 want partition 4
+  5.32 GPT partition: 1 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000058000..000157fff
+  5.32 Matched GUID bootable-part-idx 1 want partition 4
+  5.33 GPT partition: 2 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000158000..000257fff
+  5.34 Matched GUID bootable-part-idx 2 want partition 4
+  5.34 GPT partition: 3 0fc63daf-8483-4772-8e79-3d69d8477de4 000258000..000657fff
+  5.35 GPT partition: 4 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000658000..0006ac7ff
+  5.36 Matched GUID bootable-part-idx 3 want partition 4
+  5.74 GPT: No bootable partitions
+  5.74 Failed to open partition 5
+  5.77 Trying partition: 1
+  5.48 GPT 0000000000000000000000004d9b9ef0 000000001 0006ac821 num-partitions 128 entry-size 128 pentry 2 first 0
+  5.49 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  5.49 Matched GUID bootable-part-idx 0 want partition 0
+  5.04 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  5.50 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  5.51 FAT16 clusters 43215
+  5.19 secure-boot
+  5.21 Loading boot.img ...
+  5.53 boot.sig
+  5.53 hash: 3624e65aaccfa92eef8403702491db90abe290a5c3a52b07180e82751ddc1e88
+  5.54 ts: 1789287034
