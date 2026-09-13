@@ -109,7 +109,14 @@ To add:
   loaded): read counter; `version < counter` -> refuse; `==` -> boot;
   `>` -> if the firmware's tryboot flag is 0, increment up to `version`
   (`TPM2_NV_Increment`, new in `lib/tpm-v2.c`), read back, boot.
-- **A/B rule**: on a **tryboot the counter is never advanced**. Otherwise a
+- **A/B rule**: on a **tryboot the counter is never advanced**. Validated on
+  hardware (E15): trials left it at 1 and 4, the first committed boots took
+  it to 4 and 5. The rule rests on the firmware reporting the tryboot flag
+  faithfully in `/chosen/bootloader/tryboot`; EEPROM releases before
+  2024-04-17 lost the flag in secure-boot mode ("Fix TRYBOOT flag in
+  secure-boot mode", rpi-eeprom release notes), which would make a trial
+  look committed and advance the counter early. The agent's first health
+  check is therefore `tryboot == 1`; if not, it must not commit. Otherwise a
   new release that fails its health check would leave the committed (older)
   pair unbootable. The counter advances on the first plain boot after commit.
 - **Refusal = reset, not hang**: on a tryboot the firmware then boots the
