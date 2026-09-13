@@ -16,7 +16,7 @@ without those auths: the service self-disables after the factory.
   verify     -> compares the record against what the TPM holds
 """
 import json, os, sys
-sys.path.insert(0, "/usr/lib/rp5agent"); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, "/usr/lib"); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from rp5agent import *  # noqa
 
 PRIV = "/usr/bin/rp5-provision-priv"

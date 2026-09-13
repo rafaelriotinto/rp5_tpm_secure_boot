@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Provisioning, privileged half (root via sudo). See rp5-provision."""
 import json, os, re, sys, tempfile
-sys.path.insert(0, "/usr/lib/rp5agent")
+sys.path.insert(0, "/usr/lib")
 from rp5agent import *  # noqa
 
 EK_HANDLE = "0x81010001"

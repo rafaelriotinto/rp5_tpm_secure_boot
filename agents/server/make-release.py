@@ -46,7 +46,10 @@ def main():
 
     verity = os.path.realpath(f"{a.deploy}/core-image-base-raspberrypi5-uboot-tpm.rootfs.ext4.verity")
     env = {}
-    for line in open(verity + ".env"):
+    envf = verity + ".env"
+    if not os.path.exists(envf):   # meta-security keeps it in work-shared, not deploy
+        envf = f"{ENV}/poky/build/tmp/work-shared/raspberrypi5-uboot-tpm/dm-verity/core-image-base.ext4.verity.env"
+    for line in open(envf):
         if "=" in line:
             k, v = line.strip().split("=", 1); env[k] = v.strip('"')
     data_size = int(env["DATA_SIZE"]); hbs = int(env["HASH_BLOCK_SIZE"]); dbs = int(env["DATA_BLOCK_SIZE"])

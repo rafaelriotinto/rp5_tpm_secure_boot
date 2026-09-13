@@ -14,7 +14,7 @@ The privileged half does its own checks again; this half exists so that the
 network-facing process never runs as root.
 """
 import json, os, sys, tarfile
-sys.path.insert(0, "/usr/lib/rp5agent"); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, "/usr/lib"); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from rp5agent import *  # noqa
 
 STAGING = "/data/ota/staging"

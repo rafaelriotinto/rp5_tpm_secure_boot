@@ -85,9 +85,9 @@ GOLDEN_PCR = {
     9: "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6",
 }
 GOLDEN_PCR1_BY_SLOT = {
-    # layout since E13: p1 boot A, p2 boot B, p3 root A, p4 root B, p5 data
-    "A (/dev/mmcblk0p3)": "75660bcc680509428fea007d8c7c280ea2a6de7bd133d941b63dbdac03a13375",
-    "B (/dev/mmcblk0p4)": "2d8cd589048b46d0fa526c1381d9e4a88edc26f2a7d13dbb3e50c4ee91b6a654",
+    # r6: from the release manifest (host-computed from the cmdline template)
+    "A (/dev/mmcblk0p3)": "874312f8e26af0f474e214b074d81160c487cca97b8b63a12635b4289f9ab080",
+    "B (/dev/mmcblk0p4)": "71188a6be41867ba00195ee2e787755f2deb59a2ac6426a15baeb1889b6741b4",
 }
 # The index commits to the WHOLE measured state: U-Boot extends it, last (after
 # the EV_SEPARATOR events), with SHA256(PCR0||PCR1||PCR8||PCR9) -- the same

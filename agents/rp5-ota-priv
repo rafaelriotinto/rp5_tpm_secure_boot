@@ -13,7 +13,7 @@ Rules it enforces (the lessons of the hand-run updates):
     the first committed boot.
 """
 import json, os, re, subprocess, sys, tempfile
-sys.path.insert(0, "/usr/lib/rp5agent")
+sys.path.insert(0, "/usr/lib")
 from rp5agent import *  # noqa
 
 P1 = "/dev/mmcblk0p1"
