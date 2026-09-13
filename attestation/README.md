@@ -141,3 +141,14 @@ the authValue is only ever an HMAC session key — proof of knowledge, never tra
 - Demo transport is server-orchestrates-over-SSH; a production device-initiated agent
   would add python3 or a small C client. The TPM operations and verification — the
   security-relevant part — are identical.
+
+## Root slots and PCR1 (A/B updates)
+
+One signed `boot.img` serves both root slots: `cmdline.txt` carries the placeholder
+`@ROOTDEV@`, and U-Boot substitutes the root device by rule from the partition the
+firmware booted from (`/chosen/bootloader/partition` 1 → `/dev/mmcblk0p2`, 5 →
+`/dev/mmcblk0p3`). PCR1 measures the **substituted** line, so a release has two PCR1
+goldens, one per slot (`GOLDEN_PCR1_BY_SLOT`), both computed on the host from the
+template. PCR0 measures the firmware devicetree, which carries the template verbatim,
+so it is per release but identical on both slots. The verifier accepts whichever slot
+matches and reports it; the NV commitment is derived from the matching composite.

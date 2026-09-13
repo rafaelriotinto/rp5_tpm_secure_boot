@@ -54,26 +54,35 @@ DEVICE_SCRIPT = os.environ.get("DEVICE_SCRIPT", "/usr/bin/attest-device.sh")
 STATE_FILE     = os.environ.get("ATTEST_STATE", "attest-state.json")
 REQUIRE_REBOOT = os.environ.get("REQUIRE_REBOOT", "") not in ("", "0")
 
-# Enrollment record for this device+image (golden values). PCR0 is per U-Boot
-# build; capture the deployed build's value here.
+# Enrollment record for this device+RELEASE (golden values). A release is one
+# signed boot.img (U-Boot + kernel + DT + config + cmdline template) plus one
+# dm-verity rootfs; its root hash is inside the cmdline, so one record covers
+# all of it. Re-captured 2026-09-13 for the A/B release (U-Boot 8e021abd, A/B
+# root selection; cmdline.txt carries the @ROOTDEV@ placeholder).
+#
+# PCR0 = canonical digest of the FIRMWARE devicetree, which carries cmdline.txt
+#        verbatim (the template, not the substituted line) -> per release, but
+#        the SAME on both slots. It changed from 1fc437a3 for exactly that
+#        reason: cmdline.txt changed (E4: /chosen/bootargs is measured).
+# PCR1 = the SUBSTITUTED command line -> one value PER ROOT SLOT. Both are
+#        computed on the host from the template (see docs/experimental-results.md
+#        E12) and shipped in the release manifest; the verifier accepts either.
+# PCR8/9 = kernel / DT as loaded by U-Boot -> per release.
+# NOTE: ideally derived from the build system, not captured from the device
+# (capturing trusts the very board being attested); see TODO.md.
 GOLDEN_PCR = {
-    # Re-captured 2026-09-06 for the U-Boot build with the CANONICAL devicetree
-    # digest (commit 6c55511a + traversal fix). Verified byte-identical across PSU
-    # and PC-USB power and across warm/cold reboots -- see docs/experimental-results.md E4.
-    # Verified STABLE across a cold->warm reboot (count 1->2, rsts 0x1000->0x1020,
-    # PCR0 unchanged) -> the DTB sanitizer is stripping the boot-varying fields.
-    # NOTE: ideally derived from the build system, not captured from the device
-    # (capturing trusts the very board being attested); see TODO.md.
-    0: "1fc437a39bf0737bde60d0a863c2232467f59846f68518b3e430a8c7fa2c4dab",
-    1: "75660bcc680509428fea007d8c7c280ea2a6de7bd133d941b63dbdac03a13375",
+    0: "bb17bc256d65ec78f157fed0647fa7e8864aa4df5f008a7db809d4a5f9f61c2c",
     8: "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
     9: "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6",
 }
-# The index now commits to the WHOLE measured state: U-Boot extends it, last
-# (after the EV_SEPARATOR events), with SHA256(PCR0||PCR1||PCR8||PCR9) -- the
-# same composite the TPM puts in a quote. So this equals SHA256(0*32||pcrDigest),
-# which the cross-check below verifies. Recaptured 2026-09-06.
-GOLDEN_MEAS_NV = "fcb09bd1f52fbebe535b82845fdf21642765d5b7c91167033fef15ab229b6c44"
+GOLDEN_PCR1_BY_SLOT = {
+    "A (/dev/mmcblk0p2)": "9961ad506132dc5323e73b6d5c23af903acc23e1867be29683e2efc7866cfee3",
+    "B (/dev/mmcblk0p3)": "75660bcc680509428fea007d8c7c280ea2a6de7bd133d941b63dbdac03a13375",
+}
+# The index commits to the WHOLE measured state: U-Boot extends it, last (after
+# the EV_SEPARATOR events), with SHA256(PCR0||PCR1||PCR8||PCR9) -- the same
+# composite the TPM puts in a quote -- so it equals SHA256(0*32||pcrDigest).
+# It is therefore derived per slot from the goldens above, not captured.
 PCR_SET = (0, 1, 8, 9)
 
 # Golden NV index NAMES, captured at enrollment (C1). The Name is
@@ -286,8 +295,17 @@ def main():
     check("quote freshness (nonce)", q_extra == nonce)
 
     # 4) software state
-    composite = hashlib.sha256(b"".join(bytes.fromhex(GOLDEN_PCR[i]) for i in PCR_SET)).digest()
-    check("PCR state == golden", q_pcr == composite)
+    #    PCR1 differs by root slot (device path in the substituted cmdline), so
+    #    try the composite for each enrolled slot; the matching one names the
+    #    slot the device booted from.
+    slot = None
+    for name, pcr1 in GOLDEN_PCR1_BY_SLOT.items():
+        g = {**GOLDEN_PCR, 1: pcr1}
+        if q_pcr == hashlib.sha256(b"".join(bytes.fromhex(g[i]) for i in PCR_SET)).digest():
+            slot = name
+    check("PCR state == golden (release)", slot is not None)
+    if slot:
+        print(f"  [info] active root slot: {slot}")
 
     # 5) boot record + BOARD BINDING (Option B). The measured-boot index is
     #    clear_stclear, so TPM2_Startup(CLEAR) empties it at every boot, and only
@@ -297,7 +315,8 @@ def main():
     m_extra, m_val, m_clk = parsed("meas-cert structure (type + index Name)",
                                    nv_contents, B("meas_cert.msg"), meas_name)
     check("meas-cert freshness (nonce)", m_extra == nonce)
-    check("boot record (measured-boot NV == golden)", m_val == bytes.fromhex(GOLDEN_MEAS_NV))
+    golden_nv = hashlib.sha256(b"\x00" * 32 + q_pcr).digest() if slot else None
+    check("boot record (measured-boot NV == golden for slot)", golden_nv is not None and m_val == golden_nv)
 
     # 5b) CROSS-CHECK (D0b): U-Boot extends the index with the SAME composite the
     #     TPM puts in a quote, so the certified NV value must equal

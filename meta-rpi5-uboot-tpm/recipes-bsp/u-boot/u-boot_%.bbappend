@@ -8,7 +8,7 @@ SRC_URI = "git://github.com/rafaelriotinto/u-boot.git;protocol=https;branch=rpi5
            "
 
 # Pinned for reproducibility. Update when the branch advances.
-SRCREV = "2c404923c91246a12b06cdcfb0a8baec2601e3d7"
+SRCREV = "8e021abd07e897c0b0014c94b27a59981581dbf8"
 
 S = "${WORKDIR}/git"
 
