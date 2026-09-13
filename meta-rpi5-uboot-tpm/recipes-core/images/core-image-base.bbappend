@@ -29,12 +29,12 @@ IMAGE_CLASSES += "dm-verity-img"
 IMAGE_FSTYPES:append = " ext4"
 do_image_wic[depends] += "rpi-autoboot:do_deploy"
 
-IMAGE_INSTALL:append = " cryptsetup attest-user rp5-data-partition attestation-agent"
+IMAGE_INSTALL:append = " cryptsetup attest-user rp5-data-partition rp5-agents"
 
 # Lock the attest user's password: login by SSH key only. (root is left as
 # debug-tweaks sets it, for now.)
 inherit extrausers
-EXTRA_USERS_PARAMS = "usermod -L attest;"
+EXTRA_USERS_PARAMS = "usermod -L attest; usermod -L ota; usermod -L provision;"
 
 # /data: the writable, no-exec partition. LABEL= is resolved by
 # systemd-fstab-generator via udev's /dev/disk/by-label.

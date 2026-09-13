@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Attestation service (forced command for the 'attest' key; no privilege).
+
+  quote   stdin: {"nonce": "<64 hex>"}  -> AK-signed PCR quote (0,1,8,9) and
+          NV_Certify of the measured-boot index, base64 in the reply, plus the
+          firmware's partition/tryboot flags and the anti-rollback counter.
+  status  -> the same facts without TPM signing.
+
+Secret-free by design (attested reboot): reads of the measured-boot index use
+the empty platform auth (ppread); board binding is what U-Boot alone could
+write into that index since the last TPM reset, which the server checks
+together with resetCount.
+"""
+import base64, json, os, sys, tempfile
+sys.path.insert(0, "/usr/lib/rp5agent"); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from rp5agent import *  # noqa
+
+
+def facts():
+    out = {"partition": fw_partition(), "tryboot": fw_tryboot(),
+           "pcr": {str(i): pcr(i) for i in (0, 1, 8, 9)}}
+    try:
+        out["counter"] = counter()
+    except Fail as e:
+        out["counter"] = None; out["counter_error"] = str(e)
+    return out
+
+
+def quote(args):
+    req = json.loads(sys.stdin.read() or "{}")
+    nonce = req.get("nonce", "")
+    if len(nonce) != 64 or any(c not in "0123456789abcdef" for c in nonce.lower()):
+        raise Fail("nonce must be 32 bytes as hex")
+    tpm_env()
+    with tempfile.TemporaryDirectory() as d:
+        run("tpm2_quote", "-c", AK_HANDLE, "-l", "sha256:0,1,8,9", "-q", nonce,
+            "-m", f"{d}/quote.msg", "-s", f"{d}/quote.sig", "-o", f"{d}/pcrs.bin")
+        run("tpm2_nvcertify", "-C", AK_HANDLE, "-c", "p", "-g", "sha256", "-s", "rsassa",
+            "-f", "plain", "-q", nonce, "--size", "32", "-o", f"{d}/meas_cert.sig",
+            "--attestation", f"{d}/meas_cert.msg", MEAS_INDEX)
+        ev = {fn: base64.b64encode(open(f"{d}/{fn}", "rb").read()).decode()
+              for fn in ("quote.msg", "quote.sig", "meas_cert.msg", "meas_cert.sig")}
+    return {"evidence": ev, **facts()}
+
+
+if __name__ == "__main__":
+    sys.exit(main({"quote": quote, "status": lambda a: facts()}))

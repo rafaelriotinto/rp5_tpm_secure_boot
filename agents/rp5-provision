@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""Provisioning service (forced command for the 'provision' key; factory only).
+
+The factory host derives every auth value from the master secret and the DUID it
+knows (rpiboot metadata) and streams them in; the device never sees the DUID or
+the master. Every step needs a hierarchy whose auth is still empty, so once
+provisioning has set the owner/endorsement/lockout auths the same verbs fail
+without those auths: the service self-disables after the factory.
+
+  provision  stdin: {"owner": hex, "endorsement": hex, "lockout": hex,
+                     "nv_auth": hex, "counter_auth": hex}
+             -> sets hierarchy auths, defines the measured-boot extend index and
+                the anti-rollback counter (first increment -> 1), creates and
+                persists the AK; returns the enrollment record.
+  enroll     -> the enrollment record only (AK public key PEM, index Names, counter)
+  verify     -> compares the record against what the TPM holds
+"""
+import json, os, sys
+sys.path.insert(0, "/usr/lib/rp5agent"); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from rp5agent import *  # noqa
+
+PRIV = "/usr/bin/rp5-provision-priv"
+
+
+def forward(verb):
+    def h(args):
+        out = run("sudo", "-n", PRIV, verb, input=sys.stdin.buffer.read() if verb == "provision" else None)
+        p = json.loads(out.decode().strip().splitlines()[-1])
+        if not p.get("ok"):
+            raise Fail(p.get("error", f"{verb} failed"))
+        return {k: v for k, v in p.items() if k not in ("ok", "verb")}
+    return h
+
+
+if __name__ == "__main__":
+    sys.exit(main({v: forward(v) for v in ("provision", "enroll", "verify")}))

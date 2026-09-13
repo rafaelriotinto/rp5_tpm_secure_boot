@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""OTA service, privileged half. Runs as root via a single sudoers rule; takes
+its verb from argv only (never from the network). Re-checks everything the
+unprivileged half checked, then touches the block devices.
+
+Rules it enforces (the lessons of the hand-run updates):
+  * the target pair is the one autoboot.txt names in [tryboot]; it must not be
+    the pair the firmware booted from (never write the running release);
+  * every write is read back and compared against the manifest digest;
+  * commit only on a trial boot (firmware tryboot flag set), and it is the
+    single file rewrite: temp file, sync, rename, sync;
+  * the anti-rollback counter is never touched here: U-Boot advances it on
+    the first committed boot.
+"""
+import json, os, re, subprocess, sys, tempfile
+sys.path.insert(0, "/usr/lib/rp5agent")
+from rp5agent import *  # noqa
+
+P1 = "/dev/mmcblk0p1"
+MNT = "/run/rp5-ota-p1"
+
+
+def mount_p1():
+    os.makedirs(MNT, exist_ok=True)
+    run("mount", P1, MNT)
+
+
+def umount_p1():
+    run("sync"); run("umount", MNT)
+
+
+def read_autoboot():
+    mount_p1()
+    try:
+        txt = open(f"{MNT}/autoboot.txt").read()
+    finally:
+        umount_p1()
+    sec = None; out = {}
+    for line in txt.splitlines():
+        line = line.strip()
+        if line.startswith("[") and line.endswith("]"):
+            sec = line[1:-1]
+        elif line.startswith("boot_partition=") and sec in ("all", "tryboot"):
+            out[sec] = int(line.split("=", 1)[1])
+    if set(out) != {"all", "tryboot"} or out["all"] not in OTHER or out["tryboot"] != OTHER[out["all"]]:
+        raise Fail(f"autoboot.txt is not a valid A/B file: {txt!r}")
+    return out
+
+
+def write_autoboot(committed):
+    mount_p1()
+    try:
+        tmp = f"{MNT}/autoboot.txt.new"
+        with open(tmp, "w") as f:
+            f.write(AUTOBOOT.format(committed=committed, other=OTHER[committed]))
+            f.flush(); os.fsync(f.fileno())
+        os.replace(tmp, f"{MNT}/autoboot.txt")
+        run("sync")
+    finally:
+        umount_p1()
+
+
+def dd(src, dst, size):
+    with open(src, "rb") as s, open(dst, "wb") as d:
+        n = 0
+        while n < size:
+            chunk = s.read(1 << 22)
+            if not chunk:
+                break
+            d.write(chunk); n += len(chunk)
+        d.flush(); os.fsync(d.fileno())
+    run("sync")
+    return n
+
+
+def status(args):
+    ab = read_autoboot()
+    return {"partition": fw_partition(), "tryboot": fw_tryboot(), "counter": counter(),
+            "committed": ab["all"], "target": ab["tryboot"],
+            "root": ROOT_PART[fw_partition()], "pcr": {str(i): pcr(i) for i in (0, 1, 8, 9)}}
+
+
+def install(args):
+    staging = args[0] if args else None
+    if not staging or not os.path.isdir(staging):
+        raise Fail("install needs a staging directory")
+    man = json.load(open(f"{staging}/MANIFEST.json"))
+    running = fw_partition()
+    if fw_tryboot():
+        raise Fail("trial boot in progress; refuse to install")
+    ab = read_autoboot()
+    target = ab["tryboot"]
+    if target == running or ab["all"] != running:
+        raise Fail(f"autoboot.txt (committed {ab['all']}, target {target}) disagrees with the running partition {running}; refusing")
+    ver = int(man["version"])
+    if ver < counter():
+        raise Fail("release version below the anti-rollback counter")
+    # 1) root slot, raw
+    root_img = f"{staging}/rootfs.img"; size = os.path.getsize(root_img)
+    want = man["sha256"]["rootfs.img"]
+    if sha256_file(root_img) != want:
+        raise Fail("rootfs.img digest mismatch")
+    dev = ROOT_PART[target]
+    dd(root_img, dev, size)
+    if sha256_file(dev, limit=size) != want:
+        raise Fail(f"readback of {dev} does not match the manifest")
+    # 2) boot slot, files on FAT
+    bdev = BOOT_PART[target]; m = f"/run/rp5-ota-boot"; os.makedirs(m, exist_ok=True)
+    run("mount", bdev, m)
+    try:
+        for fn in ("boot.img", "boot.sig"):
+            src = f"{staging}/{fn}"; dst = f"{m}/{fn}"
+            with open(src, "rb") as s, open(dst, "wb") as d:
+                while True:
+                    chunk = s.read(1 << 20)
+                    if not chunk:
+                        break
+                    d.write(chunk)
+                d.flush(); os.fsync(d.fileno())
+            run("sync")
+            if sha256_file(dst) != man["sha256"][fn]:
+                raise Fail(f"readback of {dst} does not match the manifest")
+    finally:
+        run("sync"); run("umount", m)
+    return {"target": target, "verified": {"root": dev, "boot": bdev}, "version": ver}
+
+
+def tryboot(args):
+    if fw_tryboot():
+        raise Fail("already on a trial boot")
+    subprocess.Popen(["sh", "-c", "sleep 1; sync; reboot '0 tryboot'"],
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+    return {"rebooting": "tryboot", "target": read_autoboot()["tryboot"]}
+
+
+def commit(args):
+    if not fw_tryboot():
+        raise Fail("not a trial boot: nothing to commit")
+    running = fw_partition()
+    ab = read_autoboot()
+    if ab["tryboot"] != running:
+        raise Fail("trial boot is not the pair autoboot.txt names as the trial target; refusing")
+    write_autoboot(running)
+    return {"committed": running, "next_target": OTHER[running]}
+
+
+def reboot(args):
+    subprocess.Popen(["sh", "-c", "sleep 1; sync; reboot"],
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+    return {"rebooting": "plain"}
+
+
+if __name__ == "__main__":
+    if os.geteuid() != 0:
+        reply(ok=False, error="must run as root (via sudo)"); sys.exit(1)
+    os.environ.pop("SSH_ORIGINAL_COMMAND", None)   # verbs come from argv here
+    sys.exit(main({"status": status, "install": install, "tryboot": tryboot,
+                   "commit": commit, "reboot": reboot}))

@@ -1,0 +1,1 @@
+command="/usr/bin/rp5-provision",no-port-forwarding,no-agent-forwarding,no-X11-forwarding,no-pty ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFwG//dyZd059dPJjK9x2XqwD1zAGdPmPe+pksrj49Xt rp5-provision-service

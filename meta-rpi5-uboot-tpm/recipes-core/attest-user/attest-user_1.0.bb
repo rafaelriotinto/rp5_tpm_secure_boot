@@ -25,9 +25,9 @@ USERADD_PARAM:${PN} = "--system --home-dir /home/attest --no-create-home \
                        --shell /bin/sh --groups tss --user-group attest"
 
 do_install() {
-    install -d -m 0700 ${D}/home/attest/.ssh
-    install -m 0600 ${WORKDIR}/authorized_keys ${D}/home/attest/.ssh/authorized_keys
-    chown -R attest:attest ${D}/home/attest
+    # attest's own authorized_keys (a forced command) is installed by rp5-agents.
+    install -d -m 0755 ${D}/home/attest
+    chown attest:attest ${D}/home/attest
 
     install -d -m 0700 ${D}/root/.ssh
     install -m 0600 ${WORKDIR}/authorized_keys ${D}/root/.ssh/authorized_keys
@@ -36,3 +36,4 @@ do_install() {
 # The password is locked at rootfs assembly (extrausers in the image recipe),
 # because usermod runs against the finished rootfs, not this package.
 FILES:${PN} = "/home/attest /root/.ssh"
+DIRFILES = "1"

@@ -1,0 +1,1 @@
+command="/usr/bin/rp5-ota",no-port-forwarding,no-agent-forwarding,no-X11-forwarding,no-pty ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB20h7r/hYBVhUUK/NiGxaHy/xly2Fr6uLIIiQIKDRv3 rp5-ota-service

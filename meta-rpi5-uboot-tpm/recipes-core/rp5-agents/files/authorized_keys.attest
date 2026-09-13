@@ -1,0 +1,1 @@
+command="/usr/bin/rp5-attest",no-port-forwarding,no-agent-forwarding,no-X11-forwarding,no-pty ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDvfdK4Lz4u1DypxKhxA6r6/pVe9xZe+73MuA0k0YK75 rp5-attest-service

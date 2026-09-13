@@ -49,6 +49,10 @@ REMOTE   = "/tmp/attest"
 # attestation-agent recipe; override (e.g. "sh /tmp/attest-device.sh") to test
 # a script copied by hand before an image rebuild.
 DEVICE_SCRIPT = os.environ.get("DEVICE_SCRIPT", "/usr/bin/attest-device.sh")
+# AGENT=1: talk to the rp5-attest forced command (releases >= r6) instead of the
+# legacy script + scp. AGENT_KEY: the attest service key (default: ssh config).
+AGENT = os.environ.get("AGENT", "0") not in ("", "0")
+AGENT_KEY = os.environ.get("AGENT_KEY", "")
 # Option B: where we remember the last resetCount, and whether this round is
 # a post-reboot check (set REQUIRE_REBOOT=1 after asking the device to reboot).
 STATE_FILE     = os.environ.get("ATTEST_STATE", "attest-state.json")
@@ -258,18 +262,33 @@ def main():
             prev = {}
 
     user_host = DEVICE
-    with open(os.path.join(outdir, "nonce.bin"), "wb") as f:
-        f.write(nonce)
-    sh("scp", "-O", os.path.join(outdir, "nonce.bin"), f"{user_host}:/tmp/nonce.bin")
-
-    subprocess.run(["ssh", user_host,
-                    f"cp /tmp/nonce.bin {REMOTE}/nonce.bin 2>/dev/null; "
-                    f"{DEVICE_SCRIPT} /tmp/nonce.bin {REMOTE}"],
-                   check=True, stdout=subprocess.DEVNULL)
-
     files = ["quote.msg", "quote.sig", "meas_cert.msg", "meas_cert.sig"]
-    for fn in files:
-        sh("scp", "-O", f"{user_host}:{REMOTE}/{fn}", os.path.join(outdir, fn))
+    if AGENT:
+        # rp5-attest forced command: {"nonce": hex} on stdin, JSON reply with
+        # the evidence base64-encoded. One SSH connection, no files on the device.
+        r = subprocess.run(["ssh"] + (["-i", AGENT_KEY] if AGENT_KEY else []) + [user_host, "quote"],
+                           input=json.dumps({"nonce": nonce.hex()}).encode(), capture_output=True)
+        try:
+            rep = json.loads(r.stdout.decode().strip().splitlines()[-1])
+        except (ValueError, IndexError):
+            print(f"[server] device gave no reply: {r.stderr.decode(errors='replace')[:300]}"); sys.exit(3)
+        if not rep.get("ok"):
+            print(f"[server] device refused: {rep.get('error')}"); sys.exit(3)
+        import base64
+        for fn in files:
+            with open(os.path.join(outdir, fn), "wb") as f:
+                f.write(base64.b64decode(rep["evidence"][fn]))
+        print(f"  [info] device: partition {rep.get('partition')} tryboot {rep.get('tryboot')} counter {rep.get('counter')}")
+    else:
+        with open(os.path.join(outdir, "nonce.bin"), "wb") as f:
+            f.write(nonce)
+        sh("scp", "-O", os.path.join(outdir, "nonce.bin"), f"{user_host}:/tmp/nonce.bin")
+        subprocess.run(["ssh", user_host,
+                        f"cp /tmp/nonce.bin {REMOTE}/nonce.bin 2>/dev/null; "
+                        f"{DEVICE_SCRIPT} /tmp/nonce.bin {REMOTE}"],
+                       check=True, stdout=subprocess.DEVNULL)
+        for fn in files:
+            sh("scp", "-O", f"{user_host}:{REMOTE}/{fn}", os.path.join(outdir, fn))
     B = lambda fn: open(os.path.join(outdir, fn), "rb").read()
 
     ok = True

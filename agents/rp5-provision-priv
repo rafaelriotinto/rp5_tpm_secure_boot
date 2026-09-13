@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""Provisioning, privileged half (root via sudo). See rp5-provision."""
+import json, os, re, sys, tempfile
+sys.path.insert(0, "/usr/lib/rp5agent")
+from rp5agent import *  # noqa
+
+EK_HANDLE = "0x81010001"
+POLICY_AUTHVALUE = "8fcd2169ab92694e0c633f1ab772842b8241bbc20288981fc7ac1eddc1fddb0e"
+
+
+def hexok(v):
+    return isinstance(v, str) and len(v) == 64 and re.fullmatch(r"[0-9a-fA-F]+", v)
+
+
+def nv_name(index):
+    out = run("tpm2_nvreadpublic", index).decode()
+    m = re.search(r"name:\s*([0-9a-f]+)", out)
+    return m.group(1) if m else None
+
+
+def record():
+    tpm_env()
+    rec = {"meas_index": MEAS_INDEX, "meas_name": nv_name(MEAS_INDEX),
+           "counter_index": COUNTER_INDEX, "counter_name": nv_name(COUNTER_INDEX)}
+    try:
+        rec["counter"] = counter()
+    except Fail:
+        rec["counter"] = None
+    with tempfile.TemporaryDirectory() as d:
+        run("tpm2_readpublic", "-c", AK_HANDLE, "-f", "pem", "-o", f"{d}/ak.pem")
+        rec["ak_pem"] = open(f"{d}/ak.pem").read()
+    return rec
+
+
+def provision(args):
+    tpm_env()
+    req = json.loads(sys.stdin.read() or "{}")
+    for k in ("owner", "endorsement", "lockout", "nv_auth", "counter_auth"):
+        if not hexok(req.get(k)):
+            raise Fail(f"{k}: need 32 bytes as hex")
+    with tempfile.TemporaryDirectory() as d:
+        W = lambda n, v: (open(f"{d}/{n}", "w").write(v), f"{d}/{n}")[1]
+        owner = W("owner.hex", req["owner"])
+        # 1) AK under the endorsement hierarchy (while its auth is still empty)
+        run("tpm2_createek", "-c", f"{d}/ek.ctx", "-G", "rsa", "-u", f"{d}/ek.pub")
+        run("tpm2_createak", "-C", f"{d}/ek.ctx", "-c", f"{d}/ak.ctx", "-G", "rsa", "-g", "sha256",
+            "-s", "rsassa", "-u", f"{d}/ak.pub", "-n", f"{d}/ak.name")
+        run("tpm2_evictcontrol", "-C", "o", "-c", f"{d}/ak.ctx", AK_HANDLE)
+        # 2) policy digest for PolicyAuthValue
+        run("tpm2_startauthsession", "-S", f"{d}/trial.ctx")
+        run("tpm2_policyauthvalue", "-S", f"{d}/trial.ctx", "-L", f"{d}/authval.policy")
+        run("tpm2_flushcontext", f"{d}/trial.ctx")
+        # 3) measured-boot extend index (cleared at every TPM startup)
+        run("tpm2_nvdefine", MEAS_INDEX, "-C", "o", "-s", "32",
+            "-a", "nt=extend|policywrite|ppread|authread|ownerread|no_da|clear_stclear",
+            "-p", f"hex:{req['nv_auth']}", "-L", f"{d}/authval.policy")
+        # 4) anti-rollback counter, incremented once so it becomes readable
+        run("tpm2_nvdefine", COUNTER_INDEX, "-C", "o", "-s", "8",
+            "-a", "nt=counter|policywrite|ppread|ownerread|authread|no_da",
+            "-p", f"hex:{req['counter_auth']}", "-L", f"{d}/authval.policy")
+        run("tpm2_startauthsession", "--policy-session", "-S", f"{d}/pol.ctx")
+        run("tpm2_policyauthvalue", "-S", f"{d}/pol.ctx")
+        run("tpm2_nvincrement", COUNTER_INDEX, "-C", COUNTER_INDEX,
+            "-P", f"session:{d}/pol.ctx+hex:{req['counter_auth']}")
+        run("tpm2_flushcontext", f"{d}/pol.ctx")
+        # 5) hierarchy auths LAST (everything above needed them empty)
+        run("tpm2_changeauth", "-c", "o", f"hex:{req['owner']}")
+        run("tpm2_changeauth", "-c", "e", f"hex:{req['endorsement']}")
+        run("tpm2_changeauth", "-c", "l", f"hex:{req['lockout']}")
+    return record()
+
+
+def verify(args):
+    rec = record()
+    req = json.loads(sys.stdin.read() or "{}") if not sys.stdin.isatty() else {}
+    mism = {k: (req[k], rec.get(k)) for k in ("meas_name", "counter_name", "ak_pem") if k in req and req[k] != rec.get(k)}
+    return {"record": rec, "mismatch": mism, "match": not mism}
+
+
+if __name__ == "__main__":
+    if os.geteuid() != 0:
+        reply(ok=False, error="must run as root (via sudo)"); sys.exit(1)
+    os.environ.pop("SSH_ORIGINAL_COMMAND", None)
+    sys.exit(main({"provision": provision, "enroll": lambda a: record(), "verify": verify}))

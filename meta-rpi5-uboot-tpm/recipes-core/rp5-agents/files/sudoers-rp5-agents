@@ -1,0 +1,7 @@
+# The network-facing halves of the OTA and provisioning services run as their
+# own unprivileged users; only these two helpers may be run as root, with no
+# password and no other command. Verbs are taken from argv, never from SSH.
+Defaults!/usr/bin/rp5-ota-priv env_reset, !requiretty
+Defaults!/usr/bin/rp5-provision-priv env_reset, !requiretty
+ota        ALL=(root) NOPASSWD: /usr/bin/rp5-ota-priv
+provision  ALL=(root) NOPASSWD: /usr/bin/rp5-provision-priv
