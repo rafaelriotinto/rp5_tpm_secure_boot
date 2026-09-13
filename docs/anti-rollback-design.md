@@ -1,8 +1,8 @@
 # Anti-Rollback (Version Downgrade Prevention) — Design
 
-Planned functionality. Prevent an attacker from replaying an OLD, still-validly
--signed `boot.img` (U-Boot + kernel + rootfs reference) that contains a known
-vulnerability. Design agreed Aug 19 2026; NOT yet implemented.
+Prevent an attacker from replaying an OLD, still-validly-signed `boot.img`
+(U-Boot + kernel + rootfs reference) that contains a known vulnerability.
+Design agreed Aug 19 2026; **implemented 2026-09-13** (see "As implemented").
 
 ## Problem: the platform protects its firmware, not our payload
 
@@ -89,6 +89,40 @@ To add:
 - Release process: bump `CONFIG_ANTIROLLBACK_VERSION` whenever a security fix
   should invalidate older images.
 
+
+## As implemented (2026-09-13)
+
+- **Version**: `CONFIG_ANTIROLLBACK_VERSION`, a plain unsigned integer bumped
+  by one per release (1, 2, 3 ...), compiled into U-Boot and therefore inside
+  the signed `boot.img`. The same number is declared in the release manifest
+  (informational). A build is a release; PCR0 already changes per build.
+- **Counter**: TPM NV index `0x01800002`, `nt=counter` (64-bit),
+  `policywrite|ppread|ownerread|authread|no_da`, NO `clear_stclear`.
+  Provisioned by `provisioning/anti-rollback/provision-counter.sh` (defined
+  under the owner hierarchy with the owner auth, incremented once so it is
+  readable; starts at 1). Increment authorised by a PolicyAuthValue session
+  with `SHA256("rp5-nv-counter-v1" || DUID)` -- a separate label from the
+  measured-boot index's secret, same derivation, so U-Boot derives it at boot.
+  Reads use the empty platform auth (`ppread`), like the extend index.
+- **Check** (`antirollback_check()` in `boot/bootm.c`, right after
+  `tcg2_measurement_init`, before anything of the release is measured or
+  loaded): read counter; `version < counter` -> refuse; `==` -> boot;
+  `>` -> if the firmware's tryboot flag is 0, increment up to `version`
+  (`TPM2_NV_Increment`, new in `lib/tpm-v2.c`), read back, boot.
+- **A/B rule**: on a **tryboot the counter is never advanced**. Otherwise a
+  new release that fails its health check would leave the committed (older)
+  pair unbootable. The counter advances on the first plain boot after commit.
+- **Refusal = reset, not hang**: on a tryboot the firmware then boots the
+  committed pair by itself (the one-shot flag is consumed); on a committed
+  pair a reset loop denies the old release like a halt would, without a
+  remote power-cycle. Missing counter, no DUID, any TPM error: same path.
+- **TPM clear / swap**: index gone -> refuse (fail closed). An attacker who
+  clears the TPM and defines a fresh counter still cannot satisfy the
+  increment policy without the DUID-derived secret, so this rests on the
+  same load-bearing dependency as everything else (secure boot + DUID
+  confidentiality). A cleared TPM also empties the measured-boot index, so
+  the server sees it at the next attested reboot.
+
 ## Thesis value
 
 Anti-rollback for the customer OS payload on a platform (RPi5) that provides it
@@ -100,3 +134,6 @@ well-motivated contribution alongside secure boot + measured boot.
 
 - 2026-08-19: design documented. Depends on: tpm2_clear lockdown (hardening).
   Implement after / alongside OS hardening (#3).
+- 2026-09-13: implemented and validated on hardware (experimental-results.md E15): trial boot
+  leaves the counter, committed boot advances it (1→4→5), a signed version-3 image is refused
+  and the firmware falls back to the committed pair (resetCount +2).

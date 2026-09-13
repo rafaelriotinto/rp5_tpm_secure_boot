@@ -75,8 +75,8 @@ GOLDEN_PCR = {
     #        canonical devicetree digest), then EV_SEPARATOR -- so it changes with
     # EVERY U-Boot build (tcg2_measurement_init measures EV_S_CRTM_VERSION first;
     # E14). Per release, identical on both slots. r3 (U-Boot 5e1734a4, built
-    # 2026-09-13 09:18:22 UTC); r4 (U-Boot e4b8298d, anti-rollback, built 10:26:04 UTC):
-    0: "3d09cf9d319c1784480928c9d91b7008cdb7a6461c438a2559332b8b3b524915",
+    # 2026-09-13 09:18:22 UTC); r5 (U-Boot 2b45cf05, anti-rollback v5, built 10:30:53 UTC):
+    0: "36faa1930e3f7fb0198912509fb510652411d746a18d02fb10ed029b39133acf",
     8: "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
     9: "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6",
 }
