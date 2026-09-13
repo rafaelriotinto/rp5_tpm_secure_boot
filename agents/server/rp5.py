@@ -131,18 +131,16 @@ def update(release):
     # has none, it is taken from this trial boot and recorded -- trust on first
     # use for that ONE value; PCR1/8/9, the NV commitment, the AK signature and
     # the reset counter are all still checked against host-side values.
-    pcr0 = man["goldens"].get("pcr0")
+    # PCR0 and PCR1 are per BOARD (devicetree digest, firmware prefix): always predict
+    # them from this board's enrollment; the manifest holds nothing board-specific.
     enr = json.load(open(ENROLLMENT)) if os.path.exists(ENROLLMENT) else {}
-    if not pcr0 and enr.get("dt_digest") and man.get("uboot_version_string"):
+    pcr0 = None
+    if enr.get("dt_digest") and man.get("uboot_version_string"):
         pcr0 = predict_pcr0(man["uboot_version_string"], enr["dt_digest"])
         print(f"[update] PCR0 predicted on the host from the enrolled devicetree digest: {pcr0[:16]}...")
-        man["goldens"]["pcr0"] = pcr0
-        json.dump(man, open(os.path.join(release, "MANIFEST.json"), "w"), indent=2)
     if not pcr0:
         pcr0 = st["pcr"]["0"]
         print(f"[update] no enrollment: capturing PCR0 {pcr0[:16]}... from the trial boot (TOFU)")
-        man["goldens"]["pcr0"] = pcr0
-        json.dump(man, open(os.path.join(release, "MANIFEST.json"), "w"), indent=2)
     if st.get("dt_digest") and not enr.get("dt_digest"):
         print(f"[update] board reports devicetree digest {st['dt_digest'][:16]}...; run 'rp5.py enroll-dt' to record it")
     gfile = os.path.join(release, "goldens.json")

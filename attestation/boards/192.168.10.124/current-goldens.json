@@ -1,6 +1,6 @@
 {
-  "release": "factory",
-  "pcr0": "5f9aa34d6024140b58b188327a58e82e1b7bc29107b3bc1ef4091d21b3645bdd",
+  "release": "ab-r10",
+  "pcr0": "ab27f749822d4ad75bab02f8952b144de714b93848d6394487ed0e59c11065df",
   "pcr1": {
     "A": "51d0e05d8db1b0559c8ac584061a5deabfe30fb0857de1f88d426a8bfb2f1996",
     "B": "74f7d512e761e29c87f4cdc7a2c438fafdbec0d64f539869bac41b77b0a56d0c"

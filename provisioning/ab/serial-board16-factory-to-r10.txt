@@ -1,0 +1,139 @@
+b16-factory.log:15:  2.87 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory.log:73:  9.28 Read autoboot.txt bytes       64 hnd 0x1abd
+b16-factory.log:74:  9.33 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+b16-factory.log:75:  9.37 Trying partition: 1
+b16-factory.log:83:  9.82 Loading boot.img ...
+b16-factory.log:125: 11.33 MESS:00:00:11.331354:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 778
+b16-factory.log:208:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory.log:211:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory.log:212:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory.log:235:[MBOOT] NV read_public failed 0x18b
+b16-factory.log:240:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory.log:242:Starting kernel ...
+b16-factory.log:311:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=
+b16-factory.log:618:[    2.817863] device-mapper: verity: sha256 using implementation "sha256-generic"
+b16-factory.log:627:[    2.871635] device-mapper: verity: 179:3: data block 0 is corrupted
+b16-factory.log:684:[    3.071067] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(254,0)
+b16-factory.log:704:[    3.155995] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(254,0) ]---
+b16-factory.log:719:  2.86 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory.log:777:  9.93 Read autoboot.txt bytes       64 hnd 0x1abd
+b16-factory.log:778:  9.29 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+b16-factory.log:779:  9.02 Trying partition: 1
+b16-factory.log:787:  9.47 Loading boot.img ...
+b16-factory.log:829: 11.29 MESS:00:00:11.296430:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 778
+b16-factory.log:912:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory.log:915:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory.log:916:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory.log:939:[MBOOT] NV read_public failed 0x18b
+b16-factory.log:944:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory.log:946:Starting kernel ...
+b16-factory.log:1015:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy
+b16-factory.log:1322:[    2.718102] device-mapper: verity: sha256 using implementation "sha256-generic"
+b16-factory.log:1331:[    2.777277] device-mapper: verity: 179:3: data block 0 is corrupted
+b16-factory.log:1388:[    2.976593] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(254,0)
+b16-factory.log:1408:[    3.061521] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(254,0) ]---
+b16-factory2.log:15:  2.86 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory2.log:73:  9.01 Read autoboot.txt bytes       64 hnd 0x1abd
+b16-factory2.log:74:  9.30 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+b16-factory2.log:75:  9.11 Trying partition: 1
+b16-factory2.log:83:  9.55 Loading boot.img ...
+b16-factory2.log:125: 11.30 MESS:00:00:11.304772:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 77
+b16-factory2.log:208:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory2.log:211:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:212:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:235:[MBOOT] NV read_public failed 0x18b
+b16-factory2.log:240:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:242:Starting kernel ...
+b16-factory2.log:311:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy
+b16-factory2.log:618:[    2.711275] device-mapper: verity: sha256 using implementation "sha256-generic"
+b16-factory2.log:1044:  2.85 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory2.log:1102:  5.56 Read autoboot.txt bytes       64 hnd 0x1abd
+b16-factory2.log:1103:  5.05 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+b16-factory2.log:1104:  5.66 Trying partition: 1
+b16-factory2.log:1112:  5.10 Loading boot.img ...
+b16-factory2.log:1154:  7.02 MESS:00:00:07.023474:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 7
+b16-factory2.log:1231:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory2.log:1234:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:1235:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:1258:[MBOOT] NV commit OK (PCR composite 160d7c33...)
+b16-factory2.log:1263:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:1265:Starting kernel ...
+b16-factory2.log:1334:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_polic
+b16-factory2.log:1641:[    2.821312] device-mapper: verity: sha256 using implementation "sha256-generic"
+b16-factory2.log:2068:  2.85 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory2.log:2126:  5.58 Read autoboot.txt bytes       64 hnd 0x1abd
+b16-factory2.log:2127:  5.06 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+b16-factory2.log:2128:  5.68 Trying partition: 1
+b16-factory2.log:2136:  5.12 Loading boot.img ...
+b16-factory2.log:2178:  7.02 MESS:00:00:07.025536:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 7
+b16-factory2.log:2255:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory2.log:2258:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:2259:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:2282:[MBOOT] NV commit OK (PCR composite 160d7c33...)
+b16-factory2.log:2287:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:2289:Starting kernel ...
+b16-factory2.log:2358:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_polic
+b16-factory2.log:2666:[    2.818466] device-mapper: verity: sha256 using implementation "sha256-generic"
+b16-factory2.log:3091:  2.88 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory2.log:3151:  5.91 Read autoboot.txt bytes       64 hnd 0x1abd
+b16-factory2.log:3153:  5.09 Select partition rsts 0 C(boot_partition) 2 EEPROM config 0 result 2
+b16-factory2.log:3154:  5.03 Trying partition: 2
+b16-factory2.log:3164:  5.60 Loading boot.img ...
+b16-factory2.log:3206:  7.10 MESS:00:00:07.103174:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 7
+b16-factory2.log:3276:[ARB] this release: version 10; board counter: 1 (tryboot)
+b16-factory2.log:3277:[ARB] trial boot: counter left at 1 until committed
+b16-factory2.log:3285:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory2.log:3288:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:3289:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:3312:[MBOOT] NV commit OK (PCR composite a66f5034...)
+b16-factory2.log:3317:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:3319:Starting kernel ...
+b16-factory2.log:3388:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_polic
+b16-factory2.log:3695:[    2.713285] device-mapper: verity: sha256 using implementation "sha256-generic"
+b16-factory2.log:3879:[    5.974749] tpm tpm0: tpm_try_transmit: send(): error -110
+b16-factory2.log:4126:  2.86 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory2.log:4184:  5.60 Read autoboot.txt bytes       64 hnd 0x1abd
+b16-factory2.log:4185:  5.06 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+b16-factory2.log:4186:  5.69 Trying partition: 1
+b16-factory2.log:4194:  5.14 Loading boot.img ...
+b16-factory2.log:4236:  7.02 MESS:00:00:07.027131:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 7
+b16-factory2.log:4313:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory2.log:4316:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:4317:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:4340:[MBOOT] NV commit OK (PCR composite 160d7c33...)
+b16-factory2.log:4345:[AB] firmware booted from partition 1 -> root /dev/mmcblk0p3
+b16-factory2.log:4347:Starting kernel ...
+b16-factory2.log:4416:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_polic
+b16-factory2.log:4723:[    2.816038] device-mapper: verity: sha256 using implementation "sha256-generic"
+b16-factory2.log:5150:  2.94 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory2.log:5210:  5.50 Read autoboot.txt bytes       64 hnd 0x1abd
+b16-factory2.log:5212:  5.15 Select partition rsts 0 C(boot_partition) 2 EEPROM config 0 result 2
+b16-factory2.log:5213:  5.62 Trying partition: 2
+b16-factory2.log:5223:  5.19 Loading boot.img ...
+b16-factory2.log:5265:  7.13 MESS:00:00:07.131966:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 7
+b16-factory2.log:5335:[ARB] this release: version 10; board counter: 1 (tryboot)
+b16-factory2.log:5336:[ARB] trial boot: counter left at 1 until committed
+b16-factory2.log:5344:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory2.log:5347:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:5348:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:5371:[MBOOT] NV commit OK (PCR composite a66f5034...)
+b16-factory2.log:5376:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:5378:Starting kernel ...
+b16-factory2.log:5447:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_polic
+b16-factory2.log:5754:[    2.822730] device-mapper: verity: sha256 using implementation "sha256-generic"
+b16-factory2.log:6184:  2.89 Customer key hash 0000000000000000000000000000000000000000000000000000000000000000
+b16-factory2.log:6242:  5.95 Read autoboot.txt bytes       64 hnd 0x4d20
+b16-factory2.log:6243:  5.09 Select partition rsts 0 C(boot_partition) 2 EEPROM config 0 result 2
+b16-factory2.log:6244:  5.05 Trying partition: 2
+b16-factory2.log:6254:  5.62 Loading boot.img ...
+b16-factory2.log:6296:  7.07 MESS:00:00:07.074925:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 622592 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 7
+b16-factory2.log:6366:[ARB] this release: version 10; board counter: 1
+b16-factory2.log:6367:[ARB] counter advanced to 10 (committed)
+b16-factory2.log:6375:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+b16-factory2.log:6378:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:6379:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:6402:[MBOOT] NV commit OK (PCR composite a66f5034...)
+b16-factory2.log:6407:[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+b16-factory2.log:6409:Starting kernel ...
+b16-factory2.log:6478:[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_polic
+b16-factory2.log:6785:[    2.822791] device-mapper: verity: sha256 using implementation "sha256-generic"

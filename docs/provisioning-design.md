@@ -328,3 +328,17 @@ post-burn.
   OTP-backed DT values, not U-Boot env). Scripts not started; secure-boot
   level-2 (boot.img) validation is the current work item and a prerequisite
   for stages 3-4.
+
+## Provisioning as implemented (2026-09-13, E18)
+
+One service on the device (`rp5-provision`, factory only) and one host script
+(`agents/server/factory-auths.py`). The factory boots the **factory image** (same
+release, anti-rollback compiled out, `version 0`, never installable by OTA),
+derives the five auth values from the factory master and the board's DUID, streams
+them to the service, which creates the AK, defines the measured-boot index and the
+counter (first increment → 1), sets the hierarchy auths and returns the enrollment
+record; the host records the board's devicetree digest and command-line prefix
+(`rp5.py enroll-dt`). The service refuses a second run (auths no longer empty). The
+production release is then installed through the OTA service like any update; the
+counter moves to the release version on commit, and the factory image in the other
+pair is refused from then on.
