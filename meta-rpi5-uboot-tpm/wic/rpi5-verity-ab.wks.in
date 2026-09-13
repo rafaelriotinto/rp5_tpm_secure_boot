@@ -1,23 +1,24 @@
 # short-description: Raspberry Pi 5 A/B image: two boot + two dm-verity root slots and a data partition
-# long-description: GPT, five partitions, numbered as the firmware and U-Boot
-# expect them:
-#   p1 boot A (FAT; also carries autoboot.txt, which the firmware reads from
-#      the FIRST partition only)
-#   p2 root A (raw copy of the verity-protected ext4 image)
-#   p3 root B (same image at first flash)
-#   p4 data   (writable, noexec,nosuid,nodev)
-#   p5 boot B (FAT)
-# The pairs are fixed by rule in U-Boot (board_fdt_chosen_bootargs): the firmware
-# reports the partition it booted from in /chosen/bootloader/partition, and
-# partition 1 selects root A, partition 5 root B. One signed boot.img therefore
-# serves both pairs; an update writes the pair that is not running and switches
-# with tryboot. Root slots are fixed-size so a later release may be larger than
-# this one. Requires the dm-verity-img class.
+# long-description: GPT, five partitions. The two FAT boot partitions come
+# FIRST because the firmware numbers partitions by counting only those typed
+# "Microsoft basic data" (the FAT ones), not by GPT slot; with the root slots
+# typed as Linux filesystem, the firmware's number equals the slot number:
+#   p1 boot A (FAT; also carries autoboot.txt, read from the FIRST partition)
+#   p2 boot B (FAT)
+#   p3 root A (raw copy of the verity-protected ext4 image, Linux fs type)
+#   p4 root B (same image at first flash)
+#   p5 data   (writable, noexec,nosuid,nodev)
+# The pairs are fixed by rule in U-Boot (board_fdt_chosen_bootargs): the
+# firmware reports the partition it booted from in /chosen/bootloader/partition;
+# 1 selects root A (p3), 2 selects root B (p4). One signed boot.img serves both
+# pairs; an update writes the pair that is not running and switches with
+# tryboot. Root slots are fixed-size so a later release may be larger.
+# Requires the dm-verity-img class.
 
 bootloader --ptable gpt
 
 part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boota --active --align 4096 --size 130
-part /     --source rawcopy --ondisk mmcblk0 --align 4096 --fixed-size 512M --sourceparams="file=${IMGDEPLOYDIR}/${DM_VERITY_IMAGE}-${MACHINE}${IMAGE_NAME_SUFFIX}.${DM_VERITY_IMAGE_TYPE}.verity"
-part       --source rawcopy --ondisk mmcblk0 --align 4096 --fixed-size 512M --sourceparams="file=${IMGDEPLOYDIR}/${DM_VERITY_IMAGE}-${MACHINE}${IMAGE_NAME_SUFFIX}.${DM_VERITY_IMAGE_TYPE}.verity"
-part /data --ondisk mmcblk0 --fstype=ext4 --label data --align 4096 --size 2048 --fsoptions "noexec,nosuid,nodev"
 part       --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label bootb --align 4096 --size 130
+part /     --source rawcopy --ondisk mmcblk0 --align 4096 --fixed-size 512M --part-name roota --part-type 0FC63DAF-8483-4772-8E79-3D69D8477DE4 --sourceparams="file=${IMGDEPLOYDIR}/${DM_VERITY_IMAGE}-${MACHINE}${IMAGE_NAME_SUFFIX}.${DM_VERITY_IMAGE_TYPE}.verity"
+part       --source rawcopy --ondisk mmcblk0 --align 4096 --fixed-size 512M --part-name rootb --part-type 0FC63DAF-8483-4772-8E79-3D69D8477DE4 --sourceparams="file=${IMGDEPLOYDIR}/${DM_VERITY_IMAGE}-${MACHINE}${IMAGE_NAME_SUFFIX}.${DM_VERITY_IMAGE_TYPE}.verity"
+part /data --ondisk mmcblk0 --fstype=ext4 --label data --align 4096 --size 2048 --fsoptions "noexec,nosuid,nodev"

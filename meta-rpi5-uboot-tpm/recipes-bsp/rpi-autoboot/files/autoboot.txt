@@ -2,4 +2,4 @@
 tryboot_a_b=1
 boot_partition=1
 [tryboot]
-boot_partition=5
+boot_partition=2
