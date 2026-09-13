@@ -36,4 +36,3 @@ do_install() {
 # The password is locked at rootfs assembly (extrausers in the image recipe),
 # because usermod runs against the finished rootfs, not this package.
 FILES:${PN} = "/home/attest /root/.ssh"
-DIRFILES = "1"
