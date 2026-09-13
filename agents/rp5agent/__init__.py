@@ -57,6 +57,15 @@ def pcr(i):
         return f.read().strip().lower()
 
 
+def dt_digest():
+    """Canonical devicetree digest of this boot, exported by U-Boot (informational)."""
+    try:
+        with open("/proc/device-tree/chosen/rp5,dt-digest", "rb") as f:
+            return f.read().hex()
+    except OSError:
+        return None
+
+
 def sha256_file(path, limit=None, bs=1 << 20):
     h = hashlib.sha256(); n = 0
     with open(path, "rb") as f:

@@ -18,7 +18,7 @@ from rp5agent import *  # noqa
 
 def facts():
     out = {"partition": fw_partition(), "tryboot": fw_tryboot(),
-           "pcr": {str(i): pcr(i) for i in (0, 1, 8, 9)}}
+           "pcr": {str(i): pcr(i) for i in (0, 1, 8, 9)}, "dt_digest": dt_digest()}
     try:
         out["counter"] = counter()
     except Fail as e:

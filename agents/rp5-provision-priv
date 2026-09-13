@@ -20,7 +20,7 @@ def nv_name(index):
 
 def record():
     tpm_env()
-    rec = {"meas_index": MEAS_INDEX, "meas_name": nv_name(MEAS_INDEX),
+    rec = {"dt_digest": dt_digest(), "meas_index": MEAS_INDEX, "meas_name": nv_name(MEAS_INDEX),
            "counter_index": COUNTER_INDEX, "counter_name": nv_name(COUNTER_INDEX)}
     try:
         rec["counter"] = counter()

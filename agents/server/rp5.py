@@ -48,6 +48,18 @@ def tar_release(d):
 
 
 GOLDENS_CURRENT = os.path.join(HERE, "..", "..", "attestation", "current-goldens.json")
+ENROLLMENT = os.path.join(HERE, "..", "..", "attestation", "enrollment.json")   # per-board record
+
+
+def predict_pcr0(version_string, dt_digest_hex):
+    """PCR0 = extend(extend(extend(0, H(version string + NUL)), H(dt digest)), H(ff ff ff ff))
+    -- U-Boot measures the S-CRTM version string, then the canonical devicetree digest
+    (the digest bytes are what gets hashed), then the EV_SEPARATOR."""
+    import hashlib
+    H = lambda b: hashlib.sha256(b).digest()
+    v = H(b"\0" * 32 + H(version_string.encode() + b"\0"))
+    d = H(v + H(bytes.fromhex(dt_digest_hex)))
+    return H(d + H(b"\xff" * 4)).hex()
 PCR9_NO_INITRD = "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6"
 
 
@@ -102,11 +114,19 @@ def update(release):
     # use for that ONE value; PCR1/8/9, the NV commitment, the AK signature and
     # the reset counter are all still checked against host-side values.
     pcr0 = man["goldens"].get("pcr0")
-    if not pcr0:
-        pcr0 = st["pcr"]["0"]
-        print(f"[update] manifest has no PCR0: capturing {pcr0[:16]}... from the trial boot (TOFU, U-Boot build stamp)")
+    enr = json.load(open(ENROLLMENT)) if os.path.exists(ENROLLMENT) else {}
+    if not pcr0 and enr.get("dt_digest") and man.get("uboot_version_string"):
+        pcr0 = predict_pcr0(man["uboot_version_string"], enr["dt_digest"])
+        print(f"[update] PCR0 predicted on the host from the enrolled devicetree digest: {pcr0[:16]}...")
         man["goldens"]["pcr0"] = pcr0
         json.dump(man, open(os.path.join(release, "MANIFEST.json"), "w"), indent=2)
+    if not pcr0:
+        pcr0 = st["pcr"]["0"]
+        print(f"[update] no enrollment: capturing PCR0 {pcr0[:16]}... from the trial boot (TOFU)")
+        man["goldens"]["pcr0"] = pcr0
+        json.dump(man, open(os.path.join(release, "MANIFEST.json"), "w"), indent=2)
+    if st.get("dt_digest") and not enr.get("dt_digest"):
+        print(f"[update] board reports devicetree digest {st['dt_digest'][:16]}...; run 'rp5.py enroll-dt' to record it")
     gfile = os.path.join(release, "goldens.json")
     json.dump(goldens_for(man, pcr0, os.path.basename(os.path.abspath(release))), open(gfile, "w"), indent=2)
     print("[update] health check = attestation round")
@@ -147,6 +167,15 @@ def main(argv):
         return show(ssh("provision", "provision", stdin=open(a[0], "rb").read()))
     if v in ("enroll", "verify"):
         return show(ssh("provision", v))
+    if v == "enroll-dt":
+        # record the board's canonical devicetree digest (from the unprivileged status;
+        # the provisioning record carries it too) so PCR0 can be predicted per release
+        st = ssh("attest", "status")
+        if not st.get("ok") or not st.get("dt_digest"):
+            print("board reports no devicetree digest (release < r9?)"); return 1
+        enr = json.load(open(ENROLLMENT)) if os.path.exists(ENROLLMENT) else {}
+        enr.update({"board": BOARD, "dt_digest": st["dt_digest"], "captured_pcr0": st["pcr"]["0"]})
+        json.dump(enr, open(ENROLLMENT, "w"), indent=2); print(json.dumps(enr, indent=2)); return 0
     print(__doc__); return 2
 
 
