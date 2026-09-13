@@ -170,6 +170,46 @@ image, so there is nothing to version separately. Manifest: version,
    `reboot "0 tryboot"` -> expect partition 5, root B, PCR1 = golden B, PCR0
    unchanged; then a plain reboot -> back to pair A (nothing committed).
 
+## The update cycle, as it runs on the board (reference walkthrough, 2026-09-13)
+
+Only one piece of state says which pair is current: `autoboot.txt` on p1.
+`[all] boot_partition=N` names the COMMITTED pair; `[tryboot] boot_partition=M`
+names the OTHER pair, which is both the install target and what a trial boots.
+The two pairs are symmetric (one signed `boot.img` works from either boot
+partition; the root is chosen by rule from the partition the firmware
+reports). The firmware only ever READS this file; the agent WRITES it exactly
+once per update, at commit.
+
+1. **Install** (agent, running system): target = the `[tryboot]` pair. Refuse
+   if it equals `/chosen/bootloader/partition`. Write the verity image raw to
+   the target root, `boot.img`+`boot.sig` to the target boot partition, read
+   both back against the manifest. `autoboot.txt` untouched: an interruption
+   here changes nothing for the next boot.
+2. **Trial** (`reboot "0 tryboot"`): Linux passes the string to the firmware,
+   which stores a tryboot bit in a reset-persistent register. On the next
+   boot the firmware takes `boot_partition` from `[tryboot]`, CLEARS the bit,
+   verifies that pair's `boot.img`, reports partition and `tryboot=1` in the
+   DT. U-Boot selects the root by rule, measures, checks anti-rollback
+   WITHOUT advancing the counter (tryboot), boots. Any failure (refusal
+   reset, panic/watchdog, power loss, nobody commits) ends on the committed
+   pair, because the bit is already consumed and the file still names it.
+3. **Health check** (agent + server): agent confirms it is the trial
+   (`tryboot=1`), the intended verity root, required services; the SERVER
+   runs an attestation round (goldens of the new release, NV commitment,
+   resetCount advanced) and answers commit / no commit. The counter has not
+   moved, so "no" costs nothing.
+4. **Commit** (agent, from the trial system): rewrite `autoboot.txt` with the
+   two numbers swapped (temp file, sync, rename, sync). Then plain `reboot`.
+5. **First committed boot**: firmware reads `[all]`, `tryboot=0`; U-Boot
+   advances the anti-rollback counter to this release's version (read back),
+   boots; server records the version as committed. From here any lower
+   version is refused on this board, the previous pair included.
+6. **Afterwards**: the other pair holds the previous release until the next
+   install overwrites it. A bad release found after commit is fixed forward
+   (new signed release, higher version); a board that skipped releases is
+   updated exactly like any other (target = the `[tryboot]` pair, counter
+   catches up in one committed boot).
+
 ## Implementation plan
 
 - Yocto: partition layout with two boot slots (wic), `autoboot.txt`, and an
