@@ -27,6 +27,7 @@ EXTRA_IMAGECMD:ext4 = "-i 4096 -b 4096"
 DM_VERITY_IMAGE_DATA_BLOCK_SIZE = "4096"
 IMAGE_CLASSES += "dm-verity-img"
 IMAGE_FSTYPES:append = " ext4"
+do_image_wic[depends] += "rpi-autoboot:do_deploy"
 
 IMAGE_INSTALL:append = " cryptsetup attest-user rp5-data-partition attestation-agent"
 
