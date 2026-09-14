@@ -1,0 +1,24 @@
+e3.log:193:  5.01 Trying partition: 1
+e3.log:313:[ARB] this release: version 11; board counter: 11 (tryboot)
+e3.log:314:[MBOOT] bootm_measure: measuring kernel -> PCR 8 (start=0x200000, len=0x1aba200)
+e3.log:321:[MBOOT] dtb_sanitize: canonical DTB digest dfadbdb3... -> PCR 0
+e3.log:326:[MBOOT] bootm_measure: measuring kernel cmdline -> PCR 1 (len=661, source=env)
+e3.log:355:Starting kernel ...
+e3.log:1222:  5.75 Trying partition: 2
+e3.log:1344:[ARB] this release: version 11; board counter: 11
+e3.log:1345:[MBOOT] bootm_measure: measuring kernel -> PCR 8 (start=0x200000, len=0x1aba200)
+e3.log:1352:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+e3.log:1357:[MBOOT] bootm_measure: measuring kernel cmdline -> PCR 1 (len=661, source=env)
+e3.log:1386:Starting kernel ...
+e2.log:197:  5.96 Trying partition: 2
+e2.log:319:[ARB] this release: version 11; board counter: 11 (tryboot)
+e2.log:320:[MBOOT] bootm_measure: measuring kernel -> PCR 8 (start=0x200000, len=0x1aba200)
+e2.log:327:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+e2.log:332:[MBOOT] bootm_measure: measuring kernel cmdline -> PCR 1 (len=661, source=env)
+e2.log:361:Starting kernel ...
+e2.log:1228:  5.70 Trying partition: 1
+e2.log:1348:[ARB] this release: version 11; board counter: 11
+e2.log:1349:[MBOOT] bootm_measure: measuring kernel -> PCR 8 (start=0x200000, len=0x1aba200)
+e2.log:1356:[MBOOT] dtb_sanitize: canonical DTB digest ea7fe1d3... -> PCR 0
+e2.log:1361:[MBOOT] bootm_measure: measuring kernel cmdline -> PCR 1 (len=661, source=env)
+e2.log:1390:Starting kernel ...
