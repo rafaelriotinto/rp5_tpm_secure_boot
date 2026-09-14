@@ -1,0 +1,58 @@
+  5.77 Read autoboot.txt bytes       64 hnd 0x4d21
+  5.79 TRYBOOT_A_B_MODE
+  5.08 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+  5.88 Trying partition: 1
+  5.09 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+  5.10 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  5.11 Matched GUID bootable-part-idx 0 want partition 0
+  5.16 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  5.12 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  5.13 FAT16 clusters 43215
+  5.31 secure-boot
+  5.32 Loading boot.img ...
+  5.14 boot.sig
+  5.14 hash: f923574346ba6b5a1962badc524b7e2af264b8e0fb2018521c36b21cfca9f839
+  5.15 ts: 1789362398
+  5.15 rsa2048: 16008baed875d3cef7cad37ed9fdb7ebf2bfce629be7cf409d6e65c544283032aeb6a76680d72a42e4b07b7ea1de51c266b01044
+  9.46 Verifying
+ 12.26 Bad signature boot.img
+ 12.26 Error 12 loading boot.img
+ 12.42 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+ 12.43 Partition walk: 1
+ 12.37 Trying partition: 1
+ 12.44 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+ 12.45 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+ 12.45 Matched GUID bootable-part-idx 0 want partition 0
+ 12.65 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+ 12.47 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+ 12.48 FAT16 clusters 43215
+ 12.80 secure-boot
+ 12.81 Loading boot.img ...
+ 12.48 boot.sig
+ 12.48 hash: f923574346ba6b5a1962badc524b7e2af264b8e0fb2018521c36b21cfca9f839
+ 12.49 ts: 1789362398
+ 12.49 rsa2048: 16008baed875d3cef7cad37ed9fdb7ebf2bfce629be7cf409d6e65c544283032aeb6a76680d72a42e4b07b7ea1de51c266b01044
+ 16.88 Verifying
+ 19.64 Bad signature boot.img
+ 19.99 Error 12 loading boot.img
+ 19.99 Trying partition: 2
+ 19.71 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+ 19.72 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+ 19.73 Matched GUID bootable-part-idx 0 want partition 1
+ 19.73 GPT partition: 1 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000058000..0000ac7ff
+ 19.74 Matched GUID bootable-part-idx 1 want partition 1
+ 19.53 type: 16 lba: 360448 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+ 19.75 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+ 19.76 FAT16 clusters 43215
+ 19.67 secure-boot
+ 19.68 Loading boot.img ...
+ 19.78 boot.sig
+ 19.78 hash: bc1fd914b2d85ea164e242bd6dafdd22eca916de145a5c45d79d6c83ec3035e3
+ 19.79 ts: 1789302494
+ 19.79 rsa2048: 2092b7fdb08df97ffc5669a96da1ce8a5f90da2dddd2545617372f2b1a9709d561396a86810745f7b39caa397e1f1abcb8d53457
+ 23.31 Verifying
+ 26.97 RSA verify
+ 26.87 rsa-verify pass (0x0)
+ 27.03 MBR: 0x00000000,       0 type: 0x00
+ 27.03 MBR: 0x00000000,       0 type: 0x00
+ 27.04 MBR: 0x00000000,       0 type: 0x00
