@@ -96,13 +96,19 @@ def goldens_for(man, pcr0, release):
 
 
 def wait_up():
+    """Wait for the attestation service after a reboot. Returns the status reply, or a
+    reply with ok=false when the board answers but cannot serve (e.g. no TPM in Linux),
+    or None when it never came back."""
     time.sleep(20)
+    last = None
     for _ in range(WAIT // 5):
         rep = ssh("attest", "status", timeout=15)
         if rep.get("ok"):
             return rep
+        if "no reply" not in rep.get("error", ""):
+            last = rep          # reachable, service answered with an error
         time.sleep(5)
-    return None
+    return last
 
 
 def update(release):
@@ -123,6 +129,8 @@ def update(release):
     st = wait_up()
     if not st:
         print("[update] board did not come back; the committed pair will boot on the next reset"); return 1
+    if not st.get("ok"):
+        print(f"[update] board is up but the attestation service failed: {st.get('error')}; not committing"); return 1
     print(f"[update] up: partition {st['partition']} tryboot {st['tryboot']} counter {st['counter']}")
     if not st["tryboot"] or st["partition"] != before["target"]:
         print("[update] NOT on the trial pair: the trial fell back or never happened; not committing"); return 1
@@ -154,8 +162,8 @@ def update(release):
     print(f"[update] committed pair {rep['committed']}; rebooting")
     ssh("ota", "reboot")
     st = wait_up()
-    if not st:
-        print("[update] board did not come back after commit"); return 1
+    if not st or not st.get("ok"):
+        print(f"[update] board did not come back cleanly after commit: {st and st.get('error')}"); return 1
     print(f"[update] up: partition {st['partition']} tryboot {st['tryboot']} counter {st['counter']}")
     ok = attest(gfile)
     if ok:

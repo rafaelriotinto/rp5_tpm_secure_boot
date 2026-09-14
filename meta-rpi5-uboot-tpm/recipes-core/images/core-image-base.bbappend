@@ -42,3 +42,12 @@ rp5_add_data_fstab() {
     echo "LABEL=data  /data  ext4  defaults,noexec,nosuid,nodev,nofail  0  2" >> ${IMAGE_ROOTFS}${sysconfdir}/fstab
 }
 ROOTFS_POSTPROCESS_COMMAND += "rp5_add_data_fstab; "
+
+# The two verity root slots must never be mounted by anything but the kernel: a
+# desktop auto-mounting the card writes the ext4 superblock (mount time) and
+# breaks the hash tree (E18). GPT attribute 63 = "do not automount" (udisks).
+do_image_wic[depends] += "gptfdisk-native:do_populate_sysroot"
+rp5_wic_no_automount() {
+    sgdisk -A 3:set:63 -A 4:set:63 ${IMGDEPLOYDIR}/${IMAGE_NAME}.wic
+}
+do_image_wic[postfuncs] += "rp5_wic_no_automount"
