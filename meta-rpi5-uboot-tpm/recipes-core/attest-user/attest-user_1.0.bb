@@ -29,10 +29,9 @@ do_install() {
     install -d -m 0755 ${D}/home/attest
     chown attest:attest ${D}/home/attest
 
-    install -d -m 0700 ${D}/root/.ssh
-    install -m 0600 ${WORKDIR}/authorized_keys ${D}/root/.ssh/authorized_keys
+    # LOCKDOWN: root's SSH key is no longer installed; root is locked in the image.
 }
 
 # The password is locked at rootfs assembly (extrausers in the image recipe),
 # because usermod runs against the finished rootfs, not this package.
-FILES:${PN} = "/home/attest /root/.ssh"
+FILES:${PN} = "/home/attest"

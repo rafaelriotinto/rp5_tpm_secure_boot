@@ -34,7 +34,21 @@ IMAGE_INSTALL:append = " cryptsetup attest-user rp5-data-partition rp5-agents"
 # Lock the attest user's password: login by SSH key only. (root is left as
 # debug-tweaks sets it, for now.)
 inherit extrausers
-EXTRA_USERS_PARAMS = "usermod -L attest; usermod -L ota; usermod -L provision;"
+# LOCKDOWN (production): no debug-tweaks (which would grant an empty root password
+# and let dropbear accept it), root locked, no login prompt on the serial console
+# or on tty1. The only entry points are the three service keys (forced commands).
+EXTRA_IMAGE_FEATURES:remove = "debug-tweaks"
+IMAGE_FEATURES:remove = "debug-tweaks"
+EXTRA_USERS_PARAMS = "usermod -L attest; usermod -L ota; usermod -L provision; usermod -L root;"
+SYSTEMD_AUTO_ENABLE:pn-systemd-serialgetty = "disable"
+rp5_lockdown_gettys() {
+    # mask the login prompts: the debug UART becomes output-only, tty1 has no login
+    for u in serial-getty@ttyAMA10.service serial-getty@ttyS0.service getty@tty1.service; do
+        ln -sf /dev/null ${IMAGE_ROOTFS}${sysconfdir}/systemd/system/$u
+    done
+    rm -f ${IMAGE_ROOTFS}${sysconfdir}/systemd/system/getty.target.wants/getty@tty1.service
+}
+ROOTFS_POSTPROCESS_COMMAND += "rp5_lockdown_gettys; "
 
 # /data: the writable, no-exec partition. LABEL= is resolved by
 # systemd-fstab-generator via udev's /dev/disk/by-label.
