@@ -1,0 +1,157 @@
+RPIBOOT: build-date 2026/08/17 pkg-version local e50a7096
+
+Please fit the EMMC_DISABLE / nRPIBOOT jumper before connecting the power and USB cables to the target device.
+If the device fails to connect then please see https://rpltd.co/rpiboot for debugging tips.
+
+Boot directory 'e9-wrong-key'
+Loading: e9-wrong-key/bootcode5.bin
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+libusb_bulk_transfer sent 24 bytes; returned 0
+Writing 105928 bytes
+libusb_bulk_transfer sent 105928 bytes; returned 0
+Successful read 4 bytes 
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin
+Failed control transfer (-7,24)
+Failed to write correct length, returned -7
+Waiting for BCM2835/6/7/2711/2712...
+
+Device located successfully
+Loading: e9-wrong-key/bootcode5.bin
+Initialised device correctly
+Found serial number 3
+last_serial -1 serial 3
+Sending bootcode.bin

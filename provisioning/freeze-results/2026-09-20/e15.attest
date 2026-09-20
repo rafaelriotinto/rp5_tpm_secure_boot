@@ -1,0 +1,15 @@
+[server] goldens from /home/rafaelrt/projs/MsCS/rp5_tpm_secure_boot/agents/server/../../attestation/boards/192.168.10.198/current-goldens.json (release ab-r12)
+[server] nonce = 971f2ea5ab64d5674687a17f78768d4edfd1924ae3bad49027b5e4257845cd3e
+  [info] device: partition 2 tryboot True counter 12
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [PASS] PCR state == golden (release)
+  [info] active root slot: B (/dev/mmcblk0p4)
+  [PASS] meas-cert freshness (nonce)
+  [PASS] boot record (measured-boot NV == golden for slot)
+  [PASS] NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))
+  [info] TPM clock=2285793166 resetCount=140 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 137 -> 140)
+
+[server] ATTESTATION PASSED — device trusted

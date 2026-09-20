@@ -1,0 +1,3 @@
+  [info] TPM clock=2286154670 resetCount=143 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 140 -> 143)
+[server] ATTESTATION PASSED — device trusted

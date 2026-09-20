@@ -1,0 +1,5 @@
+{
+  "ok": false,
+  "verb": "install",
+  "error": "release version 11 is below this board's anti-rollback counter 12"
+}

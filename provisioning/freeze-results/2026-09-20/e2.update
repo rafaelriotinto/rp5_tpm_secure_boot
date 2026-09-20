@@ -1,0 +1,6 @@
+[update] release version 12
+[update] board: committed pair 2, target 1, counter 12
+[update] installed into pair 1: {'root': '/dev/mmcblk0p3', 'boot': '/dev/mmcblk0p1'}
+[update] trial boot requested; waiting
+[update] up: partition 2 tryboot True counter 12
+[update] NOT on the trial pair: the trial fell back or never happened; not committing

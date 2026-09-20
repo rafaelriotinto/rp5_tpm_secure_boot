@@ -1,0 +1,18 @@
+  [info] TPM clock=2286286211 resetCount=144 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 143 -> 144)
+[server] ATTESTATION PASSED — device trusted
+  [info] TPM clock=2286322648 resetCount=145 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 144 -> 145)
+[server] ATTESTATION PASSED — device trusted
+[update] release version 12
+[update] board: committed pair 2, target 1, counter 12
+[update] installed into pair 1: {'root': '/dev/mmcblk0p3', 'boot': '/dev/mmcblk0p1'}
+[update] trial boot requested; waiting
+[update] up: partition 1 tryboot True counter 12
+[update] PCR0 predicted on the host from the enrolled devicetree digest: 0d906ef807d644a0...
+[update] health check = attestation round
+[update] committed pair 1; rebooting
+[update] up: partition 1 tryboot False counter 12
+[update] goldens of release 12 are now current (/home/rafaelrt/projs/MsCS/rp5_tpm_secure_boot/agents/server/../../attestation/boards/192.168.10.198/current-goldens.json)
+[update] DONE
+wall clock: 147 s
