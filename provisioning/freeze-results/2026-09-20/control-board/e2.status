@@ -1,0 +1,4 @@
+  "partition": 2,
+  "tryboot": true,
+  "pcr": {
+    "8": "5d31f7de28d544d557cb47fa044927b3ad97f771b6f060d59eb45b07c6a39c5a",

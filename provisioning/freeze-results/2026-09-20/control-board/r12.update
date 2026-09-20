@@ -1,0 +1,13 @@
+[server] ATTESTATION PASSED — device trusted
+[server] ATTESTATION PASSED — device trusted
+[update] release version 12
+[update] board: committed pair 2, target 1, counter 11
+[update] installed into pair 1: {'root': '/dev/mmcblk0p3', 'boot': '/dev/mmcblk0p1'}
+[update] trial boot requested; waiting
+[update] up: partition 1 tryboot True counter 11
+[update] PCR0 predicted on the host from the enrolled devicetree digest: 8185b68e4cafa132...
+[update] health check = attestation round
+[update] committed pair 1; rebooting
+[update] up: partition 1 tryboot False counter 12
+[update] goldens of release 12 are now current (/home/rafaelrt/projs/MsCS/rp5_tpm_secure_boot/agents/server/../../attestation/boards/192.168.10.124/current-goldens.json)
+[update] DONE

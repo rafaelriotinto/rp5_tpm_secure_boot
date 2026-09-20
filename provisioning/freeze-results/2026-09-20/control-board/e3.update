@@ -1,0 +1,11 @@
+  [FAIL] PCR state == golden (release)
+  [FAIL] boot record (measured-boot NV == golden for slot)
+[server] ATTESTATION FAILED — device REJECTED
+[update] release version 12
+[update] board: committed pair 1, target 2, counter 12
+[update] installed into pair 2: {'root': '/dev/mmcblk0p4', 'boot': '/dev/mmcblk0p2'}
+[update] trial boot requested; waiting
+[update] up: partition 2 tryboot True counter 12
+[update] PCR0 predicted on the host from the enrolled devicetree digest: 8185b68e4cafa132...
+[update] health check = attestation round
+[update] attestation FAILED on the trial: not committing; a plain reboot returns to the committed pair
