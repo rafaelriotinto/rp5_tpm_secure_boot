@@ -371,20 +371,32 @@ def main():
 
     # 6) restart evidence -- the linchpin of Option B. An attacker who keeps the
     #    TPM powered and ignores a reboot request cannot advance resetCount.
+    #    Two modes:
+    #      REQUIRE_REBOOT=1  the server asked for a reboot (update cycle, attested
+    #                        reboot): the counter MUST have advanced, else FAIL.
+    #      default           a routine round: the counter is compared with the last
+    #                        round and the result is REPORTED as the freshness
+    #                        state of the evidence, not enforced. The software
+    #                        state is verified either way.
+    freshness = "unknown"
     if q_clk:
         print(f"  [info] TPM clock={q_clk.clock} resetCount={q_clk.reset_count} "
               f"restartCount={q_clk.restart_count} safe={q_clk.safe}")
+        pr = prev.get("reset_count")
+        if pr is None:
+            freshness = "no baseline"
+        elif q_clk.reset_count > pr:
+            freshness = f"fresh (resetCount {pr} -> {q_clk.reset_count}: restarted since the last round)"
+        else:
+            freshness = f"stale (resetCount {q_clk.reset_count} unchanged: NOT restarted since the last round)"
         if REQUIRE_REBOOT:
-            pr = prev.get("reset_count")
             if pr is None:
                 check("restart evidence (no baseline yet -- recorded)", False)
             else:
                 check(f"restart evidence (resetCount {pr} -> {q_clk.reset_count})",
                       q_clk.reset_count > pr)
-        elif "reset_count" in prev:
-            same = q_clk.reset_count == prev["reset_count"]
-            print(f"  [info] resetCount {'unchanged' if same else 'ADVANCED'} "
-                  f"since last round (was {prev['reset_count']})")
+        else:
+            print(f"  [info] evidence freshness: {freshness}")
 
     if q_clk:
         try:
@@ -394,7 +406,11 @@ def main():
         except OSError:
             pass
 
-    print(f"\n[server] ATTESTATION {'PASSED — device trusted' if ok else 'FAILED — device REJECTED'}")
+    print(f"\n[server] ATTESTATION {'PASSED — device trusted' if ok else 'FAILED — device REJECTED'}"
+          f"\n[server] evidence: {freshness}"
+          + ("" if REQUIRE_REBOOT or not freshness.startswith("stale") else
+             "\n[server] the software state is verified, but the board binding has not been re-established"
+             "\n[server] since the last round; run 'rp5.py reboot' then 'rp5.py attest' for a fresh round"))
     sys.exit(0 if ok else 1)
 
 

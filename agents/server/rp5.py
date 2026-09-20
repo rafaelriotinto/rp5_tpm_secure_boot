@@ -2,7 +2,12 @@
 """Server-side CLI for the three device services.
 
   rp5.py status                      OTA status (active pair, counter, autoboot.txt)
-  rp5.py attest                      one attestation round (attest-server.py, AGENT=1)
+  rp5.py attest [--require-reboot]   one attestation round (attest-server.py, AGENT=1).
+                                     Passes on a good software state and REPORTS the
+                                     freshness of the evidence (fresh = restarted since
+                                     the last round, stale = not). With --require-reboot
+                                     a stale round FAILS (used after 'reboot' and inside
+                                     'update').
   rp5.py install <release-dir>       stream a release to the INACTIVE pair
   rp5.py tryboot | commit | reboot   the single steps
   rp5.py update  <release-dir>       the whole cycle: install, tryboot, wait,
@@ -67,8 +72,9 @@ def predict_pcr0(version_string, dt_digest_hex):
 PCR9_NO_INITRD = "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6"
 
 
-def attest(goldens_file=None):
-    env = dict(os.environ, AGENT="1", AGENT_KEY=f"{KEYS}/attest_ed25519", DEVICE=f"attest@{BOARD}", REQUIRE_REBOOT="1",
+def attest(goldens_file=None, require_reboot=True):
+    env = dict(os.environ, AGENT="1", AGENT_KEY=f"{KEYS}/attest_ed25519", DEVICE=f"attest@{BOARD}",
+               REQUIRE_REBOOT="1" if require_reboot else "0",
                AK_PEM=os.path.join(BOARD_DIR, "ak.pem"), ATTEST_STATE=os.path.join(BOARD_DIR, "attest-state.json"),
                GOLDENS_FILE=goldens_file or GOLDENS_CURRENT)
     r = subprocess.run([sys.executable, VERIFIER], env=env)
@@ -180,7 +186,7 @@ def main(argv):
     if v == "status":
         return show(ssh("ota", "status"))
     if v == "attest":
-        return 0 if attest() else 1
+        return 0 if attest(require_reboot="--require-reboot" in a) else 1
     if v == "install":
         return show(ssh("ota", "install", stdin=tar_release(a[0])))
     if v in ("tryboot", "commit", "reboot"):
