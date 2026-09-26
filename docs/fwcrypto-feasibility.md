@@ -41,5 +41,23 @@ what `openssl dgst -sha256 -sign` does). Nothing was written to OTP; the test NV
 Conclusion: the SLB 9672 enforces PolicySigned with P-256 exactly as the design needs, including freshness
 (nonce) and binding of the signature to the exact value written (cpHash).
 
-Still untested (requires generating the key = irreversible, single slot): the firmware producing the signature,
-and calling it from U-Boot at boot.
+## Firmware key: generated and used with the TPM (2026-09-26T12:16Z, control board, run by Rafael)
+
+Script provisioning/fwcrypto/genkey-and-policysigned-test.sh; raw output and public key in
+provisioning/fwcrypto/results-control-2026-09-26/. IRREVERSIBLE: the control board's only OTP key slot now holds
+a firmware-generated ECDSA P-256 key.
+
+| Step | Result |
+|---|---|
+| genkey --key-id 1 --alg ec | "Successfully generated ECDSA key in slot 1" |
+| READ_LOCKED, then privkey | status 0x101; raw private key read refused |
+| public key | DER SubjectPublicKeyInfo, 91 bytes (in results dir) |
+| PolicySigned: firmware signs nonceTPM‖expiration (CLI hashes, firmware signs the SHA-256 digest) | TPM ACCEPTED; DER signature 71 bytes |
+| openssl verification of the same signature | Verified OK |
+| SIGN_LOCKED + HMAC_LOCKED, then sign | status 0xd01; sign refused, error 4 "Key is locked" |
+
+Conclusion: the complete signing path works on the hardware: firmware-held key -> ECDSA over the TPM's fresh
+nonce -> accepted by TPM2_PolicySigned on the SLB 9672; locks then deny further use until reboot.
+
+Remaining: issue the same mailbox calls from U-Boot at boot (U-Boot already uses the property mailbox on the
+Pi 5, e.g. for the memory size) and set the locks before Linux.

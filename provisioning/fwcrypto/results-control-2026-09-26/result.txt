@@ -1,0 +1,21 @@
+== 0. preconditions (2026-09-26T12:16:21Z)
+bootloader: 2026/09/10 00:06:58
+Key 1 status: 0x00000001 (DEVICE)
+key slot 1 is blank
+== 1. generate the key in the firmware (IRREVERSIBLE)
+Successfully generated ECDSA key in slot 1
+Set key 1 status to 0x00000100 (READ_LOCKED)
+Key 1 status: 0x00000101 (DEVICE READ_LOCKED)
+public key (safe to publish): 3059301306072a8648ce3d020106082a8648ce3d03010703420004cb32f3ccd67ed3c145acecb19bd3982a391094d0e66da8a74757b33d1c8a0a3b503b83ccbc572f1d80104357ceb5663b4b28c7384e01abeb36dce43ee98a565a
+raw private key read refused (expected)
+== 2. PolicySigned with a FIRMWARE signature
+signature (DER, 71 bytes)
+RESULT: TPM ACCEPTED the firmware signature; policy digest 276cce72cbac090719d19034e0483e7cb1b70d4735d48534489625acc1846ed3
+== 3. independent check: openssl verifies the firmware signature over tbs.bin
+Verified OK
+== 4. lock signing and HMAC, then try again (must be refused until reboot)
+Set key 1 status to 0x00000400 (SIGN_LOCKED)
+Set key 1 status to 0x00000800 (HMAC_LOCKED)
+Key 1 status: 0x00000d01 (DEVICE READ_LOCKED SIGN_LOCKED HMAC_LOCKED)
+Last crypto error: 4 (Key is locked)
+== done; results in /root/fwcrypto-results (reboot clears the locks)
