@@ -61,3 +61,23 @@ nonce -> accepted by TPM2_PolicySigned on the SLB 9672; locks then deny further 
 
 Remaining: issue the same mailbox calls from U-Boot at boot (U-Boot already uses the property mailbox on the
 Pi 5, e.g. for the memory size) and set the locks before Linux.
+
+## U-Boot calling the firmware at boot (2026-09-26, control board)
+
+U-Boot branch rpi5-fwcrypto (include/rpi_fwcrypto.h, board/raspberrypi/rpi/rpi_fwcrypto.c): property-mailbox
+calls for key status, public key, ECDSA sign (32-byte digest) and set-lock, plus DER -> r||s conversion.
+Test build with the sequence in CONFIG_PREBOOT, booted once via tryboot.txt (kernel=u-boot-fwc.bin) on the
+Raspberry Pi OS test card; results written with fatwrite to the boot partition (results dir: uboot-fwctest.txt).
+
+| Step in U-Boot | Result |
+|---|---|
+| key status at start of U-Boot | 0x1 (DEVICE, no locks: the earlier Linux locks were cleared by the reset) |
+| public key | identical to the one read from Linux |
+| sign SHA-256("u-boot rpi-fw-crypto test") | 71-byte DER signature, parsed to r‖s; verified on the host with openssl |
+| lock READ/GEN/SIGN/HMAC/USAGE, read back | 0x1f01 (all five) |
+| sign again | refused, firmware error 4 (Key is locked) |
+| status after the next reset, from Linux | 0x1 (locks cleared) |
+
+Conclusion: every firmware-side step the design needs works from U-Boot on the Pi 5. Remaining work is on the
+TPM side of U-Boot: TPM2_LoadExternal + TPM2_PolicySigned, use of the signed session for the NV extend and the
+anti-rollback increment, and provisioning of the indices with the PolicySigned policy.
