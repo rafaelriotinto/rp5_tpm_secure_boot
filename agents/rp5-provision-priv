@@ -70,6 +70,106 @@ def provision(args):
     return record()
 
 
+# ---------------------------------------------------------------------------------------------
+# Firmware-key anchor: the two NV indices are authorised by TPM2_PolicySigned with the SoC
+# firmware's OTP ECDSA key (rpi-fw-crypto). Must match U-Boot (CONFIG_MEASURE_NV_AUTH_FWKEY):
+# public area P-256, attributes sign|userwithauth, NULL scheme; policyRef per index.
+FWC = "rpi-fw-crypto"
+REF_MEAS = "rp5-nv-meas-v1"
+REF_CTR = "rp5-nv-ctr-v1"
+ATTR_MEAS = "nt=extend|policywrite|ppread|authread|ownerread|no_da|clear_stclear"
+ATTR_CTR = "nt=counter|policywrite|ppread|ownerread|authread|no_da"
+
+
+def owner_auth_set():
+    out = run("tpm2_getcap", "properties-variable").decode()
+    m = re.search(r"ownerAuthSet:\s*(\d)", out)
+    return bool(m and m.group(1) == "1")
+
+
+def written_name(index):
+    """Name of the index as it is once written (TPMA_NV_WRITTEN), computed from its public area."""
+    import hashlib, struct
+    out = run("tpm2_nvreadpublic", index).decode()
+    attrs = int(re.search(r"attributes:\s*\n\s*friendly:.*\n\s*value:\s*(0x[0-9a-fA-F]+)", out).group(1), 16)
+    pol = bytes.fromhex(re.search(r"authorization policy:\s*([0-9A-Fa-f]*)", out).group(1))
+    size = int(re.search(r"size:\s*(\d+)", out).group(1))
+    pub = struct.pack(">IHI", int(index, 16), 0x000B, attrs | 0x20000000) + struct.pack(">H", len(pol)) + pol + struct.pack(">H", size)
+    return (b"\x00\x0b" + hashlib.sha256(pub).digest()).hex()
+
+
+def fw_key_ready(d):
+    """Generate the firmware key if the OTP slot is blank (IRREVERSIBLE, factory only); lock raw reads."""
+    run(FWC, "pubkey", "--key-id", "1", "--out", f"{d}/pub.der", check=False)   # fails if blank
+    if not os.path.exists(f"{d}/pub.der") or os.path.getsize(f"{d}/pub.der") != 91:
+        run(FWC, "genkey", "--key-id", "1", "--alg", "ec")
+        run(FWC, "pubkey", "--key-id", "1", "--out", f"{d}/pub.der")
+    run(FWC, "set-key-status", "1", "READ_LOCKED")
+    run("openssl", "ec", "-pubin", "-inform", "DER", "-in", f"{d}/pub.der", "-out", f"{d}/pub.pem")
+    run("tpm2_loadexternal", "-C", "n", "-G", "ecc", "-a", "sign|userwithauth",
+        "-u", f"{d}/pub.pem", "-c", f"{d}/key.ctx", "-n", f"{d}/key.name")
+    for tag, ref in (("meas", REF_MEAS), ("ctr", REF_CTR)):
+        open(f"{d}/ref.{tag}", "w").write(ref)
+        run("tpm2_startauthsession", "-S", f"{d}/trial.ctx")
+        run("tpm2_policysigned", "-S", f"{d}/trial.ctx", "-c", f"{d}/key.ctx", "-q", f"{d}/ref.{tag}",
+            "-L", f"{d}/pol.{tag}")
+        run("tpm2_flushcontext", f"{d}/trial.ctx")
+
+
+def fw_signed_increment(d, index):
+    run("tpm2_nvincrement", index, "-C", index, "--cphash", f"{d}/cp.bin")
+    run("tpm2_startauthsession", "--policy-session", "-S", f"{d}/s.ctx")
+    run("tpm2_policysigned", "-S", f"{d}/s.ctx", "-c", f"{d}/key.ctx", "-x", "--cphash-input", f"{d}/cp.bin",
+        "-q", f"{d}/ref.ctr", "--raw-data", f"{d}/tbs.bin")
+    run(FWC, "sign", "--in", f"{d}/tbs.bin", "--key-id", "1", "--alg", "ec", "--out", f"{d}/sig.der")
+    run("tpm2_policysigned", "-S", f"{d}/s.ctx", "-g", "sha256", "-s", f"{d}/sig.der", "-f", "ecdsa",
+        "-c", f"{d}/key.ctx", "-x", "--cphash-input", f"{d}/cp.bin", "-q", f"{d}/ref.ctr")
+    run("tpm2_nvincrement", index, "-C", index, "-P", f"session:{d}/s.ctx")
+    run("tpm2_flushcontext", f"{d}/s.ctx")
+
+
+def provision_fwkey(args):
+    """Fresh TPM: EK/AK, indices, first increment, hierarchy auths (as `provision`, firmware-key
+    anchor). Already provisioned TPM (owner auth set): keep the AK and the hierarchy auths, replace
+    the two indices using the owner auth from the request."""
+    tpm_env()
+    req = json.loads(sys.stdin.read() or "{}")
+    closed = owner_auth_set()
+    need = ("owner",) if closed else ("owner", "endorsement", "lockout")
+    for k in need:
+        if not hexok(req.get(k)):
+            raise Fail(f"{k}: need 32 bytes as hex")
+    P = ["-P", f"hex:{req['owner']}"] if closed else []
+    with tempfile.TemporaryDirectory() as d:
+        fw_key_ready(d)
+        if not closed:
+            run("tpm2_createek", "-c", f"{d}/ek.ctx", "-G", "rsa", "-u", f"{d}/ek.pub")
+            run("tpm2_createak", "-C", f"{d}/ek.ctx", "-c", f"{d}/ak.ctx", "-G", "rsa", "-g", "sha256",
+                "-s", "rsassa", "-u", f"{d}/ak.pub", "-n", f"{d}/ak.name")
+            run("tpm2_evictcontrol", "-C", "o", "-c", f"{d}/ak.ctx", AK_HANDLE)
+        for index in (MEAS_INDEX, COUNTER_INDEX):
+            if run("tpm2_nvreadpublic", index, check=False).strip():
+                run("tpm2_nvundefine", index, "-C", "o", *P)
+        run("tpm2_nvdefine", MEAS_INDEX, "-C", "o", *P, "-s", "32", "-a", ATTR_MEAS, "-L", f"{d}/pol.meas")
+        run("tpm2_nvdefine", COUNTER_INDEX, "-C", "o", *P, "-s", "8", "-a", ATTR_CTR, "-L", f"{d}/pol.ctr")
+        fw_signed_increment(d, COUNTER_INDEX)
+        if not closed:
+            run("tpm2_changeauth", "-c", "o", f"hex:{req['owner']}")
+            run("tpm2_changeauth", "-c", "e", f"hex:{req['endorsement']}")
+            run("tpm2_changeauth", "-c", "l", f"hex:{req['lockout']}")
+        pub = open(f"{d}/pub.der", "rb").read().hex()
+        extra = {"anchor": "fwkey", "fw_pubkey_der": pub,
+                 "fw_key_name": open(f"{d}/key.name", "rb").read().hex(),
+                 "meas_policy": open(f"{d}/pol.meas", "rb").read().hex(),
+                 "counter_policy": open(f"{d}/pol.ctr", "rb").read().hex(),
+                 "reprovisioned": closed}
+    rec = record()
+    rec.update(extra)
+    rec["meas_name"] = written_name(MEAS_INDEX)        # the Name the verifier sees after U-Boot's first write
+    rec["counter_name"] = written_name(COUNTER_INDEX)
+    return rec
+
+
 def verify(args):
     rec = record()
     req = json.loads(sys.stdin.read() or "{}") if not sys.stdin.isatty() else {}
@@ -81,4 +181,5 @@ if __name__ == "__main__":
     if os.geteuid() != 0:
         reply(ok=False, error="must run as root (via sudo)"); sys.exit(1)
     os.environ.pop("SSH_ORIGINAL_COMMAND", None)
-    sys.exit(main({"provision": provision, "enroll": lambda a: record(), "verify": verify}))
+    sys.exit(main({"provision": provision, "provision-fwkey": provision_fwkey,
+                  "enroll": lambda a: record(), "verify": verify}))

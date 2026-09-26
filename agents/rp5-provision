@@ -12,6 +12,9 @@ without those auths: the service self-disables after the factory.
              -> sets hierarchy auths, defines the measured-boot extend index and
                 the anti-rollback counter (first increment -> 1), creates and
                 persists the AK; returns the enrollment record.
+  provision-fwkey stdin: {"owner", "endorsement", "lockout"} (only "owner" on an already
+             provisioned TPM) -> firmware-key anchor: generates the OTP key if blank, defines both
+             indices with PolicySigned policies, first increment signed by the firmware.
   enroll     -> the enrollment record only (AK public key PEM, index Names, counter)
   verify     -> compares the record against what the TPM holds
 """
@@ -25,7 +28,7 @@ PRIV = "/usr/bin/rp5-provision-priv"
 def forward(verb):
     def h(args):
         out = run("sudo", "-n", PRIV, verb, check=False,   # the helper's JSON carries the error
-                  input=sys.stdin.buffer.read() if verb in ("provision", "verify") else None)
+                  input=sys.stdin.buffer.read() if verb in ("provision", "provision-fwkey", "verify") else None)
         p = json.loads(out.decode().strip().splitlines()[-1])
         if not p.get("ok"):
             raise Fail(p.get("error", f"{verb} failed"))
@@ -34,4 +37,4 @@ def forward(verb):
 
 
 if __name__ == "__main__":
-    sys.exit(main({v: forward(v) for v in ("provision", "enroll", "verify")}))
+    sys.exit(main({v: forward(v) for v in ("provision", "provision-fwkey", "enroll", "verify")}))

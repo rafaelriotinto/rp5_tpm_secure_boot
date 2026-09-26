@@ -23,7 +23,7 @@ USERADD_PACKAGES = "${PN}"
 USERADD_PARAM:${PN} = "--system --home-dir /home/ota --no-create-home --shell /bin/sh --groups tss --user-group ota; \
                        --system --home-dir /home/provision --no-create-home --shell /bin/sh --groups tss --user-group provision"
 
-RDEPENDS:${PN} = "python3-core python3-json python3-compression python3-crypt python3-io python3-shell python3-netclient python3-misc tpm2-tools sudo attest-user"
+RDEPENDS:${PN} = "python3-core python3-json python3-compression python3-crypt python3-io python3-shell python3-netclient python3-misc tpm2-tools sudo attest-user rpifwcrypto"
 
 do_install() {
     install -d ${D}${libdir}/rp5agent

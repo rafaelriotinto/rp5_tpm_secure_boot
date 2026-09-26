@@ -13,6 +13,8 @@
   rp5.py update  <release-dir>       the whole cycle: install, tryboot, wait,
                                      attest (= health check), commit, reboot, attest
   rp5.py provision <auths.json>      factory: stream the derived auths, get the record
+  rp5.py provision-fwkey <auths.json> factory: firmware-key anchor (OTP key + PolicySigned indices);
+                                     on an already provisioned TPM only "owner" is used
   rp5.py enroll | verify
 
 Environment: BOARD (host/IP, default 192.168.10.198), KEYS (dir with
@@ -193,11 +195,12 @@ def main(argv):
         return show(ssh("ota", v))
     if v == "update":
         return update(a[0])
-    if v in ("enroll", "provision"):
-        rep = ssh("provision", v, stdin=open(a[0], "rb").read() if v == "provision" else None)
+    if v in ("enroll", "provision", "provision-fwkey"):
+        rep = ssh("provision", v, stdin=open(a[0], "rb").read() if v != "enroll" else None)
         if rep.get("ok") and rep.get("ak_pem"):
             enr = json.load(open(ENROLLMENT)) if os.path.exists(ENROLLMENT) else {}
-            enr.update({k: rep[k] for k in ("dt_digest", "meas_index", "meas_name", "counter_index", "counter_name", "counter") if k in rep})
+            enr.update({k: rep[k] for k in ("dt_digest", "meas_index", "meas_name", "counter_index", "counter_name", "counter",
+                                            "anchor", "fw_pubkey_der", "fw_key_name", "meas_policy", "counter_policy") if k in rep})
             enr["board"] = BOARD
             json.dump(enr, open(ENROLLMENT, "w"), indent=2)
             open(os.path.join(BOARD_DIR, "ak.pem"), "w").write(rep["ak_pem"])
