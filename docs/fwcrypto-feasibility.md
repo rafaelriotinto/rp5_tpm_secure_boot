@@ -121,3 +121,17 @@ Found on the way: (1) attest-server.py checked every board against the demonstra
 enrollment load ran before the default was assigned), fixed; (2) enrollment must hold WRITTEN-state index Names;
 (3) a bootloader update changes PCR0 and PCR1 predictions (devicetree digest, firmware command-line prefix), so
 the board must be re-enrolled after a firmware update.
+
+## Demonstration board (secure boot enforced) on r15 (2026-09-26)
+
+| Step | Result |
+|---|---|
+| Bootloader update 2026-05-26 -> 2026-09-10 (owner-signed, -fr, rpiboot) | EEPROM_UPDATE success; EEPROM_HASH = our signed image; CUSTOMER_KEY_HASH = our OTP key hash. Recovery metadata also reported FACTORY_UUID and JTAG_LOCKED 0 |
+| Factory card (factory U-Boot: no ARB, no key lock, guard) | secure boot accepted the signed factory boot.img; key slot blank -> allowed |
+| `rp5.py provision-fwkey` (owner auth only: TPM already provisioned) | key generated in the firmware (irreversible), raw read locked; DUID-rule indices replaced with PolicySigned indices; AK and hierarchy auths kept; counter continued 12 -> 13; key Name and both policies equal U-Boot's encoding; key differs from the control board's |
+| Update cycle to r15 | trial: counter left at 13, signed NV commit, key locked; health check PASSED (after fixing the verifier wiring, below); commit; committed boot: "[ARB] counter advanced to 15 (committed)" with firmware-signed increments; attestation with restart requirement PASSED (148 -> 149) |
+| Factory guard: trial-boot of the factory pair left on the card | "[FACTORY] this board is already provisioned (firmware key present) -- refusing to start the factory image; resetting"; fallback to r15 |
+
+Verifier wiring fix: during `rp5.py update` the verifier received the release's goldens.json and looked
+for enrollment.json next to it, fell back to the hard-coded default Name and rejected a correct board;
+rp5.py now passes ENROLLMENT_FILE explicitly.

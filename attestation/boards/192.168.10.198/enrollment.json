@@ -1,9 +1,16 @@
 {
   "board": "192.168.10.198",
-  "dt_digest": "1126fcdf20eb3c6389c5c3f923660d97f002a868c6f6f561943b0eeda727d2e7",
-  "captured_pcr0": "1d52c2424bdc2f1fdc85950b29080cde59e010d5b2806ac0943078e9baab9fb7",
-  "meas_name": "000b6d77af9978cd18e8a30d502db09bb64056bb36e662620d39d06d1b56e5f867b4",
+  "dt_digest": "7efa9133a194be32d361ec0b9641ef68d4526612fb119e58bb0fde3f6b4865b8",
+  "captured_pcr0": "ff419e1aa3618e2facca44bff11da5a361f387133a0e22aa986f6b7a05ecf423",
+  "meas_name": "000b6fdf0a5c6e6c4489e358160d8250deb9fb5e3025f25301280d7dc901ab7e4531",
   "meas_index": "0x01800000",
   "counter_index": "0x01800002",
-  "bootargs_prefix": "reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=4 system_heap.max_order=0 iommu_dma_numa_policy=interleave smsc95xx.macaddr=88:A2:9E:82:BB:4D vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  "
+  "bootargs_prefix": "reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=4 system_heap.max_order=0 iommu_dma_numa_policy=interleave smsc95xx.macaddr=88:A2:9E:82:BB:4D vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  ",
+  "counter_name": "000bd1b273ea9531de907f1b05cbfb7889932a673164aa123815e0e6b5a705a5e78f",
+  "counter": 13,
+  "anchor": "fwkey",
+  "fw_pubkey_der": "3059301306072a8648ce3d020106082a8648ce3d03010703420004cfb5994cf1b29bd31024175b1e78320f2dedd70a8693f1445c95b57326a32ea6cbacdf2b88390b2c92fa4488e4e7a2234f75d4ecf271c502a2f37590c13215cb",
+  "fw_key_name": "000b10c8820537b0d1f7cbf2c37219a63c9a9f217c598348e30841050ec3a8347531",
+  "meas_policy": "ca43d7012139e893816416d1f8a166f37dcd7e5bd7aac746db2859eac3942135",
+  "counter_policy": "1eadda56bf6ae020172de4986dd931bee306cc619ccf889f018b2b47f6742323"
 }

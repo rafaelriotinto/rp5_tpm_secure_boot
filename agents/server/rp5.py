@@ -78,6 +78,7 @@ def attest(goldens_file=None, require_reboot=True):
     env = dict(os.environ, AGENT="1", AGENT_KEY=f"{KEYS}/attest_ed25519", DEVICE=f"attest@{BOARD}",
                REQUIRE_REBOOT="1" if require_reboot else "0",
                AK_PEM=os.path.join(BOARD_DIR, "ak.pem"), ATTEST_STATE=os.path.join(BOARD_DIR, "attest-state.json"),
+               ENROLLMENT_FILE=ENROLLMENT,
                GOLDENS_FILE=goldens_file or GOLDENS_CURRENT)
     r = subprocess.run([sys.executable, VERIFIER], env=env)
     return r.returncode == 0
