@@ -22,5 +22,24 @@ Conclusion: per-key, per-operation locks take effect immediately, accumulate, ca
 tool, and clear only on reboot. This is the property required for U-Boot to use the key once per boot
 and deny it to Linux (including root) until the next reboot.
 
-Not yet tested (requires generating the key = irreversible, single slot):
-signing from U-Boot at boot; ECDSA P-256 signature accepted by TPM2_PolicySigned on the SLB9670.
+## TPM side: TPM2_PolicySigned with an ECDSA P-256 key (same test card, TPM enabled with dtoverlay=tpm-slb9670)
+
+TPM: Infineon (0x49465800), firmware 15.24 (TPM2_PT_FIRMWARE_VERSION_1 0x000F0018), NIST P-256 and ECDSA supported.
+A throwaway software P-256 key stood in for the firmware key (the firmware signs a SHA-256 prehash, which is
+what `openssl dgst -sha256 -sign` does). Nothing was written to OTP; the test NV index was removed afterwards.
+
+| Test | Result |
+|---|---|
+| to-be-signed data | 36 bytes = nonceTPM (32) + expiration (4); tpm2-tools omits the nonce unless `-x` is given (a nonce-less signature would be replayable: the design must always include it) |
+| PolicySigned, correct key, fresh nonce | accepted |
+| wrong key | refused |
+| session-1 signature replayed in a new session | refused (new nonce) |
+| test index 0x01800010 (platform hierarchy, nt=extend, policywrite, clear_stclear, policy = PolicySigned(key)) extended with a signature bound (cpHash) to value A | accepted; content = SHA256(0^32 || A), as expected |
+| signature bound to A, attempt to extend B | refused (session/policy check) |
+| extend without a signature | refused (authValue or authPolicy) |
+
+Conclusion: the SLB9670 enforces PolicySigned with P-256 exactly as the design needs, including freshness
+(nonce) and binding of the signature to the exact value written (cpHash).
+
+Still untested (requires generating the key = irreversible, single slot): the firmware producing the signature,
+and calling it from U-Boot at boot.
