@@ -102,3 +102,22 @@ Conclusion: the complete board-binding path of the new design works from U-Boot 
 Next: replace the DUID-derived session in measure_nv_extend and antirollback_check (boot/bootm.c) with
 rpi_fwc_policy_signed_session, lock the key before starting the kernel, provision the indices with the
 PolicySigned policy, and build a release for an end-to-end test with attestation.
+
+## Release r14 on the control board (2026-09-26)
+
+Release r14: U-Boot rpi5-fwcrypto c4b3e0d with CONFIG_MEASURE_NV_AUTH_FWKEY=y, version 14, boot tree with
+lock_device_private_key=1. Card: Yocto wic + signed r14 boot.img in both pairs (inject-boot.sh). Serial logs in
+provisioning/fwcrypto/results-control-r14-2026-09-26/ (03 is two interleaved captures).
+
+| Test | Result |
+|---|---|
+| First boot | U-Boot: ARB raised the counter 13 -> 14 with a firmware-signed session; NV commit OK; key locked 0x1f01 before "Starting kernel". Kernel panic: the unburned firmware booted the loose partition files (generic cmdline) because the card lacked boot_ramdisk=1 (the r12 card had it added by hand in E18). Fixed in inject-boot.sh. |
+| Boot with boot_ramdisk=1 | firmware reads boot.img and its verity cmdline; version 14 == counter 14; NV commit OK (signed); key locked 0x1f01; verity root mounted; services up |
+| Attestation (after re-capturing dt_digest and firmware prefix, changed by the bootloader update) | PCR0/1/8/9 equal the host predictions; NV index Name (written state, computed from the definition) matches; NV == SHA256(0^32 ‖ pcrDigest): PASSED |
+| Attested reboot (rp5.py reboot, attest --require-reboot) | resetCount 165 -> 166, all checks PASSED |
+| Rollback: signed r12 presented as version 14, trial-booted | r12 U-Boot: "[ARB] ROLLBACK … refusing to boot … resetting"; fallback to the committed r14 pair, which locked the key again; board on partition 1, counter 14 |
+
+Found on the way: (1) attest-server.py checked every board against the demonstration board's index Name (the
+enrollment load ran before the default was assigned), fixed; (2) enrollment must hold WRITTEN-state index Names;
+(3) a bootloader update changes PCR0 and PCR1 predictions (devicetree digest, firmware command-line prefix), so
+the board must be re-enrolled after a firmware update.
