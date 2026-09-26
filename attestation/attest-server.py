@@ -101,10 +101,6 @@ PCR_SET = (0, 1, 8, 9)
 # to this script: {"pcr0": hex, "pcr1": {"A": hex, "B": hex}, "pcr8": hex, "pcr9": hex}
 GOLDENS_FILE = os.environ.get("GOLDENS_FILE", os.path.join(HERE, "current-goldens.json"))
 ENROLLMENT_FILE = os.path.join(os.path.dirname(GOLDENS_FILE), "enrollment.json")
-if os.path.exists(ENROLLMENT_FILE):
-    _e = json.load(open(ENROLLMENT_FILE))
-    if _e.get("meas_name"):
-        GOLDEN_MEAS_NAME = _e["meas_name"]     # per-board index Name (C1)
 if os.path.exists(GOLDENS_FILE):
     _g = json.load(open(GOLDENS_FILE))
     GOLDEN_PCR = {0: _g["pcr0"], 8: _g["pcr8"], 9: _g["pcr9"]}
@@ -128,6 +124,13 @@ GOLDEN_ATTN_NAME = "000b9a92c0bb9a925132a1dfc907558356e7ad0688d5a98f7c6116d08d26
 # Re-provisioned 2026-09-06 with TPMA_NV_PPREAD added (attrs 0x0A070048|written),
 # so the device can certify with EMPTY PLATFORM auth and hold no secret.
 GOLDEN_MEAS_NAME = "000b6d77af9978cd18e8a30d502db09bb64056bb36e662620d39d06d1b56e5f867b4"
+# The per-board enrollment OVERRIDES the default above. (Fixed 2026-09-26: this load used to
+# run BEFORE the default was assigned, so every board was checked against the default, i.e.
+# the demonstration board's index Name.)
+if os.path.exists(ENROLLMENT_FILE):
+    _e = json.load(open(ENROLLMENT_FILE))
+    if _e.get("meas_name"):
+        GOLDEN_MEAS_NAME = _e["meas_name"]     # per-board index Name (C1)
 
 # TPMS_ATTEST type tags (TPM 2.0 Part 2, TPMI_ST_ATTEST)
 ST_ATTEST_NV    = 0x8014

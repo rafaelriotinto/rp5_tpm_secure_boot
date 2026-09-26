@@ -1,12 +1,12 @@
 {
-  "dt_digest": "ea7fe1d3c270e36d2cbfe151a78d09923aa06155c846c7bd2002867285644f8e",
+  "dt_digest": "3a9831624c5e751d48047ec6ae668c6a9df7a61af8a8a9c877c22af79179b6e9",
   "meas_index": "0x01800000",
-  "meas_name": "000bfc503e6c029dba7144195fe1783a851f101dfe694f28d3a451b3dff71d955683",
+  "meas_name": "000b3f0a5d6c707abbb4ff0c5a7b024ace82e189e33c7bc7d5d35f665bdd21c90604",
   "counter_index": "0x01800002",
   "counter_name": "000b5155a8dcd778c701af79c7c8a8457e2763489f00b7153fbb4fad51db7702e524",
   "counter": 13,
   "board": "192.168.10.124",
-  "bootargs_prefix": "reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=8 system_heap.max_order=0 smsc95xx.macaddr=88:A2:9E:1D:A4:B9 vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  ",
+  "bootargs_prefix": "reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=8 system_heap.max_order=0 iommu_dma_numa_policy=interleave smsc95xx.macaddr=88:A2:9E:1D:A4:B9 vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  ",
   "history": [
     {
       "date": "2026-09-26",
@@ -19,5 +19,9 @@
   "fw_pubkey_der": "3059301306072a8648ce3d020106082a8648ce3d03010703420004cb32f3ccd67ed3c145acecb19bd3982a391094d0e66da8a74757b33d1c8a0a3b503b83ccbc572f1d80104357ceb5663b4b28c7384e01abeb36dce43ee98a565a",
   "fw_key_name": "000b3a08e66fc6efeecd7186ebaf05b7cdb28bd440432ce16f488e3f5ce47deb82be",
   "meas_policy": "e12aedd033c6fa2e26e40a55e7ab1937147dd5b54a2c54ac65e7790234921e3b",
-  "counter_policy": "413964cbd1806c140d884318537fb29d289c58358ae1d3cf1aa92f61b5ec324e"
+  "counter_policy": "413964cbd1806c140d884318537fb29d289c58358ae1d3cf1aa92f61b5ec324e",
+  "captured_pcr0": "c1edbf969dc7262bac3accf2d76f00d3f653c39ffd772a8e15cafd56edc9ff7c",
+  "meas_name_unwritten": "000bfc503e6c029dba7144195fe1783a851f101dfe694f28d3a451b3dff71d955683",
+  "counter_name_unwritten": "000b5155a8dcd778c701af79c7c8a8457e2763489f00b7153fbb4fad51db7702e524",
+  "names_note": "written-state Names (TPMA_NV_WRITTEN set), computed from index, attributes, policy and size"
 }
