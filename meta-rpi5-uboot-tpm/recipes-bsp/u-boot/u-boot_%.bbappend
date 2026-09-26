@@ -3,12 +3,12 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 # Replace the default U-Boot source with the project's fork of
 # xen-troops/u-boot (adds RP1 PCIe/GPIO/clock drivers for RPi5 and the
 # TPM measured-boot work developed in this project).
-SRC_URI = "git://github.com/rafaelriotinto/u-boot.git;protocol=https;branch=rpi5-tpm-measured-boot \
+SRC_URI = "git://github.com/rafaelriotinto/u-boot.git;protocol=https;branch=rpi5-fwcrypto \
            file://uboot-tpm.cfg \
            "
 
 # Pinned for reproducibility. Update when the branch advances.
-SRCREV = "d582c1d13f8fb139723028d021ae785d14ac3763"
+SRCREV = "c4b3e0d2904c523f82f1b60852966550b29b18c4"
 
 S = "${WORKDIR}/git"
 
