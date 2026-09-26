@@ -24,7 +24,7 @@ and deny it to Linux (including root) until the next reboot.
 
 ## TPM side: TPM2_PolicySigned with an ECDSA P-256 key (same test card, TPM enabled with dtoverlay=tpm-slb9670)
 
-TPM: Infineon (0x49465800), firmware 15.24 (TPM2_PT_FIRMWARE_VERSION_1 0x000F0018), NIST P-256 and ECDSA supported.
+TPM on the control board: Infineon OPTIGA TPM **SLB 9672** (vendor strings "SLB9" "672"), firmware 15.24 (TPM2_PT_FIRMWARE_VERSION_1 0x000F0018, _2 0x004A0A00), TPM library revision 1.59, NIST P-256 and ECDSA supported. NOTE: not the SLB 9670 the thesis names; the demonstration board's TPM model has not been read out yet.
 A throwaway software P-256 key stood in for the firmware key (the firmware signs a SHA-256 prehash, which is
 what `openssl dgst -sha256 -sign` does). Nothing was written to OTP; the test NV index was removed afterwards.
 
@@ -38,7 +38,7 @@ what `openssl dgst -sha256 -sign` does). Nothing was written to OTP; the test NV
 | signature bound to A, attempt to extend B | refused (session/policy check) |
 | extend without a signature | refused (authValue or authPolicy) |
 
-Conclusion: the SLB9670 enforces PolicySigned with P-256 exactly as the design needs, including freshness
+Conclusion: the SLB 9672 enforces PolicySigned with P-256 exactly as the design needs, including freshness
 (nonce) and binding of the signature to the exact value written (cpHash).
 
 Still untested (requires generating the key = irreversible, single slot): the firmware producing the signature,
