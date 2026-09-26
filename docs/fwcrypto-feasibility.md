@@ -81,3 +81,24 @@ Raspberry Pi OS test card; results written with fatwrite to the boot partition (
 Conclusion: every firmware-side step the design needs works from U-Boot on the Pi 5. Remaining work is on the
 TPM side of U-Boot: TPM2_LoadExternal + TPM2_PolicySigned, use of the signed session for the NV extend and the
 anti-rollback increment, and provisioning of the indices with the PolicySigned policy.
+
+## U-Boot: PolicySigned NV extend end to end (2026-09-26, control board)
+
+U-Boot branch rpi5-fwcrypto adds TPM2_LoadExternal and TPM2_PolicySigned (lib/tpm-v2.c) and
+rpi_fwc_policy_signed_session (board/raspberrypi/rpi/rpi_fwcrypto.c).
+
+1. Key identity: U-Boot's fixed public area (P-256, sign|userWithAuth, NULL scheme) gives Name
+   000b3a08…82be and, with policyRef "rp5-nv-meas-v1", policy e12aedd0…1e3b. The TPM computed the same
+   Name (tpm2_loadexternal -a "sign|userwithauth") and the same trial policy digest.
+2. Test index 0x01800011 (platform hierarchy, nt=extend, policywrite, no clear_stclear) defined from Linux
+   with that policy.
+3. Trial boot of the test U-Boot (dtoverlay=letstrust-tpm-uboot): firmware signs
+   SHA256(nonceTPM ‖ 0 ‖ cpHash(NV_Extend) ‖ policyRef), PolicySigned, NV_Extend with the policy session
+   (empty HMAC key): return code 0; key then locked (0x1f01). Output: results dir uboot-fwctest2.txt.
+4. Read back from Linux: index = f2730db5…e0e0 = SHA256(0^32 ‖ SHA256("u-boot policysigned nv-extend test")),
+   exactly as expected. Test index removed.
+
+Conclusion: the complete board-binding path of the new design works from U-Boot on the hardware.
+Next: replace the DUID-derived session in measure_nv_extend and antirollback_check (boot/bootm.c) with
+rpi_fwc_policy_signed_session, lock the key before starting the kernel, provision the indices with the
+PolicySigned policy, and build a release for an end-to-end test with attestation.
