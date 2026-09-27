@@ -242,6 +242,19 @@ def mbox_legacy_private_key():
     return buf[1], buf[7:15].tobytes()
 
 
+def mbox_gencmd(cmd):
+    """Firmware general command over the mailbox (what vcgencmd sends): tag 0x00030080."""
+    import array, fcntl
+    n = 1024
+    data = cmd.encode() + b"\0" * (n - len(cmd))
+    words = [0, 0, 0x00030080, n + 4, 0, 0] + list(array.array("I", data)) + [0]
+    words[0] = len(words) * 4
+    buf = array.array("I", words)
+    with open("/dev/vcio", "rb+", buffering=0) as f:
+        fcntl.ioctl(f, 0xC0086400, buf, True)
+    return buf[5], buf[6:6 + n // 4].tobytes().split(b"\0")[0].decode(errors="replace")
+
+
 def read_key(d):
     import glob
     pub_der = run(FWC, "pubkey", "--key-id", "1")
@@ -264,11 +277,14 @@ def read_key(d):
         verdict("legacy mailbox: customer private key (0x00030081)", 0, blob, f"response code 0x{code:08x}")
     except OSError as e:
         verdict("legacy mailbox: customer private key (0x00030081)", e.errno, b"", str(e))
-    r = subprocess.run(["vcgencmd", "otp_dump"], capture_output=True)
-    rows = b"".join(bytes.fromhex(l.split(":")[1].strip()) for l in r.stdout.decode(errors="replace").splitlines()
-                    if ":" in l and len(l.split(":")[1].strip()) == 8)
-    verdict("vcgencmd otp_dump (all rows)", r.returncode, rows,
-            f"{len(rows) // 4} rows; " + r.stderr.decode(errors="replace"))
+    try:
+        code, text = mbox_gencmd("otp_dump")
+        rows = b"".join(bytes.fromhex(l.split(":")[1].strip()) for l in text.splitlines()
+                        if ":" in l and len(l.split(":")[1].strip()) == 8)
+        verdict("otp_dump (firmware command over the mailbox, all rows)", code, rows,
+                f"{len(rows) // 4} rows; first line: {text.splitlines()[0] if text else ''}")
+    except OSError as e:
+        verdict("otp_dump (firmware command over the mailbox, all rows)", e.errno, b"", str(e))
     for dev in sorted(glob.glob("/sys/bus/nvmem/devices/*/nvmem")):
         try:
             verdict(f"nvmem {dev.split('/')[-2]}", 0, open(dev, "rb").read(65536))
@@ -283,12 +299,16 @@ def read_key(d):
             res.append({"attempt": f"open {node}", "rc": e.errno, "note": e.strerror})
     # an unsigned kernel module: a module of this image with its signature removed
     loaded = {l.split()[0] for l in open("/proc/modules")}
-    mods = sorted(glob.glob(f"/lib/modules/{os.uname().release}/kernel/**/*.ko", recursive=True))
-    cand = [m for m in mods if os.path.basename(m)[:-3].replace("-", "_") not in loaded]
-    pref = [m for m in cand if os.path.basename(m) in ("dummy.ko", "tun.ko", "loop.ko", "configs.ko")]
+    import lzma
+    mods = sorted(glob.glob(f"/lib/modules/{os.uname().release}/kernel/**/*.ko*", recursive=True))
+    base = lambda m: os.path.basename(m).split(".ko")[0]
+    cand = [m for m in mods if base(m).replace("-", "_") not in loaded]
+    pref = [m for m in cand if base(m) in ("dummy", "tun", "loop", "configs")]
     mod = (pref or cand or [None])[0]
     if mod:
         raw = open(mod, "rb").read()
+        if mod.endswith(".xz"):
+            raw = lzma.decompress(raw)
         marker = b"~Module signature appended~\n"
         signed = raw.endswith(marker)
         if signed:
