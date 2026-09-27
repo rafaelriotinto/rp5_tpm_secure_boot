@@ -1,0 +1,1 @@
+{"ok": false, "verb": "attack", "error": "tpm2_nvreadpublic failed (1): WARNING:esys:/usr/src/debug/tpm2-tss/4.0.2/src/tss2-esys/api/Esys_NV_ReadPublic.c:309:Esys_NV_ReadPublic_Finish() Received TPM Error \nERROR:esys:/usr/src/debug/tpm2-tss/4.0.2/src/tss2-esys/esys_tr.c:243:Esys_TR_FromTPMPublic_Finish() Error NV_ReadPublic ErrorCode (0x0000018b) \nERROR:esys:/usr/src/de"}

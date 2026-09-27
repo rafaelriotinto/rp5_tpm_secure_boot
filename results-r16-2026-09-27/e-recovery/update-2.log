@@ -1,0 +1,43 @@
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/ab-r17/goldens.json (release ab-r17)
+[server] nonce = d0daa428d5e2c920975c5f64ea2eb8a8c0f5042572ae7bb23a3debfc698c7c2d
+  [info] device: partition 1 tryboot True counter 17
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [PASS] PCR state == golden (release)
+  [info] active root slot: A (/dev/mmcblk0p3)
+  [PASS] meas-cert freshness (nonce)
+  [PASS] boot record (measured-boot NV == golden for slot)
+  [PASS] NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))
+  [info] TPM clock=2567686689 resetCount=218 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 217 -> 218)
+
+[server] ATTESTATION PASSED — device trusted
+[server] evidence: fresh (resetCount 217 -> 218: restarted since the last round)
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/ab-r17/goldens.json (release ab-r17)
+[server] nonce = bd278bcfeed47b22345f9cf53b4c51f0a3997085f5ebb3ffe6bd9744cd4233a0
+  [info] device: partition 1 tryboot False counter 17
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [PASS] PCR state == golden (release)
+  [info] active root slot: A (/dev/mmcblk0p3)
+  [PASS] meas-cert freshness (nonce)
+  [PASS] boot record (measured-boot NV == golden for slot)
+  [PASS] NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))
+  [info] TPM clock=2567722929 resetCount=219 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 218 -> 219)
+
+[server] ATTESTATION PASSED — device trusted
+[server] evidence: fresh (resetCount 218 -> 219: restarted since the last round)
+[update] release version 17
+[update] board: committed pair 2, target 1, counter 17
+[update] installed into pair 1: {'root': '/dev/mmcblk0p3', 'boot': '/dev/mmcblk0p1'}
+[update] trial boot requested; waiting
+[update] up: partition 1 tryboot True counter 17
+[update] PCR0 predicted on the host from the enrolled devicetree digest: 94cce7abb63511d7...
+[update] health check = attestation round
+[update] committed pair 1; rebooting
+[update] up: partition 1 tryboot False counter 17
+[update] goldens of release 17 are now current (/home/rafaelrt/projs/MsCS/rp5_tpm_secure_boot/agents/server/../../attestation/boards/192.168.10.198/current-goldens.json)
+[update] DONE
