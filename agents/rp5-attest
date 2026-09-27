@@ -4,7 +4,7 @@
   quote   stdin: {"nonce": "<64 hex>"}  -> AK-signed PCR quote (0,1,8,9) and
           NV_Certify of the measured-boot index, base64 in the reply, plus the
           firmware's partition/tryboot flags and the anti-rollback counter.
-  status  -> the same facts without TPM signing.
+  status  -> the same facts without TPM signing, plus the TPM model and firmware version.
 
 Secret-free by design (attested reboot): reads of the measured-boot index use
 the empty platform auth (ppread); board binding is what U-Boot alone could
@@ -45,4 +45,4 @@ def quote(args):
 
 
 if __name__ == "__main__":
-    sys.exit(main({"quote": quote, "status": lambda a: facts()}))
+    sys.exit(main({"quote": quote, "status": lambda a: {**facts(), "tpm": tpm_info()}}))

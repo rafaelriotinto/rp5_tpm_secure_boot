@@ -4,8 +4,8 @@ Every service is a forced command behind dropbear: the SSH channel is its
 stdin/stdout, the verb comes from SSH_ORIGINAL_COMMAND (what the client asked
 to run; dropbear runs the forced command instead and passes the request here).
 Requests are small JSON documents or raw streams on stdin; replies are JSON on
-stdout. No secret is ever read by these programs: the DUID is not in the
-devicetree, and the TPM operations they perform need none.
+stdout. No secret is ever read by these programs: the TPM operations they
+perform need none, and the firmware key is locked before Linux starts.
 """
 import hashlib, json, os, shlex, subprocess, sys
 
@@ -50,6 +50,25 @@ def tpm_env():
 def counter():
     tpm_env()
     return int.from_bytes(run("tpm2_nvread", COUNTER_INDEX, "-C", "p"), "big")
+
+
+def tpm_info():
+    """Model and firmware version of the TPM (public fixed properties, no authorisation)."""
+    tpm_env()
+    raw = {}
+    for line in run("tpm2_getcap", "properties-fixed").decode().splitlines():
+        s = line.strip()
+        if s.startswith("TPM2_PT_"):
+            key = s.rstrip(":")
+        elif s.startswith("raw:"):
+            raw[key] = int(s.split()[1], 16)
+    def text(*ks):
+        return b"".join(raw.get(k, 0).to_bytes(4, "big") for k in ks).rstrip(b"\0").replace(b"\0", b"").decode(errors="replace")
+    v1, v2 = raw.get("TPM2_PT_FIRMWARE_VERSION_1", 0), raw.get("TPM2_PT_FIRMWARE_VERSION_2", 0)
+    return {"manufacturer": text("TPM2_PT_MANUFACTURER"),
+            "vendor_string": text(*(f"TPM2_PT_VENDOR_STRING_{i}" for i in (1, 2, 3, 4))),
+            "firmware": f"{v1 >> 16}.{v1 & 0xffff}.{v2 >> 8}.{v2 & 0xff:02d}",
+            "spec_revision": raw.get("TPM2_PT_REVISION")}
 
 
 def pcr(i):
