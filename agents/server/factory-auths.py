@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Factory host: derive a board's TPM auth values from the factory master and the
-board's DUID, for `rp5.py provision`. The device never sees the master or the DUID.
+board identifier (the DUID), for `rp5.py provision[-fwkey]`. The device never sees the
+master or the identifier.
 
-  factory-auths.py --duid 0000911045808726 [--master <file>] --out auths.json
+  factory-auths.py --board-id 0000911045808726 [--master <file>] --out auths.json
+  (--duid is kept as an alias of --board-id)
 
 Derivations (all SHA256, DUID as the devicetree string INCLUDING its NUL):
   owner / endorsement / lockout = H("rp5-<h>-auth-v1" || master || DUID)   (provision-hierarchy-auth.sh)
@@ -12,11 +14,13 @@ Derivations (all SHA256, DUID as the devicetree string INCLUDING its NUL):
 import argparse, hashlib, json, os, stat
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--duid", required=True, help="16 hex digits as shown in /chosen/rpi-duid")
+g = ap.add_mutually_exclusive_group(required=True)
+g.add_argument("--board-id", dest="board_id", help="16 hex digits as shown in /chosen/rpi-duid")
+g.add_argument("--duid", dest="board_id", help=argparse.SUPPRESS)
 ap.add_argument("--master", default=os.path.expanduser("~/LINUX_YOCTO_RP5_TPM_ENV/secure-boot-keys/factory-master.bin"))
 ap.add_argument("--out", required=True)
 a = ap.parse_args()
-duid = a.duid.lower().encode() + b"\0"
+duid = a.board_id.lower().encode() + b"\0"
 master = open(a.master, "rb").read()
 H = lambda *parts: hashlib.sha256(b"".join(parts)).hexdigest()
 auths = {"owner": H(b"rp5-owner-auth-v1", master, duid),
