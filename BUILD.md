@@ -51,7 +51,7 @@ project's TPM work) are fetched automatically by BitBake from
 regular build. Clone it only if you intend to modify U-Boot (see step 6):
 
 ```bash
-git clone --branch rpi5-tpm-measured-boot https://github.com/rafaelriotinto/u-boot.git u-boot
+git clone --branch rpi5-fwcrypto https://github.com/rafaelriotinto/u-boot.git u-boot
 ```
 
 ## 3. Build container
@@ -157,3 +157,50 @@ Then after each source change:
 ```bash
 bitbake -c cleansstate u-boot && bitbake core-image-base
 ```
+
+## 7. Host tools: signing, provisioning and operation
+
+Everything after the image build -- signing releases, updating the bootloader,
+programming OTP, provisioning the TPM, attestation and updates -- runs on the
+host, not in the container. The Python scripts use only the standard library.
+
+```bash
+sudo apt install openssl openssh-client mtools dosfstools xxd bzip2 \
+                 libusb-1.0-0-dev pkg-config build-essential
+
+cd $HOME/LINUX_YOCTO_RP5_TPM_ENV
+git clone --recurse-submodules https://github.com/raspberrypi/usbboot.git
+git -C usbboot checkout e50a709 && git -C usbboot submodule update
+make -C usbboot            # builds rpiboot (bootloader update, OTP programming)
+```
+
+| Tool | Used by |
+|---|---|
+| `usbboot/tools/rpi-make-boot-image` (`mkfs.fat`, `mcopy`) | `make-release.py`, `tamper-release.py` |
+| `usbboot/tools/rpi-eeprom-digest`, `update-pieeprom.sh` (`openssl`, `xxd`) | release signing, bootloader update |
+| `usbboot/rpiboot` | bootloader update and OTP programming over USB (RPIBOOT mode) |
+| `openssl` | release signing, attestation verifier |
+| `ssh` | `rp5.py`, attestation verifier |
+| `sfdisk`, `mcopy` | `inject-boot.sh` |
+| `docker` | `build-factory-uboot.sh` |
+
+### Keys and secrets
+
+All under `$HOME/LINUX_YOCTO_RP5_TPM_ENV/secure-boot-keys/` (never committed;
+keep an encrypted offline backup of the first two):
+
+| File | Purpose | Generate with |
+|---|---|---|
+| `private.pem` | owner RSA-2048 signing key; its SHA-256 hash is what the OTP burn programs | `openssl genrsa -out private.pem 2048` |
+| `factory-master.bin` | factory master for the TPM hierarchy authorisations (`factory-auths.py`) | `head -c 32 /dev/urandom > factory-master.bin; chmod 600 factory-master.bin` |
+| `ssh/{attest,ota,provision}_ed25519` | one client key per device service | `ssh-keygen -t ed25519 -N '' -f ssh/<service>_ed25519` |
+
+The device holds only the public halves of the service keys: copy each
+`ssh/<service>_ed25519.pub` into
+`meta-rpi5-uboot-tpm/recipes-core/rp5-agents/files/authorized_keys.<service>`
+(keeping the `command=...,no-port-forwarding,...` options already there) **before** building
+the image. Losing `private.pem` after the OTP burn leaves the board without any
+means of update; losing `factory-master.bin` prevents re-deriving the TPM owner,
+endorsement and lockout authorisations.
+
+Operation (provisioning, attestation, updates): [`agents/README.md`](agents/README.md).

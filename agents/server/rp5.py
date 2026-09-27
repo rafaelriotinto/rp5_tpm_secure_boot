@@ -15,6 +15,7 @@
   rp5.py provision <auths.json>      factory: stream the derived auths, get the record
   rp5.py provision-fwkey <auths.json> factory: firmware-key anchor (OTP key + PolicySigned indices);
                                      on an already provisioned TPM only "owner" is used
+  rp5.py enroll-dt                   record the board's devicetree digest and command-line prefix
   rp5.py enroll | verify
 
 Environment: BOARD (host/IP, default 192.168.10.198), KEYS (dir with

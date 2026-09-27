@@ -23,26 +23,28 @@ Linux
 
 - Raspberry Pi 5 (BCM2712, Cortex-A76) — expansion header GPIO/SPI routed through
   the **RP1** companion chip (PCIe south bridge)
-- **LetsTrust TPM** module (Infineon SLB9670, TPM 2.0, SPI) on the 40-pin header
+- **LetsTrust TPM** module (Infineon SLB9670 or SLB9672, TPM 2.0, SPI) on the 40-pin header
 
 ## Repository layout
 
 | Path | Contents |
 |------|----------|
 | `docker/` | Ubuntu 22.04 Yocto build container (Dockerfile + usage commands) |
-| `meta-rpi5-uboot-tpm/` | Custom Yocto layer (Scarthgap): machine `raspberrypi5-uboot-tpm`, U-Boot/kernel TPM config fragments, LetsTrust TPM device tree overlays (Linux hardware-SPI + U-Boot soft-SPI variants), tpm2-tools environment |
-
-*(More components — U-Boot measured-boot patches, signing/provisioning
-scripts — will be added as the work progresses.)*
+| `meta-rpi5-uboot-tpm/` | Custom Yocto layer (Scarthgap): machine `raspberrypi5-uboot-tpm`, U-Boot/kernel TPM config fragments, LetsTrust TPM device tree overlays (Linux hardware-SPI + U-Boot soft-SPI variants), device services, tpm2-tools environment |
+| `agents/` | Device services (attestation, OTA, provisioning) and the host-side CLI, release and factory tools |
+| `attestation/` | Attestation verifier and per-board enrollment records |
+| `provisioning/` | TPM and firmware-key provisioning scripts and test results |
+| `docs/` | Design notes and validation logs |
 
 ## Building
 
-Full from-scratch instructions: [`BUILD.md`](BUILD.md). Container details:
-[`docker/README.md`](docker/README.md).
+Full from-scratch instructions, including the host tools and keys needed for
+signing, provisioning and operation: [`BUILD.md`](BUILD.md). Container details:
+[`docker/README.md`](docker/README.md). Operation: [`agents/README.md`](agents/README.md).
 
 ## Related repositories
 
 - [rafaelriotinto/u-boot](https://github.com/rafaelriotinto/u-boot) — fork of
   [xen-troops/u-boot](https://github.com/xen-troops/u-boot) (RP1 PCIe/GPIO/clock
-  support for the Pi 5); branch `rpi5-tpm-measured-boot` carries this project's
-  TPM measured-boot work.
+  support for the Pi 5); branch `rpi5-fwcrypto` carries this project's
+  TPM measured-boot and firmware-key work.
