@@ -197,7 +197,7 @@ def main(argv):
         return show(ssh("ota", v))
     if v == "update":
         return update(a[0])
-    if v in ("enroll", "provision", "provision-fwkey"):
+    if v in ("enroll", "provision", "provision-fwkey", "provision-fwhmac"):
         rep = ssh("provision", v, stdin=open(a[0], "rb").read() if v != "enroll" else None)
         if rep.get("ok") and rep.get("ak_pem"):
             enr = json.load(open(ENROLLMENT)) if os.path.exists(ENROLLMENT) else {}

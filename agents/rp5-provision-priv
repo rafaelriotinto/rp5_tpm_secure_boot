@@ -170,6 +170,73 @@ def provision_fwkey(args):
     return rec
 
 
+# ---------------------------------------------------------------------------------------------
+# Firmware-HMAC anchor (CONFIG_MEASURE_NV_AUTH_FWHMAC): each index is authorised by PolicyAuthValue
+# with authValue = HMAC-SHA256(OTP device key, context), computed here by the firmware. Contexts
+# must match U-Boot (MEASURE_NV_AUTH_CTX / ANTIROLLBACK_AUTH_CTX). The secrets never leave the board.
+CTX_MEAS = "rp5-nv-auth-v1"
+CTX_CTR = "rp5-nv-counter-v1"
+
+
+def fw_hmac(d, context):
+    open(f"{d}/ctx.bin", "w").write(context)
+    h = run(FWC, "hmac", "--in", f"{d}/ctx.bin", "--key-id", "1", "--outform", "hex").decode().strip()
+    if not re.fullmatch(r"[0-9a-f]{64}", h):
+        raise Fail("firmware HMAC did not return 32 bytes")
+    return h
+
+
+def provision_fwhmac(args):
+    """As provision-fwkey, but the indices use PolicyAuthValue with firmware-HMAC secrets."""
+    tpm_env()
+    req = json.loads(sys.stdin.read() or "{}")
+    closed = owner_auth_set()
+    need = ("owner",) if closed else ("owner", "endorsement", "lockout")
+    for k in need:
+        if not hexok(req.get(k)):
+            raise Fail(f"{k}: need 32 bytes as hex")
+    P = ["-P", f"hex:{req['owner']}"] if closed else []
+    with tempfile.TemporaryDirectory() as d:
+        run(FWC, "pubkey", "--key-id", "1", "--out", f"{d}/pub.der", check=False)
+        if not os.path.exists(f"{d}/pub.der") or os.path.getsize(f"{d}/pub.der") != 91:
+            run(FWC, "genkey", "--key-id", "1", "--alg", "ec")
+            run(FWC, "pubkey", "--key-id", "1", "--out", f"{d}/pub.der")
+        run(FWC, "set-key-status", "1", "READ_LOCKED")
+        s_meas, s_ctr = fw_hmac(d, CTX_MEAS), fw_hmac(d, CTX_CTR)
+        if not closed:
+            run("tpm2_createek", "-c", f"{d}/ek.ctx", "-G", "rsa", "-u", f"{d}/ek.pub")
+            run("tpm2_createak", "-C", f"{d}/ek.ctx", "-c", f"{d}/ak.ctx", "-G", "rsa", "-g", "sha256",
+                "-s", "rsassa", "-u", f"{d}/ak.pub", "-n", f"{d}/ak.name")
+            run("tpm2_evictcontrol", "-C", "o", "-c", f"{d}/ak.ctx", AK_HANDLE)
+        run("tpm2_startauthsession", "-S", f"{d}/trial.ctx")
+        run("tpm2_policyauthvalue", "-S", f"{d}/trial.ctx", "-L", f"{d}/authval.policy")
+        run("tpm2_flushcontext", f"{d}/trial.ctx")
+        for index in (MEAS_INDEX, COUNTER_INDEX):
+            if run("tpm2_nvreadpublic", index, check=False).strip():
+                run("tpm2_nvundefine", index, "-C", "o", *P)
+        run("tpm2_nvdefine", MEAS_INDEX, "-C", "o", *P, "-s", "32", "-a", ATTR_MEAS,
+            "-p", f"hex:{s_meas}", "-L", f"{d}/authval.policy")
+        run("tpm2_nvdefine", COUNTER_INDEX, "-C", "o", *P, "-s", "8", "-a", ATTR_CTR,
+            "-p", f"hex:{s_ctr}", "-L", f"{d}/authval.policy")
+        run("tpm2_startauthsession", "--policy-session", "-S", f"{d}/pol.ctx")
+        run("tpm2_policyauthvalue", "-S", f"{d}/pol.ctx")
+        run("tpm2_nvincrement", COUNTER_INDEX, "-C", COUNTER_INDEX, "-P", f"session:{d}/pol.ctx+hex:{s_ctr}")
+        run("tpm2_flushcontext", f"{d}/pol.ctx")
+        s_meas = s_ctr = None
+        if not closed:
+            run("tpm2_changeauth", "-c", "o", f"hex:{req['owner']}")
+            run("tpm2_changeauth", "-c", "e", f"hex:{req['endorsement']}")
+            run("tpm2_changeauth", "-c", "l", f"hex:{req['lockout']}")
+        pol = open(f"{d}/authval.policy", "rb").read().hex()
+        extra = {"anchor": "fwhmac", "fw_pubkey_der": open(f"{d}/pub.der", "rb").read().hex(),
+                 "meas_policy": pol, "counter_policy": pol, "reprovisioned": closed}
+    rec = record()
+    rec.update(extra)
+    rec["meas_name"] = written_name(MEAS_INDEX)
+    rec["counter_name"] = written_name(COUNTER_INDEX)
+    return rec
+
+
 def verify(args):
     rec = record()
     req = json.loads(sys.stdin.read() or "{}") if not sys.stdin.isatty() else {}
@@ -181,5 +248,5 @@ if __name__ == "__main__":
     if os.geteuid() != 0:
         reply(ok=False, error="must run as root (via sudo)"); sys.exit(1)
     os.environ.pop("SSH_ORIGINAL_COMMAND", None)
-    sys.exit(main({"provision": provision, "provision-fwkey": provision_fwkey,
+    sys.exit(main({"provision": provision, "provision-fwkey": provision_fwkey, "provision-fwhmac": provision_fwhmac,
                   "enroll": lambda a: record(), "verify": verify}))
