@@ -27,9 +27,13 @@ PRIV = "/usr/bin/rp5-provision-priv"
 
 def forward(verb):
     def h(args):
-        out = run("sudo", "-n", PRIV, verb, check=False,   # the helper's JSON carries the error
-                  input=sys.stdin.buffer.read() if verb in ("provision", "provision-fwkey", "verify", "attack") else None)
-        p = json.loads(out.decode().strip().splitlines()[-1])
+        import subprocess
+        r = subprocess.run(["sudo", "-n", PRIV, verb], capture_output=True,
+                           input=sys.stdin.buffer.read() if verb in ("provision", "provision-fwkey", "verify", "attack") else None)
+        lines = r.stdout.decode(errors="replace").strip().splitlines()
+        if not lines:
+            raise Fail(f"{verb}: privileged half produced no output (rc {r.returncode}); stderr: {r.stderr.decode(errors='replace')[-500:]}")
+        p = json.loads(lines[-1])
         if not p.get("ok"):
             raise Fail(p.get("error", f"{verb} failed"))
         return {k: v for k, v in p.items() if k not in ("ok", "verb")}
