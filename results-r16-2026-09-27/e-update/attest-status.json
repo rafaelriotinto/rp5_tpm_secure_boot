@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "verb": "status",
+  "partition": 1,
+  "tryboot": false,
+  "pcr": {
+    "0": "531a99fbe48cbfbc8a82fb2683f3f9b95af8cff87c107b2d4d480d731a01541e",
+    "1": "a2399c6436436fd5a488fef71fcf43395f03cad0ca04b1e5270b123ba9ccf112",
+    "8": "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
+    "9": "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6"
+  },
+  "dt_digest": "7efa9133a194be32d361ec0b9641ef68d4526612fb119e58bb0fde3f6b4865b8",
+  "bootargs": "reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=4 system_heap.max_order=0 iommu_dma_numa_policy=interleave smsc95xx.macaddr=88:A2:9E:82:BB:4D vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  dwc_otg.lpm_enable=0 dm-mod.create=\"vroot,,,ro,0 630784 verity 1 /dev/mmcblk0p3 /dev/mmcblk0p3 4096 4096 78848 78849 sha256 536c1bb26bec436896ba0548e0cb973bf4408a324b9c7dc0f5de241ebb53ed9f 4232c3df520b3f2622cfde96e252969fa66896403017348c84a4734f99c83716\" dm-mod.waitfor=/dev/mmcblk0p3 root=/dev/dm-0 rootfstype=ext4 rootwait ro net.ifnames=0",
+  "counter": 16,
+  "tpm": {
+    "manufacturer": "IFX",
+    "vendor_string": "SLB9672",
+    "firmware": "15.24.18954.00",
+    "spec_revision": 159
+  }
+}

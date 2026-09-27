@@ -1,0 +1,18 @@
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/ab-r16-attacktest/goldens.json (release ab-r16-attacktest)
+[server] nonce = f84aea003d560e29a6d1100d24935b52aa9a063c7e19296fa49d5e68db9f9429
+  [info] device: partition 2 tryboot True counter 16
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [PASS] PCR state == golden (release)
+  [info] active root slot: B (/dev/mmcblk0p4)
+  [FAIL] meas-cert structure (type + index Name): wrong NV index certified: Name 000b17ffb0bbf2fb0e0ed236a939f09b3f0ad03755f46f09d389e38ac7611a7c8687 != golden 000b6fdf0a5c6e6c4489e358160d8250deb9fb5e3025f25301280d7dc901ab7e4531
+  [FAIL] meas-cert freshness (nonce)
+  [FAIL] boot record (measured-boot NV == golden for slot)
+  [info] TPM clock=2547834750 resetCount=154 restartCount=0 safe=1
+  [info] evidence freshness: stale (resetCount 154 unchanged: NOT restarted since the last round)
+
+[server] ATTESTATION FAILED — device REJECTED
+[server] evidence: stale (resetCount 154 unchanged: NOT restarted since the last round)
+[server] the software state is verified, but the board binding has not been re-established
+[server] since the last round; run 'rp5.py reboot' then 'rp5.py attest' for a fresh round

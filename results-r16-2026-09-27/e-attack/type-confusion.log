@@ -1,0 +1,13 @@
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/ab-r16-attacktest/goldens.json (release ab-r16-attacktest)
+[server] nonce = ce83061234d34f42dac85656c9c02e6a113e069632d0ff658ca31d89ff600319
+  [info] device: partition 2 tryboot True counter 16
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [FAIL] quote structure (magic/type/PCR selection): wrong attest type: got 0x8014, expected 0x8018
+  [FAIL] quote freshness (nonce)
+  [FAIL] PCR state == golden (release)
+  [PASS] meas-cert freshness (nonce)
+  [FAIL] boot record (measured-boot NV == golden for slot)
+
+[server] ATTESTATION FAILED — device REJECTED
+[server] evidence: unknown
