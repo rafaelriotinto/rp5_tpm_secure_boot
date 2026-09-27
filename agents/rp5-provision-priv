@@ -395,6 +395,15 @@ def attack(args):
             after = run("tpm2_nvread", MEAS_INDEX, "-C", "p", "-s", "32").hex()
             out.update(attempts=res, index_before=before, index_after=after, index_unchanged=before == after)
             return out
+        if mode == "tpmstate":
+            def cap(c): 
+                r=subprocess.run(["tpm2_getcap",c],capture_output=True); return (r.stdout+r.stderr).decode(errors="replace")
+            return {**out,
+                    "nv_indexes": cap("handles-nv-index"),
+                    "persistent": cap("handles-persistent"),
+                    "props_var": cap("properties-variable"),
+                    "meas_readpublic": subprocess.run(["tpm2_nvreadpublic",MEAS_INDEX],capture_output=True).returncode,
+                    "ctr_readpublic": subprocess.run(["tpm2_nvreadpublic",COUNTER_INDEX],capture_output=True).returncode}
         if mode == "redefine":
             res = []
             mn_before, cn_before = nv_name(MEAS_INDEX), nv_name(COUNTER_INDEX)
@@ -426,7 +435,7 @@ def attack(args):
                 return {**out, **read_key(d)}
             except Exception:
                 return {**out, "read_key_traceback": traceback.format_exc()[-1800:]}
-        raise Fail("mode must be forge-nv, type-confusion, write-index, read-key, otp-dump or redefine")
+        raise Fail("mode must be forge-nv, type-confusion, write-index, read-key, otp-dump, redefine or tpmstate")
 
 
 if __name__ == "__main__":
