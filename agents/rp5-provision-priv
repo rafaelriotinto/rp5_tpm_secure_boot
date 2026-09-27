@@ -267,14 +267,17 @@ def _probe_nvmem(pubhex):
 
 
 def _probe_devmem(pubhex):
+    # Test only whether root can OPEN the physical-memory devices; do not read (reading an
+    # invalid physical address faults). Open access is the capability lockdown removes.
     out = []
     for node in ("/dev/mem", "/dev/kmem", "/dev/port"):
+        exists = os.path.exists(node)
         try:
-            with open(node, "rb") as f:
-                f.read(16)
-            out.append({"attempt": f"open {node}", "rc": 0, "note": "OPENED AND READ"})
+            fd = os.open(node, os.O_RDONLY)
+            os.close(fd)
+            out.append({"attempt": f"open {node}", "rc": 0, "exists": exists, "note": "OPENED (root can access physical memory)"})
         except OSError as e:
-            out.append({"attempt": f"open {node}", "rc": e.errno, "note": e.strerror})
+            out.append({"attempt": f"open {node}", "rc": e.errno, "exists": exists, "note": e.strerror})
     return {"group": "devmem", "items": out}
 
 
