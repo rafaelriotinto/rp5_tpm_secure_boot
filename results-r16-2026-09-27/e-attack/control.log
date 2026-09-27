@@ -1,0 +1,16 @@
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/ab-r16-attacktest/goldens.json (release ab-r16-attacktest)
+[server] nonce = bf3546befddd02c3a2b94398bf6de5513b9a30dcca8fe44c62f6023e59567380
+  [info] device: partition 2 tryboot True counter 16
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [PASS] PCR state == golden (release)
+  [info] active root slot: B (/dev/mmcblk0p4)
+  [PASS] meas-cert freshness (nonce)
+  [PASS] boot record (measured-boot NV == golden for slot)
+  [PASS] NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))
+  [info] TPM clock=2547832705 resetCount=154 restartCount=0 safe=1
+  [info] evidence freshness: fresh (resetCount 153 -> 154: restarted since the last round)
+
+[server] ATTESTATION PASSED — device trusted
+[server] evidence: fresh (resetCount 153 -> 154: restarted since the last round)

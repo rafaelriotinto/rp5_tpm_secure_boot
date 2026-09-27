@@ -1,0 +1,39 @@
+{
+  "ok": true,
+  "verb": "status",
+  "partition": 1,
+  "tryboot": false,
+  "counter": 16,
+  "committed": 1,
+  "target": 2,
+  "root": "/dev/mmcblk0p3",
+  "pcr": {
+    "0": "531a99fbe48cbfbc8a82fb2683f3f9b95af8cff87c107b2d4d480d731a01541e",
+    "1": "a2399c6436436fd5a488fef71fcf43395f03cad0ca04b1e5270b123ba9ccf112",
+    "8": "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
+    "9": "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6"
+  },
+  "staged": {
+    "version": 16,
+    "factory": false,
+    "cmdline": "dwc_otg.lpm_enable=0 dm-mod.create=\"vroot,,,ro,0 630784 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 78848 78849 sha256 536c1bb26bec436896ba0548e0cb973bf4408a324b9c7dc0f5de241ebb53ed9f 4232c3df520b3f2622cfde96e252969fa66896403017348c84a4734f99c83716\" dm-mod.waitfor=@ROOTDEV@ root=/dev/dm-0 rootfstype=ext4 rootwait ro net.ifnames=0",
+    "sha256": {
+      "boot.img": "f92f3b8aac63989ae1650b59a4610188edb560e6960f78cc815e8b988f37a294",
+      "boot.sig": "9236776f3d745a0291cb22930e57f12de00340efe79faf37453af20403a4a560",
+      "rootfs.img": "0bb19aff746faaba6dd79bec0e918a2e2c88ebc8f939b97e6742d7b14e91dc30"
+    },
+    "rootfs": {
+      "root_hash": "536c1bb26bec436896ba0548e0cb973bf4408a324b9c7dc0f5de241ebb53ed9f",
+      "size": 325513216
+    },
+    "uboot_version_string": "U-Boot 2024.04 (Sep 27 2026 - 09:02:00 +0000)",
+    "goldens": {
+      "pcr0": null,
+      "pcr1": {
+        "A": "a2399c6436436fd5a488fef71fcf43395f03cad0ca04b1e5270b123ba9ccf112",
+        "B": "a3ab1ce8fdd8b09054ff70c2c789f9102d71abb2785faeef41bab80eae84b333"
+      },
+      "pcr8": "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253"
+    }
+  }
+}
