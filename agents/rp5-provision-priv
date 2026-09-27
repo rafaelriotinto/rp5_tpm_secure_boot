@@ -298,7 +298,7 @@ def read_key(d):
         except OSError as e:
             res.append({"attempt": f"open {node}", "rc": e.errno, "note": e.strerror})
     # an unsigned kernel module: a module of this image with its signature removed
-    loaded = {l.split()[0] for l in open("/proc/modules")}
+    loaded = {l.split()[0] for l in open("/proc/modules") if l.split()}
     import lzma
     mods = sorted(glob.glob(f"/lib/modules/{os.uname().release}/kernel/**/*.ko*", recursive=True))
     base = lambda m: os.path.basename(m).split(".ko")[0]
