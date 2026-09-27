@@ -1,9 +1,9 @@
 {
-  "release": "ab-r15",
-  "pcr0": "b70079a3cf6c0e4231e539c344b0b9d68ca32c6cf5c0fc90029da40c3ce2b623",
+  "release": "ab-r16",
+  "pcr0": "531a99fbe48cbfbc8a82fb2683f3f9b95af8cff87c107b2d4d480d731a01541e",
   "pcr1": {
-    "A": "b493bb201d93ddf3cd8e7717afb6d9b053ecdbed406c4a7f32b50897aa06636b",
-    "B": "477afa662c15d4a985a07d4bf18aec57bcd6d34fb71a4e4bc841cd3eee2d0e54"
+    "A": "a2399c6436436fd5a488fef71fcf43395f03cad0ca04b1e5270b123ba9ccf112",
+    "B": "a3ab1ce8fdd8b09054ff70c2c789f9102d71abb2785faeef41bab80eae84b333"
   },
   "pcr8": "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
   "pcr9": "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6"
