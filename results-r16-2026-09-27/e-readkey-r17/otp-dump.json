@@ -1,0 +1,1 @@
+{"ok": false, "verb": "attack", "error": "tpm2_nvread failed (1): ERROR:tcti:/usr/src/debug/tpm2-tss/4.0.2/src/tss2-tcti/tcti-device.c:454:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpmrm0: No such file or directory \nERROR:tcti:/usr/src/debug/tpm2-tss/4.0.2/src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: "}
