@@ -288,8 +288,10 @@ def main():
     if AGENT:
         # rp5-attest forced command: {"nonce": hex} on stdin, JSON reply with
         # the evidence base64-encoded. One SSH connection, no files on the device.
-        r = subprocess.run(["ssh"] + (["-i", AGENT_KEY] if AGENT_KEY else []) + [user_host, "quote"],
-                           input=json.dumps({"nonce": nonce.hex()}).encode(), capture_output=True)
+        # AGENT_VERB / AGENT_REQUEST: test-only hooks (attack experiments); defaults = the real round
+        r = subprocess.run(["ssh"] + (["-i", AGENT_KEY] if AGENT_KEY else []) + [user_host, os.environ.get("AGENT_VERB", "quote")],
+                           input=json.dumps({**json.loads(os.environ.get("AGENT_REQUEST", "{}")),
+                                             "nonce": nonce.hex()}).encode(), capture_output=True)
         try:
             rep = json.loads(r.stdout.decode().strip().splitlines()[-1])
         except (ValueError, IndexError):

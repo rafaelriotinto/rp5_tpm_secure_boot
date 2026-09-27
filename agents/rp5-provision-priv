@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Provisioning, privileged half (root via sudo). See rp5-provision."""
-import json, os, re, sys, tempfile
+import json, os, re, subprocess, sys, tempfile
 sys.path.insert(0, "/usr/lib")
 from rp5agent import *  # noqa
 
@@ -177,9 +177,208 @@ def verify(args):
     return {"record": rec, "mismatch": mism, "match": not mism}
 
 
+# --------------------------------------------------------------------------------------------
+# TEST ONLY (branch test/attack-verb, never in a committed release). Stands in for an attacker
+# with root on the running system and NO secret (no owner auth, firmware key locked).
+FAKE_INDEX = "0x01800010"
+
+
+def attempt(label, *cmd):
+    r = subprocess.run(cmd, capture_output=True)
+    return {"attempt": label, "rc": r.returncode,
+            "out": (r.stdout + r.stderr).decode(errors="replace").strip()[-400:]}
+
+
+def pcr_composite():
+    import hashlib
+    return hashlib.sha256(b"".join(bytes.fromhex(pcr(i)) for i in (0, 1, 8, 9))).digest()
+
+
+def fake_index(d, content):
+    """Define an unprotected index in the platform hierarchy (root, no secret) holding content."""
+    run("tpm2_nvundefine", FAKE_INDEX, "-C", "p", check=False)
+    run("tpm2_nvdefine", FAKE_INDEX, "-C", "p", "-s", "32",
+        "-a", "ppwrite|ppread|authread|authwrite|platformcreate|no_da")
+    open(f"{d}/content.bin", "wb").write(content)
+    run("tpm2_nvwrite", FAKE_INDEX, "-C", "p", "-i", f"{d}/content.bin")
+
+
+def certify(d, index, nonce, tag):
+    run("tpm2_nvcertify", "-C", AK_HANDLE, "-c", "p", "-g", "sha256", "-s", "rsassa",
+        "-f", "plain", "-q", nonce, "--size", "32", "-o", f"{d}/{tag}.sig",
+        "--attestation", f"{d}/{tag}.msg", index)
+
+
+def is_key(d, cand, pub_der):
+    """True if the 32 bytes are the private key: derive the public key and compare (on the device;
+    candidates never leave it)."""
+    if cand in (b"\0" * 32, b"\xff" * 32):
+        return False
+    der = bytes.fromhex("30310201010420") + cand + bytes.fromhex("a00a06082a8648ce3d030107")
+    open(f"{d}/cand.der", "wb").write(der)
+    r = subprocess.run(["openssl", "ec", "-inform", "DER", "-in", f"{d}/cand.der", "-pubout", "-outform", "DER"],
+                       capture_output=True)
+    return r.returncode == 0 and r.stdout == pub_der
+
+
+def key_in(d, blob, pub_der):
+    """Search every 4-byte-aligned 32-byte window of blob, as stored and word-byte-swapped."""
+    for off in range(0, max(0, len(blob) - 31), 4):
+        w = blob[off:off + 32]
+        sw = b"".join(w[i:i + 4][::-1] for i in range(0, 32, 4))
+        if is_key(d, w, pub_der) or is_key(d, sw, pub_der):
+            return off
+    return None
+
+
+def mbox_legacy_private_key():
+    """Legacy mailbox GET_CUSTOMER_PRIVATE_KEY (0x00030081): 8 words from row offset 0."""
+    import array, fcntl
+    words = [0, 0, 0x00030081, 40, 0, 0, 8] + [0] * 8 + [0]
+    words[0] = len(words) * 4
+    buf = array.array("I", words)
+    with open("/dev/vcio", "rb+", buffering=0) as f:
+        fcntl.ioctl(f, 0xC0086400, buf, True)
+    return buf[1], buf[7:15].tobytes()
+
+
+def read_key(d):
+    import glob
+    pub_der = run(FWC, "pubkey", "--key-id", "1")
+    res = []
+
+    def verdict(label, rc, blob, note=""):
+        off = key_in(d, blob, pub_der) if blob else None
+        res.append({"attempt": label, "rc": rc, "bytes_returned": len(blob or b""),
+                    "all_zero": bool(blob) and not any(blob), "key_found": off is not None,
+                    "note": note[-300:]})
+
+    try:
+        res.append({"attempt": "kernel lockdown mode", "note": open("/sys/kernel/security/lockdown").read().strip()})
+    except OSError as e:
+        res.append({"attempt": "kernel lockdown mode", "note": str(e)})
+    r = subprocess.run([FWC, "privkey", "--key-id", "1"], capture_output=True)
+    verdict("firmware crypto API: read the private key", r.returncode, r.stdout, r.stderr.decode(errors="replace"))
+    try:
+        code, blob = mbox_legacy_private_key()
+        verdict("legacy mailbox: customer private key (0x00030081)", 0, blob, f"response code 0x{code:08x}")
+    except OSError as e:
+        verdict("legacy mailbox: customer private key (0x00030081)", e.errno, b"", str(e))
+    r = subprocess.run(["vcgencmd", "otp_dump"], capture_output=True)
+    rows = b"".join(bytes.fromhex(l.split(":")[1].strip()) for l in r.stdout.decode(errors="replace").splitlines()
+                    if ":" in l and len(l.split(":")[1].strip()) == 8)
+    verdict("vcgencmd otp_dump (all rows)", r.returncode, rows,
+            f"{len(rows) // 4} rows; " + r.stderr.decode(errors="replace"))
+    for dev in sorted(glob.glob("/sys/bus/nvmem/devices/*/nvmem")):
+        try:
+            verdict(f"nvmem {dev.split('/')[-2]}", 0, open(dev, "rb").read(65536))
+        except OSError as e:
+            verdict(f"nvmem {dev.split('/')[-2]}", e.errno, b"", str(e))
+    for node in ("/dev/mem", "/dev/kmem", "/dev/port"):
+        try:
+            with open(node, "rb") as f:
+                f.read(16)
+            res.append({"attempt": f"open {node}", "rc": 0, "note": "OPENED AND READ"})
+        except OSError as e:
+            res.append({"attempt": f"open {node}", "rc": e.errno, "note": e.strerror})
+    # an unsigned kernel module: a module of this image with its signature removed
+    loaded = {l.split()[0] for l in open("/proc/modules")}
+    mods = sorted(glob.glob(f"/lib/modules/{os.uname().release}/kernel/**/*.ko", recursive=True))
+    cand = [m for m in mods if os.path.basename(m)[:-3].replace("-", "_") not in loaded]
+    pref = [m for m in cand if os.path.basename(m) in ("dummy.ko", "tun.ko", "loop.ko", "configs.ko")]
+    mod = (pref or cand or [None])[0]
+    if mod:
+        raw = open(mod, "rb").read()
+        marker = b"~Module signature appended~\n"
+        signed = raw.endswith(marker)
+        if signed:
+            siglen = int.from_bytes(raw[-len(marker) - 4:-len(marker)], "big")
+            raw = raw[:-len(marker) - 12 - siglen]
+        open(f"{d}/unsigned.ko", "wb").write(raw)
+        r = subprocess.run(["insmod", f"{d}/unsigned.ko"], capture_output=True)
+        res.append({"attempt": f"load unsigned module ({os.path.basename(mod)}; image copy signed: {signed})",
+                    "rc": r.returncode, "note": (r.stdout + r.stderr).decode(errors="replace").strip()[-300:]})
+    else:
+        res.append({"attempt": "load unsigned module", "note": "no module files in the image"})
+    return {"key_reads": res, "key_found_anywhere": any(x.get("key_found") for x in res)}
+
+
+def attack(args):
+    import base64
+    tpm_env()
+    req = json.loads(sys.stdin.read() or "{}")
+    mode, nonce = req.get("mode"), req.get("nonce", "")
+    out = {"mode": mode, "partition": fw_partition(), "tryboot": fw_tryboot(), "counter": counter()}
+    with tempfile.TemporaryDirectory() as d:
+        if mode in ("forge-nv", "type-confusion"):
+            if not re.fullmatch(r"[0-9a-f]{64}", nonce):
+                raise Fail("nonce must be 32 bytes as hex")
+            if mode == "forge-nv":      # copy the genuine (publicly readable) content into a look-alike
+                content = run("tpm2_nvread", MEAS_INDEX, "-C", "p", "-s", "32")
+            else:                       # the public expected PCR composite
+                content = pcr_composite()
+            fake_index(d, content)
+            try:
+                run("tpm2_quote", "-c", AK_HANDLE, "-l", "sha256:0,1,8,9", "-q", nonce,
+                    "-m", f"{d}/q.msg", "-s", f"{d}/q.sig", "-o", f"{d}/pcrs.bin")
+                certify(d, FAKE_INDEX, nonce, "fake")
+                certify(d, MEAS_INDEX, nonce, "real")
+                out["fake_index_name"] = nv_name(FAKE_INDEX)
+            finally:
+                run("tpm2_nvundefine", FAKE_INDEX, "-C", "p", check=False)
+            pick = ({"quote": "q", "meas_cert": "fake"} if mode == "forge-nv"
+                    else {"quote": "fake", "meas_cert": "real"})
+            B = lambda t, e: base64.b64encode(open(f"{d}/{t}.{e}", "rb").read()).decode()
+            out["evidence"] = {"quote.msg": B(pick["quote"], "msg"), "quote.sig": B(pick["quote"], "sig"),
+                               "meas_cert.msg": B(pick["meas_cert"], "msg"),
+                               "meas_cert.sig": B(pick["meas_cert"], "sig")}
+            return out
+        if mode == "write-index":
+            res = []
+            open(f"{d}/data.bin", "wb").write(b"\xa5" * 32)
+            before = run("tpm2_nvread", MEAS_INDEX, "-C", "p", "-s", "32").hex()
+            res.append(attempt("status of the firmware key", FWC, "get-key-status", "1"))
+            res.append(attempt("extend, platform hierarchy (root, empty platform auth)",
+                               "tpm2_nvextend", MEAS_INDEX, "-C", "p", "-i", f"{d}/data.bin"))
+            res.append(attempt("extend, index authorisation (empty password)",
+                               "tpm2_nvextend", MEAS_INDEX, "-C", MEAS_INDEX, "-i", f"{d}/data.bin"))
+            res.append(attempt("extend, owner hierarchy (empty password)",
+                               "tpm2_nvextend", MEAS_INDEX, "-C", "o", "-i", f"{d}/data.bin"))
+            # PolicySigned with a key the attacker generates: valid signature, wrong key
+            run("openssl", "ecparam", "-name", "prime256v1", "-genkey", "-noout", "-out", f"{d}/k.pem")
+            run("openssl", "ec", "-in", f"{d}/k.pem", "-pubout", "-out", f"{d}/kp.pem")
+            run("tpm2_loadexternal", "-C", "n", "-G", "ecc", "-a", "sign|userwithauth",
+                "-u", f"{d}/kp.pem", "-c", f"{d}/k.ctx")
+            open(f"{d}/ref", "w").write(REF_MEAS)
+            run("tpm2_nvextend", MEAS_INDEX, "-C", MEAS_INDEX, "-i", f"{d}/data.bin", "--cphash", f"{d}/cp.bin")
+            run("tpm2_startauthsession", "--policy-session", "-S", f"{d}/s.ctx")
+            run("tpm2_policysigned", "-S", f"{d}/s.ctx", "-c", f"{d}/k.ctx", "-x", "--cphash-input", f"{d}/cp.bin",
+                "-q", f"{d}/ref", "--raw-data", f"{d}/tbs.bin")
+            run("openssl", "dgst", "-sha256", "-sign", f"{d}/k.pem", "-out", f"{d}/sig.der", f"{d}/tbs.bin")
+            res.append(attempt("PolicySigned with the attacker's own key (signature valid)",
+                               "tpm2_policysigned", "-S", f"{d}/s.ctx", "-g", "sha256", "-s", f"{d}/sig.der",
+                               "-f", "ecdsa", "-c", f"{d}/k.ctx", "-x", "--cphash-input", f"{d}/cp.bin",
+                               "-q", f"{d}/ref"))
+            res.append(attempt("extend with that policy session",
+                               "tpm2_nvextend", MEAS_INDEX, "-C", MEAS_INDEX, "-i", f"{d}/data.bin",
+                               "-P", f"session:{d}/s.ctx"))
+            run("tpm2_flushcontext", f"{d}/s.ctx", check=False)
+            res.append(attempt("firmware signature over a TPM challenge (key locked after boot)",
+                               FWC, "sign", "--in", f"{d}/tbs.bin", "--key-id", "1", "--alg", "ec",
+                               "--out", f"{d}/fwsig.der"))
+            res.append(attempt("firmware public key (still readable)", FWC, "pubkey", "--key-id", "1",
+                               "--outform", "hex"))
+            after = run("tpm2_nvread", MEAS_INDEX, "-C", "p", "-s", "32").hex()
+            out.update(attempts=res, index_before=before, index_after=after, index_unchanged=before == after)
+            return out
+        if mode == "read-key":
+            return {**out, **read_key(d)}
+        raise Fail("mode must be forge-nv, type-confusion, write-index or read-key")
+
+
 if __name__ == "__main__":
     if os.geteuid() != 0:
         reply(ok=False, error="must run as root (via sudo)"); sys.exit(1)
     os.environ.pop("SSH_ORIGINAL_COMMAND", None)
     sys.exit(main({"provision": provision, "provision-fwkey": provision_fwkey,
-                  "enroll": lambda a: record(), "verify": verify}))
+                  "enroll": lambda a: record(), "verify": verify, "attack": attack}))
