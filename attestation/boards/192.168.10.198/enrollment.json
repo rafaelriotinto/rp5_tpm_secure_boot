@@ -7,7 +7,7 @@
   "counter_index": "0x01800002",
   "bootargs_prefix": "reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=4 system_heap.max_order=0 iommu_dma_numa_policy=interleave smsc95xx.macaddr=88:A2:9E:82:BB:4D vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  ",
   "counter_name": "000bd1b273ea9531de907f1b05cbfb7889932a673164aa123815e0e6b5a705a5e78f",
-  "counter": 18,
+  "counter": 19,
   "anchor": "fwkey",
   "fw_pubkey_der": "3059301306072a8648ce3d020106082a8648ce3d03010703420004cfb5994cf1b29bd31024175b1e78320f2dedd70a8693f1445c95b57326a32ea6cbacdf2b88390b2c92fa4488e4e7a2234f75d4ecf271c502a2f37590c13215cb",
   "fw_key_name": "000b10c8820537b0d1f7cbf2c37219a63c9a9f217c598348e30841050ec3a8347531",
