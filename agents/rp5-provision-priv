@@ -231,28 +231,6 @@ def key_in(d, blob, pub_der):
     return None
 
 
-def mbox_legacy_private_key():
-    """Legacy mailbox GET_CUSTOMER_PRIVATE_KEY (0x00030081): 8 words from row offset 0."""
-    import array, fcntl
-    words = [0, 0, 0x00030081, 40, 0, 0, 8] + [0] * 8 + [0]
-    words[0] = len(words) * 4
-    buf = array.array("I", words)
-    with open("/dev/vcio", "rb+", buffering=0) as f:
-        fcntl.ioctl(f, 0xC0086400, buf, True)
-    return buf[1], buf[7:15].tobytes()
-
-
-def mbox_gencmd(cmd):
-    """Firmware general command over the mailbox (what vcgencmd sends): tag 0x00030080."""
-    import array, fcntl
-    n = 1024
-    data = cmd.encode() + b"\0" * (n - len(cmd))
-    words = [0, 0, 0x00030080, n + 4, 0, 0] + list(array.array("I", data)) + [0]
-    words[0] = len(words) * 4
-    buf = array.array("I", words)
-    with open("/dev/vcio", "rb+", buffering=0) as f:
-        fcntl.ioctl(f, 0xC0086400, buf, True)
-    return buf[5], buf[6:6 + n // 4].tobytes().split(b"\0")[0].decode(errors="replace")
 
 
 def read_key(d):
@@ -272,19 +250,6 @@ def read_key(d):
         res.append({"attempt": "kernel lockdown mode", "note": str(e)})
     r = subprocess.run([FWC, "privkey", "--key-id", "1"], capture_output=True)
     verdict("firmware crypto API: read the private key", r.returncode, r.stdout, r.stderr.decode(errors="replace"))
-    try:
-        code, blob = mbox_legacy_private_key()
-        verdict("legacy mailbox: customer private key (0x00030081)", 0, blob, f"response code 0x{code:08x}")
-    except OSError as e:
-        verdict("legacy mailbox: customer private key (0x00030081)", e.errno, b"", str(e))
-    try:
-        code, text = mbox_gencmd("otp_dump")
-        rows = b"".join(bytes.fromhex(l.split(":")[1].strip()) for l in text.splitlines()
-                        if ":" in l and len(l.split(":")[1].strip()) == 8)
-        verdict("otp_dump (firmware command over the mailbox, all rows)", code, rows,
-                f"{len(rows) // 4} rows; first line: {text.splitlines()[0] if text else ''}")
-    except OSError as e:
-        verdict("otp_dump (firmware command over the mailbox, all rows)", e.errno, b"", str(e))
     for dev in sorted(glob.glob("/sys/bus/nvmem/devices/*/nvmem")):
         try:
             verdict(f"nvmem {dev.split('/')[-2]}", 0, open(dev, "rb").read(65536))
