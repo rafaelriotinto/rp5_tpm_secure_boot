@@ -233,60 +233,96 @@ def key_in(d, blob, pub_der):
 
 
 
-def read_key(d):
-    import glob
-    pub_der = run(FWC, "pubkey", "--key-id", "1")
-    res = []
-
-    def verdict(label, rc, blob, note=""):
-        off = key_in(d, blob, pub_der) if blob else None
-        res.append({"attempt": label, "rc": rc, "bytes_returned": len(blob or b""),
-                    "all_zero": bool(blob) and not any(blob), "key_found": off is not None,
-                    "note": note[-300:]})
-
+def _probe_lockdown(pubhex):
     try:
-        res.append({"attempt": "kernel lockdown mode", "note": open("/sys/kernel/security/lockdown").read().strip()})
+        return {"attempt": "kernel lockdown mode", "note": open("/sys/kernel/security/lockdown").read().strip()}
     except OSError as e:
-        res.append({"attempt": "kernel lockdown mode", "note": str(e)})
+        return {"attempt": "kernel lockdown mode", "note": str(e)}
+
+
+def _probe_fwcrypto(pubhex):
+    import tempfile
+    pub = bytes.fromhex(pubhex)
     r = subprocess.run([FWC, "privkey", "--key-id", "1"], capture_output=True)
-    verdict("firmware crypto API: read the private key", r.returncode, r.stdout, r.stderr.decode(errors="replace"))
-    for dev in sorted(glob.glob("/sys/bus/nvmem/devices/*/nvmem")):
-        try:
-            verdict(f"nvmem {dev.split('/')[-2]}", 0, open(dev, "rb").read(65536))
-        except OSError as e:
-            verdict(f"nvmem {dev.split('/')[-2]}", e.errno, b"", str(e))
+    with tempfile.TemporaryDirectory() as d:
+        found = key_in(d, r.stdout, pub) is not None if r.stdout else False
+    return {"attempt": "firmware crypto API: read the private key (rpi-fw-crypto privkey)",
+            "rc": r.returncode, "bytes_returned": len(r.stdout),
+            "key_found": found, "note": r.stderr.decode(errors="replace").strip()[-200:]}
+
+
+def _probe_nvmem(pubhex):
+    import glob, tempfile
+    pub = bytes.fromhex(pubhex); out = []
+    with tempfile.TemporaryDirectory() as d:
+        for dev in sorted(glob.glob("/sys/bus/nvmem/devices/*/nvmem")):
+            name = dev.split("/")[-2]
+            try:
+                blob = open(dev, "rb").read(65536)
+                out.append({"attempt": f"nvmem {name}", "bytes_returned": len(blob),
+                            "all_zero": not any(blob), "key_found": key_in(d, blob, pub) is not None})
+            except OSError as e:
+                out.append({"attempt": f"nvmem {name}", "rc": e.errno, "note": str(e)})
+    return {"group": "nvmem", "items": out}
+
+
+def _probe_devmem(pubhex):
+    out = []
     for node in ("/dev/mem", "/dev/kmem", "/dev/port"):
         try:
             with open(node, "rb") as f:
                 f.read(16)
-            res.append({"attempt": f"open {node}", "rc": 0, "note": "OPENED AND READ"})
+            out.append({"attempt": f"open {node}", "rc": 0, "note": "OPENED AND READ"})
         except OSError as e:
-            res.append({"attempt": f"open {node}", "rc": e.errno, "note": e.strerror})
-    # an unsigned kernel module: a module of this image with its signature removed
+            out.append({"attempt": f"open {node}", "rc": e.errno, "note": e.strerror})
+    return {"group": "devmem", "items": out}
+
+
+def _probe_module(pubhex):
+    import glob, lzma, tempfile
     loaded = {l.split()[0] for l in open("/proc/modules") if l.split()}
-    import lzma
     mods = sorted(glob.glob(f"/lib/modules/{os.uname().release}/kernel/**/*.ko*", recursive=True))
     base = lambda m: os.path.basename(m).split(".ko")[0]
     cand = [m for m in mods if base(m).replace("-", "_") not in loaded]
     pref = [m for m in cand if base(m) in ("dummy", "tun", "loop", "configs")]
     mod = (pref or cand or [None])[0]
-    if mod:
-        raw = open(mod, "rb").read()
-        if mod.endswith(".xz"):
-            raw = lzma.decompress(raw)
-        marker = b"~Module signature appended~\n"
-        signed = raw.endswith(marker)
-        if signed:
-            siglen = int.from_bytes(raw[-len(marker) - 4:-len(marker)], "big")
-            raw = raw[:-len(marker) - 12 - siglen]
+    if not mod:
+        return {"attempt": "load unsigned module", "note": "no module files in the image"}
+    raw = open(mod, "rb").read()
+    if mod.endswith(".xz"):
+        raw = lzma.decompress(raw)
+    marker = b"~Module signature appended~\n"
+    signed = raw.endswith(marker)
+    with tempfile.TemporaryDirectory() as d:
         open(f"{d}/unsigned.ko", "wb").write(raw)
         r = subprocess.run(["insmod", f"{d}/unsigned.ko"], capture_output=True)
-        res.append({"attempt": f"load unsigned module ({os.path.basename(mod)}; image copy signed: {signed})",
-                    "rc": r.returncode, "note": (r.stdout + r.stderr).decode(errors="replace").strip()[-300:]})
-    else:
-        res.append({"attempt": "load unsigned module", "note": "no module files in the image"})
-    return {"key_reads": res, "key_found_anywhere": any(x.get("key_found") for x in res)}
+    return {"attempt": f"load unsigned module ({os.path.basename(mod)}; image copy signed: {signed})",
+            "rc": r.returncode, "note": (r.stdout + r.stderr).decode(errors="replace").strip()[-200:]}
 
+
+PROBES = {"lockdown": _probe_lockdown, "fwcrypto": _probe_fwcrypto,
+          "nvmem": _probe_nvmem, "devmem": _probe_devmem, "module": _probe_module}
+
+
+def read_key(d):
+    """Run each probe in its own child process, so a probe that crashes (e.g. SIGSEGV)
+    is recorded as a signal instead of aborting the whole run."""
+    import signal
+    pubhex = run(FWC, "pubkey", "--key-id", "1").hex()
+    res = []
+    for name in ("lockdown", "fwcrypto", "nvmem", "devmem", "module"):
+        r = subprocess.run([sys.executable, os.path.abspath(__file__), "__probe__", name, pubhex],
+                           capture_output=True)
+        line = r.stdout.decode(errors="replace").strip().splitlines()
+        if line:
+            item = json.loads(line[-1])
+            res.extend(item["items"]) if item.get("group") else res.append(item)
+        else:
+            sig = -r.returncode if r.returncode < 0 else None
+            res.append({"attempt": f"probe {name}",
+                        "note": (f"child killed by signal {sig} ({signal.Signals(sig).name})" if sig
+                                 else f"child rc {r.returncode}: {r.stderr.decode(errors='replace')[-200:]}")})
+    return {"key_reads": res, "key_found_anywhere": any(x.get("key_found") for x in res)}
 
 def attack(args):
     import base64
@@ -369,5 +405,8 @@ if __name__ == "__main__":
     if os.geteuid() != 0:
         reply(ok=False, error="must run as root (via sudo)"); sys.exit(1)
     os.environ.pop("SSH_ORIGINAL_COMMAND", None)
+    if len(sys.argv) >= 4 and sys.argv[1] == "__probe__":
+        reply(**(PROBES[sys.argv[2]](sys.argv[3])))
+        sys.exit(0)
     sys.exit(main({"provision": provision, "provision-fwkey": provision_fwkey,
                   "enroll": lambda a: record(), "verify": verify, "attack": attack}))
