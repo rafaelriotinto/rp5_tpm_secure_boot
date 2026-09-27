@@ -392,7 +392,11 @@ def attack(args):
             out.update(attempts=res, index_before=before, index_after=after, index_unchanged=before == after)
             return out
         if mode == "read-key":
-            return {**out, **read_key(d)}
+            import traceback
+            try:
+                return {**out, **read_key(d)}
+            except Exception:
+                return {**out, "read_key_traceback": traceback.format_exc()[-1800:]}
         raise Fail("mode must be forge-nv, type-confusion, write-index or read-key")
 
 
