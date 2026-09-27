@@ -1,0 +1,396 @@
+  8.35 Verifying
+ 11.93 RSA verify
+ 11.44 rsa-verify pass (0x0)
+ 11.95 MBR: 0x00000000,       0 type: 0x00
+ 11.95 MBR: 0x00000000,       0 type: 0x00
+ 11.96 MBR: 0x00000000,       0 type: 0x00
+ 11.96 MBR: 0x00000000,       0 type: 0x00
+ 11.71 Trying partition: 0
+ 11.73 type: 16 lba: 0 'mkfs.fat' '  V       ^ ' clusters 56381 (1)
+ 11.97 rsc 1 fat-sectors 221 root dir cluster 1 sectors 2 entries 32
+ 11.98 FAT16 clusters 56381
+ 11.89 Read config.txt bytes     2774 hnd 0xd674
+ 11.93 usb_max_current_enable default 0 max-current 3000
+ 11.98 Read bcm2712-rpi-5-b.dtb bytes    81203 hnd 0xd5d3
+ 12.00 dt-match: compatible: raspberrypi,5-model-b match: brcm,bcm2712
+ 12.00 dt-match: compatible: brcm,bcm2712 match: brcm,bcm2712
+ 12.24 Selecting USB low current limit
+ 12.02 MESS:00:00:12.027361:0: *** Restart logging
+ 12.29 Read /config.txt bytes     2774 hnd 0xd674
+ 12.03 MESS:00:00:12.034492:0: board: boardrev a04171 otp a04171
+ 12.39 Read /config.txt bytes     2774 hnd 0xd674
+ 12.04 MESS:00:00:12.047541:0: Initial voltage 800000 temp 55415
+ 12.24 MESS:00:00:12.247597:0: avs_2712: AVS pred 8587 858700 temp 56515
+ 12.25 MESS:00:00:12.251200:0: vpred 858 mV +0
+ 12.25 MESS:00:00:12.255395:0: over-voltage idle: 0 avs: 98700 delta: 0 (0x00000000)
+ 12.26 MESS:00:00:12.266475:0: FB framebuffer_swap 1
+ 12.28 MESS:00:00:12.280798:0: Select resolution HDMI0/2 hotplug 0 max_mode 2
+ 12.28 MESS:00:00:12.284834:0: Select resolution HDMI1/2 hotplug 0 max_mode 2
+ 12.29 MESS:00:00:12.291837:0: dtb_file 'bcm2712-rpi-5-b.dtb'
+ 12.29 Loading 'bcm2712-rpi-5-b.dtb' to 0x00000000 offset 0x100
+ 12.03 Read bcm2712-rpi-5-b.dtb bytes    81203 hnd 0xd5d3
+ 12.20 Read /overlays/overlay_map.dtb bytes     5451 hnd 0xdc2c
+ 12.25 Read /overlays/bcm2712d0.dtbo bytes     1507 hnd 0xdc3c
+ 12.34 MESS:00:00:12.340957:0: Loaded overlay 'bcm2712d0'
+ 12.38 PCIEx1: PWR 0 DET_WAKE 0
+ 12.93 Read /config.txt bytes     2774 hnd 0xd674
+ 12.39 [ramdisk] /overlays/vc4-kms-v3d-pi5.dtbo not found
+ 12.04  /overlays/vc4-kms-v3d-pi5.dtbo 
+ 12.40 MESS:00:00:12.405269:0: dtparam: spi=on
+ 12.16 Read /overlays/letstrust-tpm.dtbo bytes      775 hnd 0xdc3a
+ 12.42 MESS:00:00:12.425845:0: Loaded overlay 'letstrust-tpm'
+ 12.45 Read /overlays/letstrust-tpm-uboot.dtbo bytes     1099 hnd 0xdc37
+ 12.45 MESS:00:00:12.453489:0: Loaded overlay 'letstrust-tpm-uboot'
+ 12.19 Read /cmdline.txt bytes      327 hnd 0xd673
+ 12.52 MESS:00:00:12.521203:0: Read command line from file 'cmdline.txt':
+ 12.52 MESS:00:00:12.527713:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 630784 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 78848 78849 sha256 3d423859be7620bd7cb59cf2d4fb849fd726fce99533c53bf0f15e00139e5c1c 9570a3ad44a3c560a36441fdd48de280733b10a7330c4432
+ 12.65 MESS:00:00:12.657593:0: RPM 0, max RPM 0
+ 12.67 BMD "armstub8-2712.bin" not found
+ 12.77 fs_open: 'armstub8-2712.bin' 
+ 12.68 Loading 'kernel_2712.img' to 0x00000000 offset 0x200000
+ 12.91 Read kernel_2712.img bytes   742904 hnd 0xd680
+ 12.69 MESS:00:00:12.693698:0: Device tree loaded to 0x2efeb800 (size 0x1470b)
+ 12.70 PCI1 reset
+ 12.71 PCI2 reset
+ 12.72 set_reboot_order 0
+ 12.72 set_reboot_arg1 0
+ 12.72 USB-OTG disconnect
+ 12.76 MESS:00:00:12.763632:0: Watchdog stopped
+ 12.76 MESS:00:00:12.765049:0: Starting OS 12765 ms
+ 12.77 MESS:00:00:12.773514:0: 00000040: -> 00000480
+ 12.77 MESS:00:00:12.775367:0: 00000030: -> 00100080
+ 12.78 MESS:00:00:12.780080:0: 00000034: -> 00100080
+ 12.78 MESS:00:00:12.784792:0: 00000038: -> 00100080
+ 12.78 MESS:00:00:12.789506:0: 0000003c: -> 00100080
+
+NOTICE:  BL31: v2.6(release):v2.6-240-gfc45bc492
+NOTICE:  BL31: Built : 12:55:13, Dec  4 2024
+
+
+U-Boot 2024.04 (Sep 27 2026 - 15:32:58 +0000)
+
+DRAM:  1020 MiB
+RPI 5 Model B (0xa04171)
+Core:  53 devices, 17 uclasses, devicetree: board
+MMC:   mmc@fff000: 0, mmc@1100000: 1
+Loading Environment from nowhere... OK
+PCIe BRCM: link up, 5.0 Gbps x4 (!SSC)
+In:    serial,usbkbd
+Out:   serial,vidconsole
+Err:   serial,vidconsole
+Net:   eth0: ethernet@100000
+[?25h
+starting USB...
+No working controllers found
+rpi_bootpart=1
+28981760 bytes read in 1209 ms (22.9 MiB/s)
+Created "bi"
+Block 0x0+0xdd1d mapped to 0x20000000
+28025344 bytes read in 5 ms (5.2 GiB/s)
+Working FDT set to 2efeb800
+Moving Image from 0x80000 to 0x200000, end=1e10000
+## Flattened Device Tree blob at 2efeb800
+   Booting using the fdt blob at 0x2efeb800
+Working FDT set to 2efeb800
+[MBOOT] bootm_measure: enter (os.os=5)
+[MBOOT] bootm_measure: CONFIG_MEASURED_BOOT active
+[MBOOT] tcg2_measurement_init: enter (ignore_existing_log=0, elog->log_size=65536)
+[MBOOT] tpm2_auto_start: self_test
+[MBOOT] tpm2_auto_start: self_test rc=256
+[MBOOT] tpm2_auto_start: TPM not started, issuing Startup(CLEAR)
+[MBOOT] tpm2_auto_start: post-startup self_test rc=0
+[MBOOT] tcg2_log_prepare_buffer: enter (ignore=0, elog->log_size=65536)
+[MBOOT] tcg2_log_prepare_buffer: no DT log found rc=-19
+[MBOOT] tcg2_log_prepare_buffer: initializing fresh log (size=65536)
+[MBOOT] tcg2_log_prepare_buffer: exit rc=0 (log=000000003f751430, size=65536, pos=65, found=0)
+[MBOOT] tcg2_measurement_init: log ready (log=000000003f751430, log_size=65536, log_pos=65, found=0)
+[MBOOT] tcg2_measurement_init: measuring S-CRTM version -> PCR 0
+[MBOOT] tcg2_measure_data: PCR 0, event_type=0x8, data=0000000000000000, data_size=0, event_size=46
+[MBOOT] tcg2_measure_data: PCR 0 extended OK
+[MBOOT] tcg2_measurement_init: complete OK
+[ARB] counter read failed 0x28b
+[ARB] no anti-rollback counter -- refusing to boot this release; resetting
+resetting ...
+£
+  1.51 RPi: BOOTSYS release VERSION:465206a2 DATE: 2026/09/10 TIME: 00:06:58
+  1.52 MFG_VER: 1
+  1.52 BOOTMODE: 0x06 partition 0 build-ts BUILD_TIMESTAMP=1788998818 serial 0af4f481 boardrev a04171 stc 1522728
+  1.53 AON_RESET: 00000003 PM_RSTS 00000020
+  1.53 POWER_OFF_ON_HALT: 1 WAIT_FOR_POWER_BUTTON 0 power-on-reset 0
+  1.54 EEPROM ID 0xef4015
+  1.54 SFDP v1.5 Param v1.5 Capacity 2048KB
+  1.55 RP1_BOOT chip ID: 0x20001927
+  1.55 PCIEx1: PWR 0 DET_WAKE 0
+  1.55 part 00000000 reset_info 00000000
+  1.56 PMIC power-on reset-event 00000000 rtc 6ab94352 alarm 00000000 enabled 0
+  1.56 uSD voltage 3.3V
+  1.57 SDRAM_CONFIG: 07 board-rev 00000001
+  1.57 Initialising SDRAM rank 1 total-size: 8Gbit part: 0 (0x07 0x07) odt: 0
+  1.58 memsys_init: 0 8Gbit MCB 0x80015ff0: 7880
+  1.58 DDR 4267 Mbps dual-rank:0 byte-mode:0 size-gbit:8 part-config:0 odt:0
+  2.09 RP1 FW: load 0
+  2.10 RP1_BOOT chip ID: 0x20001927
+  2.89 RP1 FW: load 1
+  3.31 OTP boardrev a04171 bootrom a a
+  3.31 Customer key hash 0e4da3d85c697bf14d80c93d4257754edc7ab80290b0ce317823182b782160b0
+  3.31 VC-JTAG unlocked
+  3.34 RP1_BOOT chip ID: 0x20001927
+  3.34 bootconf.sig
+  3.34 hash: 06ff27260a405355d7a129c13dd9b8e16335c0311831468aeb2e886740c7ac28
+  3.35 rsa2048: bc31e3bef2ea2b7e487911a21680abd1f3b27c064d6260c3dd48f5fc94757d2263ee3db58a4760778da95a08c69acad45affbb513ba9afabaf26ffa4f3edb1bb9889554c1e2a1d0428d07f4b3fa52688d6182d891216d601525a675016b417669e32851f2b2ab0e805bf41e1fbae82211c139a62b7f28d636e742db3a79b9a426f7a132506209a9efd41df77891a8010e2d4fa1fa0f682cdd834f9d6d4528fe633659705248921b935ca8153ee32d121fbe99732d8a42de3dcb2d5b0fbba5cfbc051c99f1d5aa6c38130ba8f0067883e9d0c9e457e58a49b05910a23e6c2323142f2d6c361e9ddd987460b9e52cabc42232be792ba71fa7e2d36ec80f30a7cf1
+  3.40 RSA verify
+  3.16 rsa-verify pass (0x0)
+
+  4.07 AB: P:N C:1
+  4.10 PCI2 init
+  4.10 PCI2 reset
+  4.14 PCIe scan 00001de4:00000001
+  4.14 RP1_CHIP_INFO 20001927
+
+  4.15 RPi: BOOTLOADER release VERSION:465206a2 DATE: 2026/09/10 TIME: 00:06:58
+  4.15 MFG_VER: 1
+  4.15 BOOTMODE: 0x06 partition 0 build-ts BUILD_TIMESTAMP=1788998818 serial 0af4f481 boardrev a04171 stc 4159196
+  4.16 EEPROM ID 0xef4015
+  4.17 SFDP v1.5 Param v1.5 Capacity 2048KB
+  4.17 PCIEx1: PWR 0 DET_WAKE 0
+  4.78 M.2 PCIe HAT not detected.
+  4.18 usb_pd_init status 3
+  4.18 USB_PD CONFIG 0 43
+  4.23 SD_OC: 0
+  4.36 Boot mode: SD (01) order f24
+  4.25 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.26 SD HOST: 200000000 CTL0: 0x00800f00 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.58 SD retry 1 oc 501
+  4.60 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.62 OCR c0ff8000 [13]
+CID: 00563456534400000000000004ba01a2
+CSD: 400e00325b590001d1eb7f8006400000
+  4.63 SD: bus-width: 4 spec: 2 SCR: 0x02858483 0x00000000
+  4.65 SD HOST: 200000000 CTL0: 0x00800f04 BUS: 50000000 Hz actual: 50000000 HZ div: 4 (2) status: 0x1fff0000 delay: 2
+  4.66 MBR: 0x00000001, 7004193 type: 0xee
+  4.66 MBR: 0x00000000,       0 type: 0x00
+  4.66 MBR: 0x00000000,       0 type: 0x00
+  4.66 MBR: 0x00000000,       0 type: 0x00
+  4.67 USB-PD: src-cap PDO object1 0x2e01912c
+  4.67 Current 3000 mA
+  4.67 Voltage 5000 mV
+  4.81 Trying partition: 0
+  4.68 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+  4.69 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  4.70 Matched GUID bootable-part-idx 0 want partition 0
+  4.09 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  4.71 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  4.72 FAT16 clusters 43215
+  4.32 Read autoboot.txt bytes       64 hnd 0x4d20
+  4.73 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+  4.40 Trying partition: 1
+  4.74 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+  4.75 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  4.76 Matched GUID bootable-part-idx 0 want partition 0
+  4.68 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  4.77 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  4.78 FAT16 clusters 43215
+  4.83 secure-boot
+  4.84 Loading boot.img ...
+  4.80 boot.sig
+  4.80 hash: b6e801a4097ed5ba125a62f1288408df314047a84c4fb21c46ce68131f45fc37
+  4.80 ts: 1790523396
+  4.80 rsa2048: be8e1cf61d8b22fe622e4cdc00098766f4aa344fc203f52edc21646e56d2592bd6562f8eb4fee22d888a628873ebae5fdfa548fc08a7f3065a7307a2763f9098a89ec81fcee34b0c1d58bee34ef0293a56bbe9363fb555f870b6ad9726d52d422d3922b479ee0f897119e1ca5b86d277a79d3a43beba199826d4ed4d8442bed0f79b0cf5506bceaa07288ded9f47e69cdfc16aa794fd2c2152c5fca330aaac888bc8e60b20db4c989649b917e74e018e0f023797f765d2828de9add4c35a728273e00e078b5fd96bec2c62190b3e9c89c88f964991756a0c819585ab047c1e93ca1ce9550fc421185bb09f629d7f6501ee234545f449e5b339cf85e521a47764
+  8.35 Verifying
+ 11.93 RSA verify
+ 11.44 rsa-verify pass (0x0)
+ 11.95 MBR: 0x00000000,       0 type: 0x00
+ 11.96 MBR: 0x00000000,       0 type: 0x00
+ 11.96 MBR: 0x00000000,       0 type: 0x00
+ 11.96 MBR: 0x00000000,       0 type: 0x00
+ 11.71 Trying partition: 0
+ 11.74 type: 16 lba: 0 'mkfs.fat' '  V       ^ ' clusters 56381 (1)
+ 11.98 rsc 1 fat-sectors 221 root dir cluster 1 sectors 2 entries 32
+ 11.98 FAT16 clusters 56381
+ 11.90 Read config.txt bytes     2774 hnd 0xd674
+ 11.93 usb_max_current_enable default 0 max-current 3000
+ 11.99 Read bcm2712-rpi-5-b.dtb bytes    81203 hnd 0xd5d3
+ 12.00 dt-match: compatible: raspberrypi,5-model-b match: brcm,bcm2712
+ 12.00 dt-match: compatible: brcm,bcm2712 match: brcm,bcm2712
+ 12.24 Selecting USB low current limit
+ 12.02 MESS:00:00:12.027659:0: *** Restart logging
+ 12.29 Read /config.txt bytes     2774 hnd 0xd674
+ 12.03 MESS:00:00:12.034791:0: board: boardrev a04171 otp a04171
+ 12.39 Read /config.txt bytes     2774 hnd 0xd674
+ 12.04 MESS:00:00:12.047842:0: Initial voltage 800000 temp 55965
+ 12.24 MESS:00:00:12.247907:0: avs_2712: AVS pred 8564 856400 temp 54316
+ 12.25 MESS:00:00:12.251510:0: vpred 856 mV +0
+ 12.25 MESS:00:00:12.255705:0: over-voltage idle: 0 avs: 96400 delta: 0 (0x00000000)
+ 12.26 MESS:00:00:12.266783:0: FB framebuffer_swap 1
+ 12.28 MESS:00:00:12.281109:0: Select resolution HDMI0/2 hotplug 0 max_mode 2
+ 12.28 MESS:00:00:12.285145:0: Select resolution HDMI1/2 hotplug 0 max_mode 2
+ 12.29 MESS:00:00:12.292149:0: dtb_file 'bcm2712-rpi-5-b.dtb'
+ 12.29 Loading 'bcm2712-rpi-5-b.dtb' to 0x00000000 offset 0x100
+ 12.03 Read bcm2712-rpi-5-b.dtb bytes    81203 hnd 0xd5d3
+ 12.20 Read /overlays/overlay_map.dtb bytes     5451 hnd 0xdc2c
+ 12.25 Read /overlays/bcm2712d0.dtbo bytes     1507 hnd 0xdc3c
+ 12.34 MESS:00:00:12.341269:0: Loaded overlay 'bcm2712d0'
+ 12.38 PCIEx1: PWR 0 DET_WAKE 0
+ 12.93 Read /config.txt bytes     2774 hnd 0xd674
+ 12.39 [ramdisk] /overlays/vc4-kms-v3d-pi5.dtbo not found
+ 12.04  /overlays/vc4-kms-v3d-pi5.dtbo 
+ 12.40 MESS:00:00:12.405581:0: dtparam: spi=on
+ 12.17 Read /overlays/letstrust-tpm.dtbo bytes      775 hnd 0xdc3a
+ 12.42 MESS:00:00:12.426159:0: Loaded overlay 'letstrust-tpm'
+ 12.45 Read /overlays/letstrust-tpm-uboot.dtbo bytes     1099 hnd 0xdc37
+ 12.45 MESS:00:00:12.453803:0: Loaded overlay 'letstrust-tpm-uboot'
+ 12.19 Read /cmdline.txt bytes      327 hnd 0xd673
+ 12.52 MESS:00:00:12.521514:0: Read command line from file 'cmdline.txt':
+ 12.52 MESS:00:00:12.528026:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 630784 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 78848 78849 sha256 3d423859be7620bd7cb59cf2d4fb849fd726fce99533c53bf0f15e00139e5c1c 9570a3ad44a3c560a36441fdd48de280733b10a7330c4432
+ 12.65 MESS:00:00:12.657953:0: RPM 0, max RPM 0
+ 12.67 BMD "armstub8-2712.bin" not found
+ 12.77 fs_open: 'armstub8-2712.bin' 
+ 12.68 Loading 'kernel_2712.img' to 0x00000000 offset 0x200000
+ 12.92 Read kernel_2712.img bytes   742904 hnd 0xd680
+ 12.69 MESS:00:00:12.694057:0: Device tree loaded to 0x2efeb800 (size 0x1470b)
+ 12.70 PCI1 reset
+ 12.71 PCI2 reset
+ 12.72 set_reboot_order 0
+ 12.72 set_reboot_arg1 0
+ 12.72 USB-OTG disconnect
+ 12.76 MESS:00:00:12.763992:0: Watchdog stopped
+ 12.76 MESS:00:00:12.765408:0: Starting OS 12765 ms
+ 12.77 MESS:00:00:12.773873:0: 00000040: -> 00000480
+ 12.77 MESS:00:00:12.775726:0: 00000030: -> 00100080
+ 12.78 MESS:00:00:12.780439:0: 00000034: -> 00100080
+ 12.78 MESS:00:00:12.785151:0: 00000038: -> 00100080
+ 12.78 MESS:00:00:12.789864:0: 0000003c: -> 00100080
+
+NOTICE:  BL31: v2.6(release):v2.6-240-gfc45bc492
+NOTICE:  BL31: Built : 12:55:13, Dec  4 2024
+
+
+U-Boot 2024.04 (Sep 27 2026 - 15:32:58 +0000)
+
+DRAM:  1020 MiB
+RPI 5 Model B (0xa04171)
+Core:  53 devices, 17 uclasses, devicetree: board
+MMC:   mmc@fff000: 0, mmc@1100000: 1
+Loading Environment from nowhere... OK
+PCIe BRCM: link up, 5.0 Gbps x4 (!SSC)
+In:    serial,usbkbd
+Out:   serial,vidconsole
+Err:   serial,vidconsole
+Net:   eth0: ethernet@100000
+[?25h
+starting USB...
+No working controllers found
+rpi_bootpart=1
+28981760 bytes read in 1209 ms (22.9 MiB/s)
+Created "bi"
+Block 0x0+0xdd1d mapped to 0x20000000
+28025344 bytes read in 6 ms (4.4 GiB/s)
+Working FDT set to 2efeb800
+Moving Image from 0x80000 to 0x200000, end=1e10000
+## Flattened Device Tree blob at 2efeb800
+   Booting using the fdt blob at 0x2efeb800
+Working FDT set to 2efeb800
+[MBOOT] bootm_measure: enter (os.os=5)
+[MBOOT] bootm_measure: CONFIG_MEASURED_BOOT active
+[MBOOT] tcg2_measurement_init: enter (ignore_existing_log=0, elog->log_size=65536)
+[MBOOT] tpm2_auto_start: self_test
+[MBOOT] tpm2_auto_start: self_test rc=256
+[MBOOT] tpm2_auto_start: TPM not started, issuing Startup(CLEAR)
+[MBOOT] tpm2_auto_start: post-startup self_test rc=0
+[MBOOT] tcg2_log_prepare_buffer: enter (ignore=0, elog->log_size=65536)
+[MBOOT] tcg2_log_prepare_buffer: no DT log found rc=-19
+[MBOOT] tcg2_log_prepare_buffer: initializing fresh log (size=65536)
+[MBOOT] tcg2_log_prepare_buffer: exit rc=0 (log=000000003f751430, size=65536, pos=65, found=0)
+[MBOOT] tcg2_measurement_init: log ready (log=000000003f751430, log_size=65536, log_pos=65, found=0)
+[MBOOT] tcg2_measurement_init: measuring S-CRTM version -> PCR 0
+[MBOOT] tcg2_measure_data: PCR 0, event_type=0x8, data=0000000000000000, data_size=0, event_size=46
+[MBOOT] tcg2_measure_data: PCR 0 extended OK
+[MBOOT] tcg2_measurement_init: complete OK
+[ARB] counter read failed 0x28b
+[ARB] no anti-rollback counter -- refusing to boot this release; resetting
+resetting ...
+£
+  1.51 RPi: BOOTSYS release VERSION:465206a2 DATE: 2026/09/10 TIME: 00:06:58
+  1.51 MFG_VER: 1
+  1.52 BOOTMODE: 0x06 partition 0 build-ts BUILD_TIMESTAMP=1788998818 serial 0af4f481 boardrev a04171 stc 1521088
+  1.53 AON_RESET: 00000003 PM_RSTS 00000020
+  1.53 POWER_OFF_ON_HALT: 1 WAIT_FOR_POWER_BUTTON 0 power-on-reset 0
+  1.54 EEPROM ID 0xef4015
+  1.54 SFDP v1.5 Param v1.5 Capacity 2048KB
+  1.55 RP1_BOOT chip ID: 0x20001927
+  1.55 PCIEx1: PWR 0 DET_WAKE 0
+  1.55 part 00000000 reset_info 00000000
+  1.55 PMIC power-on reset-event 00000000 rtc 6ab94362 alarm 00000000 enabled 0
+  1.56 uSD voltage 3.3V
+  1.57 SDRAM_CONFIG: 07 board-rev 00000001
+  1.57 Initialising SDRAM rank 1 total-size: 8Gbit part: 0 (0x07 0x07) odt: 0
+  1.58 memsys_init: 0 8Gbit MCB 0x80015ff0: 7880
+  1.58 DDR 4267 Mbps dual-rank:0 byte-mode:0 size-gbit:8 part-config:0 odt:0
+  2.09 RP1 FW: load 0
+  2.10 RP1_BOOT chip ID: 0x20001927
+  2.89 RP1 FW: load 1
+  3.30 OTP boardrev a04171 bootrom a a
+  3.31 Customer key hash 0e4da3d85c697bf14d80c93d4257754edc7ab80290b0ce317823182b782160b0
+  3.31 VC-JTAG unlocked
+  3.34 RP1_BOOT chip ID: 0x20001927
+  3.34 bootconf.sig
+  3.34 hash: 06ff27260a405355d7a129c13dd9b8e16335c0311831468aeb2e886740c7ac28
+  3.35 rsa2048: bc31e3bef2ea2b7e487911a21680abd1f3b27c064d6260c3dd48f5fc94757d2263ee3db58a4760778da95a08c69acad45affbb513ba9afabaf26ffa4f3edb1bb9889554c1e2a1d0428d07f4b3fa52688d6182d891216d601525a675016b417669e32851f2b2ab0e805bf41e1fbae82211c139a62b7f28d636e742db3a79b9a426f7a132506209a9efd41df77891a8010e2d4fa1fa0f682cdd834f9d6d4528fe633659705248921b935ca8153ee32d121fbe99732d8a42de3dcb2d5b0fbba5cfbc051c99f1d5aa6c38130ba8f0067883e9d0c9e457e58a49b05910a23e6c2323142f2d6c361e9ddd987460b9e52cabc42232be792ba71fa7e2d36ec80f30a7cf1
+  3.39 RSA verify
+  3.15 rsa-verify pass (0x0)
+
+  4.07 AB: P:N C:1
+  4.10 PCI2 init
+  4.10 PCI2 reset
+  4.14 PCIe scan 00001de4:00000001
+  4.14 RP1_CHIP_INFO 20001927
+
+  4.14 RPi: BOOTLOADER release VERSION:465206a2 DATE: 2026/09/10 TIME: 00:06:58
+  4.15 MFG_VER: 1
+  4.15 BOOTMODE: 0x06 partition 0 build-ts BUILD_TIMESTAMP=1788998818 serial 0af4f481 boardrev a04171 stc 4158289
+  4.16 EEPROM ID 0xef4015
+  4.17 SFDP v1.5 Param v1.5 Capacity 2048KB
+  4.17 PCIEx1: PWR 0 DET_WAKE 0
+  4.77 M.2 PCIe HAT not detected.
+  4.18 usb_pd_init status 3
+  4.18 USB_PD CONFIG 0 43
+  4.23 SD_OC: 0
+  4.36 Boot mode: SD (01) order f24
+  4.25 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.26 SD HOST: 200000000 CTL0: 0x00800f00 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.58 SD retry 1 oc 501
+  4.60 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.62 OCR c0ff8000 [12]
+CID: 00563456534400000000000004ba01a2
+CSD: 400e00325b590001d1eb7f8006400000
+  4.63 SD: bus-width: 4 spec: 2 SCR: 0x02858483 0x00000000
+  4.64 SD HOST: 200000000 CTL0: 0x00800f04 BUS: 50000000 Hz actual: 50000000 HZ div: 4 (2) status: 0x1fff0000 delay: 2
+  4.66 MBR: 0x00000001, 7004193 type: 0xee
+  4.66 MBR: 0x00000000,       0 type: 0x00
+  4.66 MBR: 0x00000000,       0 type: 0x00
+  4.66 MBR: 0x00000000,       0 type: 0x00
+  4.67 USB-PD: src-cap PDO object1 0x2e01912c
+  4.67 Current 3000 mA
+  4.67 Voltage 5000 mV
+  4.80 Trying partition: 0
+  4.68 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+  4.69 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  4.70 Matched GUID bootable-part-idx 0 want partition 0
+  4.08 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  4.71 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  4.72 FAT16 clusters 43215
+  4.31 Read autoboot.txt bytes       64 hnd 0x4d20
+  4.73 Select partition rsts 0 C(boot_partition) 1 EEPROM config 0 result 1
+  4.39 Trying partition: 1
+  4.74 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+  4.75 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  4.76 Matched GUID bootable-part-idx 0 want partition 0
+  4.67 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  4.77 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  4.78 FAT16 clusters 43215
+  4.82 secure-boot
+  4.83 Loading boot.img ...
+  4.80 boot.sig
+  4.80 hash: b6e801a4097ed5ba125a62f1288408df314047a84c4fb21c46ce68131f45fc37
+  4.80 ts: 1790523396
+  4.80 rsa2048: be8e1cf61d8b22fe622e4cdc00098766f4aa344fc203f52edc21646e56d2592bd6562f8eb4fee22d888a628873ebae5fdfa548fc08a7f3065a7307a2763f9098a89ec81fcee34b0c1d58bee34ef0293a56bbe9363fb555f870b6ad9726d52d422d3922b479ee0f897119e1ca5b86d277a79d3a43beba199826d4ed4d8442bed0f79b0cf5506bceaa07288ded9f47e69cdfc16aa794fd2c2152c5fca330aaac888bc8e60b20db4c989649b917e74e018e0f023797f765d2828de9add4c35a728273e00e078b5fd96bec2c62190b3e9c89c88f964991756a0c819585ab047c1e93ca1ce9550fc421185bb09f629d7f6501ee234545f449e5b339cf85e521a47764
