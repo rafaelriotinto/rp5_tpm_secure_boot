@@ -1,0 +1,1133 @@
+[[0;32m  OK  [0m] Started [0;[[0;32m  OK  [0m] Started [0;1;39mSSH Per-Connection Server (192.168.10.224:38134)[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSSH Per-Connection Server (192.168.10.224:38144)[0m.
+[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (20s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (21s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (22s / 1min 30s)
+M[K[     [0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (22s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (23s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (23s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (24s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (24s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (25s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (26s / 1min 30s)
+M[K[[0m[0;31m*     [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (26s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (27s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (27s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (28s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (29s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (29s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (30s / 1min 30s)
+M[K[     [0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (30s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (31s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (31s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (32s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (33s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (33s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (34s / 1min 30s)
+M[K[[0m[0;31m*     [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (34s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (35s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (36s / 1min 30s)
+[   39.484819] audit: type=1334 audit(1790534295.451:16): prog-id=19 op=UNLOAD
+[   39.491833] audit: type=1334 audit(1790534295.455:17): prog-id=18 op=UNLOAD
+[   39.498827] audit: type=1334 audit(1790534295.455:18): prog-id=17 op=UNLOAD
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (36s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (37s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (37s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (38s / 1min 30s)
+M[K[     [0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (38s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (39s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (40s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (40s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (41s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (41s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (42s / 1min 30s)
+M[K[[0m[0;31m*     [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (43s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (43s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (44s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (44s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (45s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (45s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (46s / 1min 30s)
+M[K[     [0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (47s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (47s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (47s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (48s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (48s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (49s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (49s / 1min 30s)
+M[K[[0m[0;31m*     [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (50s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (50s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (51s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (51s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (52s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (52s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (53s / 1min 30s)
+M[K[     [0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (53s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (54s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (54s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (55s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (55s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (56s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (56s / 1min 30s)
+M[K[[0m[0;31m*     [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (57s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (57s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (58s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (58s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (59s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/gpu/graphics/fb0 (59s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…gpu/graphics/fb0 (1min / 1min 30s)
+M[K[     [0;31m*[0m] A start job is running for /sys/dev…gpu/graphics/fb0 (1min / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/graphics/fb0 (1min 1s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/graphics/fb0 (1min 1s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 2s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 2s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 3s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 3s / 1min 30s)
+M[K[[0m[0;31m*     [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 4s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 4s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 5s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 5s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 6s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/graphics/fb0 (1min 6s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/graphics/fb0 (1min 7s / 1min 30s)
+M[K[     [0;31m*[0m] A start job is running for /sys/dev…/graphics/fb0 (1min 7s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…/graphics/fb0 (1min 8s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…/graphics/fb0 (1min 8s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 9s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…/graphics/fb0 (1min 9s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…graphics/fb0 (1min 10s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…graphics/fb0 (1min 10s / 1min 30s)
+M[K[[0m[0;31m*     [0m] A start job is running for /sys/dev…graphics/fb0 (1min 11s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…graphics/fb0 (1min 11s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…graphics/fb0 (1min 12s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…graphics/fb0 (1min 12s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…graphics/fb0 (1min 13s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…graphics/fb0 (1min 15s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…graphics/fb0 (1min 15s / 1min 30s)
+M[K[     [0;31m*[0m] A start job is running for /sys/dev…graphics/fb0 (1min 16s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] A start job is running for /sys/dev…graphics/fb0 (1min 16s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…graphics/fb0 (1min 17s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…graphics/fb0 (1min 17s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…graphics/fb0 (1min 18s / 1min 30s)
+M[K[[0;32m  OK  [0m] Started [0;1;39mSSH Per-Connection Server (192.168.10.224:59156)[0m.
+[K[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system/dropbear[0m.
+[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system/modprobe[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mBluetooth Support[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mMulti-User System[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mLogin Prompts[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mNetwork[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mHost and Network Name Lookups[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mRemote File Systems[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mRPC Port Mapper[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSystem Time Set[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mTimer Units[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mDaily Cleanup of Temporary Directories[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mLoad/Save RF Kill Switch Status /dev/rfkill Watch[0m.
+         Unmounting [0;1;39m/data[0m...
+         Stopping [0;1;39mAvahi mDNS/DNS-SD Stack[0m...
+[   83.177446] EXT4-fs (mmcblk0p5): unmounting filesystem 3924175a-14b0-4a0f-bd47-0e87a1c1c592.
+         Stopping [0;1;39mBluetooth service[0m...
+         Stopping [0;1;39mKernel Logging Service[0m...
+         Stopping [0;1;39mSystem Logging Service[0m...
+         Stopping [0;1;39mD-Bus System Message Bus[0m...
+         Stopping [0;1;39mTelephony service[0m...
+         Stopping [0;1;39mUser Login Management[0m...
+         Stopping [0;1;39mNetwork Configuration[0m...
+         Stopping [0;1;39mLoad/Save OS Random Seed[0m...
+[[0;32m  OK  [0m] Stopped [0;1;39mAvahi mDNS/DNS-SD Stack[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mKernel Logging Service[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mSystem Logging Service[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mD-Bus System Message Bus[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mTelephony service[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mUser Login Management[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mNetwork Configuration[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mBluetooth service[0m.
+[[0;32m  OK  [0m] Unmounted [0;1;39m/data[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mLoad/Save OS Random Seed[0m.
+[   83.472030] audit: type=1334 audit(1790534339.805:19): prog-id=16 op=UNLOAD
+[   83.479056] audit: type=1334 audit(1790534339.805:20): prog-id=13 op=UNLOAD
+[[0;32m  OK  [0m] Stopped target [0;1;39mPreparation for Network[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mRaspberry Pi bluetooth helper[0m.
+[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system/bthelper[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mBasic System[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mPath Units[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mDispatch Password Requests to Console Directory Watch[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mForward Password Requests to Wall Directory Watch[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSlice Units[0m.
+[[0;32m  OK  [0m] Removed slice [0;1;39mUser and Session Slice[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSocket Units[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mAvahi mDNS/DNS-SD Stack Activation Socket[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mD-Bus System Message Bus Socket[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mdropbear.socket[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSystem Initialization[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mSyslog Socket[0m.
+[[0;32m  OK  [0m] Closed [0;1;39mNetwork Service Netlink Socket[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mFile System Check on /dev/disk/by-label/data[0m.
+[[0;32m  OK  [0m] Removed slice [0;1;39mSlice /system/systemd-fsck[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mGenerate network units from Kernel command line[0m.
+         Stopping [0;1;39mNetwork Name Resolution[0m...
+         Stopping [0;1;39mNetwork Time Synchronization[0m...
+         Stopping [0;1;39mRecord System Boot/Shutdown in UTMP[0m...
+[[0;32m  OK  [0m] Stopped [0;1;39mNetwork Name Resolution[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mNetwork Time Synchronization[0m.
+[   83.867022] audit: type=1334 audit(1790534340.197:21): prog-id=11 op=UNLOAD
+[   83.874035] audit: type=1334 audit(1790534340.201:22): prog-id=12 op=UNLOAD
+[[0;32m  OK  [0m] Stopped [0;1;39mApply Kernel Variables[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mRecord System Boot/Shutdown in UTMP[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mCreate System Files and Directories[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mLocal File Systems[0m.
+         Unmounting [0;1;39m/etc/machine-id[0m...
+         Unmounting [0;1;39m/srv[0m...
+         Unmounting [0;1;39mTemporary Directory /tmp[0m...
+         Unmounting [0;1;39m/var/cache[0m...
+         Unmounting [0;1;39m/var/lib[0m...
+         Unmounting [0;1;39m/var/spool[0m...
+         Stopping [0;1;39mBind mount volatile /var/cache[0m...
+         Stopping [0;1;39mBind mount volatile /var/lib[0m...
+         Stopping [0;1;39mBind mount volatile /var/spool[0m...
+         Stopping [0;1;39mBind mount volatile /srv[0m...
+[[0;32m  OK  [0m] Unmounted [0;1;39m/etc/machine-id[0m.
+[[0;32m  OK  [0m] Unmounted [0;1;39m/srv[0m.
+[[0;32m  OK  [0m] Unmounted [0;1;39mTemporary Directory /tmp[0m.
+[[0;32m  OK  [0m] Unmounted [0;1;39m/var/cache[0m.
+[[0;32m  OK  [0m] Unmounted [0;1;39m/var/lib[0m.
+[[0;32m  OK  [0m] Unmounted [0;1;39m/var/spool[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mBind mount volatile /var/cache[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mBind mount volatile /var/lib[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mBind mount volatile /var/spool[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mBind mount volatile /srv[0m.
+         Unmounting [0;1;39m/var/volatile[0m...
+[[0;32m  OK  [0m] Unmounted [0;1;39m/var/volatile[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mPreparation for Local File Systems[0m.
+[[0;32m  OK  [0m] Stopped target [0;1;39mSwaps[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mUnmount All Filesystems[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mRemount Root and Kernel File Systems[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mCreate Static Device Nodes in /dev[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mCreate Static Device Nodes in /dev gracefully[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Shutdown[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mLate Shutdown Services[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mSystem Reboot[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Reboot[0m.
+[   84.488822] audit: type=1334 audit(1790534340.822:23): prog-id=15 op=UNLOAD
+[   84.495835] audit: type=1334 audit(1790534340.822:24): prog-id=14 op=UNLOAD
+[   84.502829] audit: type=1334 audit(1790534340.822:25): prog-id=5 op=UNLOAD
+[   84.509732] audit: type=1334 audit(1790534340.822:26): prog-id=4 op=UNLOAD
+[   84.516635] audit: type=1334 audit(1790534340.822:27): prog-id=3 op=UNLOAD
+[   84.523537] audit: type=1334 audit(1790534340.826:28): prog-id=7 op=UNLOAD
+[   84.538835] watchdog: watchdog0: watchdog did not stop!
+[   84.549556] systemd-shutdown[1]: Using hardware watchdog 'Broadcom BCM2835 Watchdog timer', version 0, device /dev/watchdog0
+[   84.560837] systemd-shutdown[1]: Watchdog running with a hardware timeout of 1min.
+[   84.596136] systemd-shutdown[1]: Syncing filesystems and block devices.
+[   84.602865] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+[   84.614981] systemd-journald[139]: Received SIGTERM from PID 1 (systemd-shutdow).
+[   84.623224] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
+[   84.633108] systemd-shutdown[1]: Unmounting file systems.
+[   84.638741] systemd-shutdown[1]: All filesystems unmounted.
+[   84.644431] systemd-shutdown[1]: Deactivating swaps.
+[   84.649432] systemd-shutdown[1]: All swaps deactivated.
+[   84.654676] systemd-shutdown[1]: Detaching loop devices.
+[   84.661386] systemd-shutdown[1]: All loop devices detached.
+[   84.667096] systemd-shutdown[1]: Stopping MD devices.
+[   84.672242] systemd-shutdown[1]: All MD devices stopped.
+[   84.677581] systemd-shutdown[1]: Detaching DM devices.
+[   84.682891] systemd-shutdown[1]: Not all DM devices detached, 1 left.
+[   84.689389] systemd-shutdown[1]: Detaching DM devices.
+[   84.694733] systemd-shutdown[1]: Not all DM devices detached, 1 left.
+[   84.701201] systemd-shutdown[1]: Cannot finalize remaining DM devices, continuing.
+[   84.767305] systemd-shutdown[1]: Unable to finalize remaining DM devices, ignoring.
+[   84.775215] systemd-shutdown[1]: Syncing filesystems and block devices.
+[   84.781904] systemd-shutdown[1]: Rebooting with argument '0 tryboot'.
+[   84.838792] macb 1f00100000.ethernet eth0: Link is Down
+[   84.844368] macb 1f00100000.ethernet: gem-ptp-timer ptp clock unregistered.
+[   84.851798] kvm: exiting hardware virtualization
+[   84.856435] reboot: Restarting system with command '0 tryboot'
+
+  1.87 RPi: BOOTSYS release VERSION:465206a2 DATE: 2026/09/10 TIME: 00:06:58
+  1.87 MFG_VER: 1
+  1.87 BOOTMODE: 0x06 partition 0 build-ts BUILD_TIMESTAMP=1788998818 serial 0af4f481 boardrev a04171 stc 1879524
+  1.88 AON_RESET: 00000003 PM_RSTS 00000020
+  1.89 POWER_OFF_ON_HALT: 1 WAIT_FOR_POWER_BUTTON 0 power-on-reset 0
+  1.89 EEPROM ID 0xef4015
+  1.90 SFDP v1.5 Param v1.5 Capacity 2048KB
+  1.90 RP1_BOOT chip ID: 0x20001927
+  1.91 PCIEx1: PWR 0 DET_WAKE 0
+  1.91 part 00000000 reset_info 00000001
+  1.91 PMIC power-on reset-event 00000000 rtc 6ab962c6 alarm 00000000 enabled 0
+  1.92 uSD voltage 3.3V
+  1.93 SDRAM_CONFIG: 07 board-rev 00000001
+  1.93 Initialising SDRAM rank 1 total-size: 8Gbit part: 0 (0x07 0x07) odt: 0
+  1.94 memsys_init: 0 8Gbit MCB 0x80015ff0: 7880
+  1.94 DDR 4267 Mbps dual-rank:0 byte-mode:0 size-gbit:8 part-config:0 odt:0
+  2.44 RP1 FW: load 0
+  2.46 RP1_BOOT chip ID: 0x20001927
+  3.25 RP1 FW: load 1
+  3.66 OTP boardrev a04171 bootrom a a
+  3.66 Customer key hash 0e4da3d85c697bf14d80c93d4257754edc7ab80290b0ce317823182b782160b0
+  3.67 VC-JTAG unlocked
+  3.98 TRYBOOT
+  3.69 RP1_BOOT chip ID: 0x20001927
+  3.70 bootconf.sig
+  3.70 hash: 06ff27260a405355d7a129c13dd9b8e16335c0311831468aeb2e886740c7ac28
+  3.71 rsa2048: bc31e3bef2ea2b7e487911a21680abd1f3b27c064d6260c3dd48f5fc94757d2263ee3db58a4760778da95a08c69acad45affbb513ba9afabaf26ffa4f3edb1bb9889554c1e2a1d0428d07f4b3fa52688d6182d891216d601525a675016b417669e32851f2b2ab0e805bf41e1fbae82211c139a62b7f28d636e742db3a79b9a426f7a132506209a9efd41df77891a8010e2d4fa1fa0f682cdd834f9d6d4528fe633659705248921b935ca8153ee32d121fbe99732d8a42de3dcb2d5b0fbba5cfbc051c99f1d5aa6c38130ba8f0067883e9d0c9e457e58a49b05910a23e6c2323142f2d6c361e9ddd987460b9e52cabc42232be792ba71fa7e2d36ec80f30a7cf1
+  3.75 RSA verify
+  3.74 rsa-verify pass (0x0)
+
+  4.43 AB: P:N C:1
+  4.59 TRYBOOT
+  4.46 PCI2 init
+  4.46 PCI2 reset
+  4.50 PCIe scan 00001de4:00000001
+  4.50 RP1_CHIP_INFO 20001927
+
+  4.50 RPi: BOOTLOADER release VERSION:465206a2 DATE: 2026/09/10 TIME: 00:06:58
+  4.51 MFG_VER: 1
+  4.51 BOOTMODE: 0x06 partition 0 build-ts BUILD_TIMESTAMP=1788998818 serial 0af4f481 boardrev a04171 stc 4517742
+  4.52 EEPROM ID 0xef4015
+  4.53 SFDP v1.5 Param v1.5 Capacity 2048KB
+  4.53 PCIEx1: PWR 0 DET_WAKE 0
+  4.36 M.2 PCIe HAT not detected.
+  4.54 usb_pd_init status 3
+  4.54 USB_PD CONFIG 0 43
+  4.59 SD_OC: 0
+  4.97 Boot mode: SD (01) order f24
+  4.61 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.62 SD HOST: 200000000 CTL0: 0x00800f00 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.94 SD retry 1 oc 501
+  4.96 SD HOST: 200000000 CTL0: 0x00800000 BUS: 400000 Hz actual: 390625 HZ div: 512 (256) status: 0x1fff0000 delay: 276
+  4.99 OCR c0ff8000 [21]
+CID: 00563456534400000000000004ba01a2
+CSD: 400e00325b590001d1eb7f8006400000
+  5.00 SD: bus-width: 4 spec: 2 SCR: 0x02858483 0x00000000
+  5.01 SD HOST: 200000000 CTL0: 0x00800f04 BUS: 50000000 Hz actual: 50000000 HZ div: 4 (2) status: 0x1fff0000 delay: 2
+  5.02 MBR: 0x00000001, 7004193 type: 0xee
+  5.02 MBR: 0x00000000,       0 type: 0x00
+  5.03 MBR: 0x00000000,       0 type: 0x00
+  5.03 MBR: 0x00000000,       0 type: 0x00
+  5.03 USB-PD: src-cap PDO object1 0x2e01912c
+  5.04 Current 3000 mA
+  5.04 Voltage 5000 mV
+  5.47 Trying partition: 0
+  5.05 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+  5.06 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  5.06 Matched GUID bootable-part-idx 0 want partition 0
+  5.74 type: 16 lba: 8192 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  5.07 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  5.08 FAT16 clusters 43215
+  5.98 Read autoboot.txt bytes       64 hnd 0x4d20
+  5.99 TRYBOOT_A_B_MODE
+  5.10 Select partition rsts 0 C(boot_partition) 2 EEPROM config 0 result 2
+  5.08 Trying partition: 2
+  5.11 GPT 0000000000000000000000004d9b9ef0 000000001 0006ae021 num-partitions 128 entry-size 128 pentry 2 first 0
+  5.12 GPT partition: 0 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000002000..0000567ff
+  5.13 Matched GUID bootable-part-idx 0 want partition 1
+  5.13 GPT partition: 1 ebd0a0a2-b9e5-4433-87c0-68b6b72699c7 000058000..0000ac7ff
+  5.14 Matched GUID bootable-part-idx 1 want partition 1
+  5.49 type: 16 lba: 360448 'mkfs.fat' '  V       ^ ' clusters 43215 (8)
+  5.15 rsc 8 fat-sectors 176 root dir cluster 1 sectors 32 entries 512
+  5.16 FAT16 clusters 43215
+  5.63 secure-boot
+  5.65 Loading boot.img ...
+  5.18 boot.sig
+  5.18 hash: db38a2e371750ff62cfe4e18364b513006efb7cd7dfa5aed7f522be8d6c278b8
+  5.19 ts: 1790534277
+  5.19 rsa2048: 63af5be8cf70812556989ab7fb736340165f11695d4b01076418bcdef99107a67ba4f5cbf35167b93793e188dd85ffd07d1d22bfa10ab075ebd4b8be03653d9cfc05a0236e7bab2d5148c5b11d5b32f2bedc0b30852402af673d838ec62eb7cbc490e77f5fdac16667eaf94c9f510e798fcc5d189ec3d90b229de46c23632d3cfdd3fc18163b2c743e3298eef31b40d378d8fc0d548069a6a04a4194ae4a6b726016f31007c58e9d95da740b02ff5cc9f9f13ee957b487d5d5dc4aee6ba98d73d9adb98b702bc382cb9d2dd9649ffcc270f499d35d8eb73ff798f842a1e3265d31423639c6474998a630792dbc39dcaec9ea1d45001c2651d70e101b3cb16b1c
+  9.13 Verifying
+ 12.21 RSA verify
+ 12.22 rsa-verify pass (0x0)
+ 12.23 MBR: 0x00000000,       0 type: 0x00
+ 12.23 MBR: 0x00000000,       0 type: 0x00
+ 12.24 MBR: 0x00000000,       0 type: 0x00
+ 12.24 MBR: 0x00000000,       0 type: 0x00
+ 12.49 Trying partition: 0
+ 12.52 type: 16 lba: 0 'mkfs.fat' '  V       ^ ' clusters 56381 (1)
+ 12.25 rsc 1 fat-sectors 221 root dir cluster 1 sectors 2 entries 32
+ 12.26 FAT16 clusters 56381
+ 12.68 Read config.txt bytes     2774 hnd 0xd674
+ 12.71 usb_max_current_enable default 0 max-current 3000
+ 12.77 Read bcm2712-rpi-5-b.dtb bytes    81203 hnd 0xd5d3
+ 12.28 dt-match: compatible: raspberrypi,5-model-b match: brcm,bcm2712
+ 12.28 dt-match: compatible: brcm,bcm2712 match: brcm,bcm2712
+ 12.02 Selecting USB low current limit
+ 12.30 MESS:00:00:12.305776:0: *** Restart logging
+ 12.07 Read /config.txt bytes     2774 hnd 0xd674
+ 12.31 MESS:00:00:12.312873:0: board: boardrev a04171 otp a04171
+ 12.18 Read /config.txt bytes     2774 hnd 0xd674
+ 12.32 MESS:00:00:12.325927:0: Initial voltage 800000 temp 55965
+ 12.52 MESS:00:00:12.525971:0: avs_2712: AVS pred 8564 856400 temp 55415
+ 12.52 MESS:00:00:12.529577:0: vpred 856 mV +0
+ 12.53 MESS:00:00:12.533772:0: over-voltage idle: 0 avs: 96400 delta: 0 (0x00000000)
+ 12.54 MESS:00:00:12.544849:0: FB framebuffer_swap 1
+ 12.55 MESS:00:00:12.559169:0: Select resolution HDMI0/2 hotplug 0 max_mode 2
+ 12.56 MESS:00:00:12.563210:0: Select resolution HDMI1/2 hotplug 0 max_mode 2
+ 12.57 MESS:00:00:12.570215:0: dtb_file 'bcm2712-rpi-5-b.dtb'
+ 12.57 Loading 'bcm2712-rpi-5-b.dtb' to 0x00000000 offset 0x100
+ 12.81 Read bcm2712-rpi-5-b.dtb bytes    81203 hnd 0xd5d3
+ 12.98 Read /overlays/overlay_map.dtb bytes     5451 hnd 0xdc2c
+ 12.03 Read /overlays/bcm2712d0.dtbo bytes     1507 hnd 0xdc3c
+ 12.61 MESS:00:00:12.619334:0: Loaded overlay 'bcm2712d0'
+ 12.66 PCIEx1: PWR 0 DET_WAKE 0
+ 12.71 Read /config.txt bytes     2774 hnd 0xd674
+ 12.67 [ramdisk] /overlays/vc4-kms-v3d-pi5.dtbo not found
+ 12.82  /overlays/vc4-kms-v3d-pi5.dtbo 
+ 12.68 MESS:00:00:12.683653:0: dtparam: spi=on
+ 12.95 Read /overlays/letstrust-tpm.dtbo bytes      775 hnd 0xdc3a
+ 12.70 MESS:00:00:12.704233:0: Loaded overlay 'letstrust-tpm'
+ 12.23 Read /overlays/letstrust-tpm-uboot.dtbo bytes     1099 hnd 0xdc37
+ 12.73 MESS:00:00:12.731872:0: Loaded overlay 'letstrust-tpm-uboot'
+ 12.97 Read /cmdline.txt bytes      327 hnd 0xd673
+ 12.79 MESS:00:00:12.799575:0: Read command line from file 'cmdline.txt':
+ 12.80 MESS:00:00:12.806086:0: 'dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 630784 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 78848 78849 sha256 342ee1df76f908882f4f2a9a660008ddd3461b602935b64e93ccb8c5ff590cec 8b352efce498a95c9c5b9d6e0e49942c026143136bc200d6
+ 12.93 MESS:00:00:12.936014:0: RPM 0, max RPM 0
+ 12.95 BMD "armstub8-2712.bin" not found
+ 12.55 fs_open: 'armstub8-2712.bin' 
+ 12.95 Loading 'kernel_2712.img' to 0x00000000 offset 0x200000
+ 12.70 Read kernel_2712.img bytes   742904 hnd 0xd680
+ 12.97 MESS:00:00:12.972122:0: Device tree loaded to 0x2efeb800 (size 0x1470b)
+ 12.97 PCI1 reset
+ 12.99 PCI2 reset
+ 13.00 set_reboot_order 0
+ 13.00 set_reboot_arg1 0
+ 13.00 USB-OTG disconnect
+ 13.04 MESS:00:00:13.042057:0: Watchdog stopped
+ 13.04 MESS:00:00:13.043471:0: Starting OS 13043 ms
+ 13.05 MESS:00:00:13.051936:0: 00000040: -> 00000480
+ 13.05 MESS:00:00:13.053785:0: 00000030: -> 00100080
+ 13.05 MESS:00:00:13.058498:0: 00000034: -> 00100080
+ 13.06 MESS:00:00:13.063211:0: 00000038: -> 00100080
+ 13.06 MESS:00:00:13.067923:0: 0000003c: -> 00100080
+
+NOTICE:  BL31: v2.6(release):v2.6-240-gfc45bc492
+NOTICE:  BL31: Built : 12:55:13, Dec  4 2024
+
+
+U-Boot 2024.04 (Sep 27 2026 - 17:29:54 +0000)
+
+DRAM:  1020 MiB
+RPI 5 Model B (0xa04171)
+Core:  53 devices, 17 uclasses, devicetree: board
+MMC:   mmc@fff000: 0, mmc@1100000: 1
+Loading Environment from nowhere... OK
+PCIe BRCM: link up, 5.0 Gbps x4 (!SSC)
+In:    serial,usbkbd
+Out:   serial,vidconsole
+Err:   serial,vidconsole
+Net:   eth0: ethernet@100000
+[?25h
+starting USB...
+No working controllers found
+rpi_bootpart=2
+28981760 bytes read in 1196 ms (23.1 MiB/s)
+Created "bi"
+Block 0x0+0xdd1d mapped to 0x20000000
+28025344 bytes read in 6 ms (4.4 GiB/s)
+Working FDT set to 2efeb800
+Moving Image from 0x80000 to 0x200000, end=1e10000
+## Flattened Device Tree blob at 2efeb800
+   Booting using the fdt blob at 0x2efeb800
+Working FDT set to 2efeb800
+[MBOOT] bootm_measure: enter (os.os=5)
+[MBOOT] bootm_measure: CONFIG_MEASURED_BOOT active
+[MBOOT] tcg2_measurement_init: enter (ignore_existing_log=0, elog->log_size=65536)
+[MBOOT] tpm2_auto_start: self_test
+[MBOOT] tpm2_auto_start: self_test rc=256
+[MBOOT] tpm2_auto_start: TPM not started, issuing Startup(CLEAR)
+[MBOOT] tpm2_auto_start: post-startup self_test rc=0
+[MBOOT] tcg2_log_prepare_buffer: enter (ignore=0, elog->log_size=65536)
+[MBOOT] tcg2_log_prepare_buffer: no DT log found rc=-19
+[MBOOT] tcg2_log_prepare_buffer: initializing fresh log (size=65536)
+[MBOOT] tcg2_log_prepare_buffer: exit rc=0 (log=000000003f74f810, size=65536, pos=65, found=0)
+[MBOOT] tcg2_measurement_init: log ready (log=000000003f74f810, log_size=65536, log_pos=65, found=0)
+[MBOOT] tcg2_measurement_init: measuring S-CRTM version -> PCR 0
+[MBOOT] tcg2_measure_data: PCR 0, event_type=0x8, data=0000000000000000, data_size=0, event_size=46
+[MBOOT] tcg2_measure_data: PCR 0 extended OK
+[MBOOT] tcg2_measurement_init: complete OK
+[ARB] this release: version 19; board counter: 19 (tryboot)
+[MBOOT] bootm_measure: measuring kernel -> PCR 8 (start=0x200000, len=0x1aba200)
+[MBOOT] tcg2_measure_data: PCR 8, event_type=0xc, data=0000000000200000, data_size=28025344, event_size=6
+[MBOOT] tcg2_measure_data: PCR 8 extended OK
+[MBOOT] bootm_measure: measuring initrd -> PCR 9 (rd_start=0x0, rd_len=0x0)
+[MBOOT] tcg2_measure_data: PCR 9, event_type=0xc, data=0000000000000000, data_size=0, event_size=7
+[MBOOT] tcg2_measure_data: PCR 9 extended OK
+[MBOOT] bootm_measure: measuring DTB -> PCR 0 (ft_addr=000000002efeb800, ft_len=0x1470b)
+[MBOOT] dtb_sanitize: canonical DTB digest df95cb84... -> PCR 0
+[MBOOT] tcg2_measure_data: PCR 0, event_type=0xb, data=000000003f705d50, data_size=32, event_size=4
+[MBOOT] tcg2_measure_data: PCR 0 extended OK
+[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+[MBOOT] bootm_measure: measuring kernel cmdline -> PCR 1 (len=694, source=env)
+[MBOOT] tcg2_measure_data: PCR 1, event_type=0xa, data=000000003fbd45fc, data_size=695, event_size=695
+[MBOOT] tcg2_measure_data: PCR 1 extended OK
+[MBOOT] bootm_measure: calling measurement_term (error=0)
+[MBOOT] tcg2_measurement_term: extending separators PCR 0-7 (error=0, separator=0xffffffff)
+[MBOOT] tcg2_measure_data: PCR 0, event_type=0x4, data=0000000000000000, data_size=0, event_size=4
+[MBOOT] tcg2_measure_data: PCR 0 extended OK
+[MBOOT] tcg2_measure_data: PCR 1, event_type=0x4, data=0000000000000000, data_size=0, event_size=4
+[MBOOT] tcg2_measure_data: PCR 1 extended OK
+[MBOOT] tcg2_measure_data: PCR 2, event_type=0x4, data=0000000000000000, data_size=0, event_size=4
+[MBOOT] tcg2_measure_data: PCR 2 extended OK
+[MBOOT] tcg2_measure_data: PCR 3, event_type=0x4, data=0000000000000000, data_size=0, event_size=4
+[MBOOT] tcg2_measure_data: PCR 3 extended OK
+[MBOOT] tcg2_measure_data: PCR 4, event_type=0x4, data=0000000000000000, data_size=0, event_size=4
+[MBOOT] tcg2_measure_data: PCR 4 extended OK
+[MBOOT] tcg2_measure_data: PCR 5, event_type=0x4, data=0000000000000000, data_size=0, event_size=4
+[MBOOT] tcg2_measure_data: PCR 5 extended OK
+[MBOOT] tcg2_measure_data: PCR 6, event_type=0x4, data=0000000000000000, data_size=0, event_size=4
+[MBOOT] tcg2_measure_data: PCR 6 extended OK
+[MBOOT] tcg2_measure_data: PCR 7, event_type=0x4, data=0000000000000000, data_size=0, event_size=4
+[MBOOT] tcg2_measure_data: PCR 7 extended OK
+[MBOOT] bootm_measure: NV-committing PCR composite
+[MBOOT] NV commit OK (PCR composite 907df328...)
+[MBOOT] bootm_measure: exit ret=0
+   Using Device Tree in place at 000000002efeb800, end 000000002f002f0a
+Working FDT set to 2efeb800
+[AB] firmware booted from partition 2 -> root /dev/mmcblk0p4
+[FWKEY] firmware key locked until reset (status 0x00001f01)
+
+Starting kernel ...
+
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x414fd0b1]
+[    0.000000] Linux version 6.6.63-v8-16k (oe-user@oe-host) (aarch64-poky-linux-gcc (GCC) 13.4.0, GNU ld (GNU Binutils) 2.42.0.20240723) #1 SMP PREEMPT Fri Dec  6 10:10:05 UTC 2024
+[    0.000000] KASLR enabled
+[    0.000000] random: crng init done
+[    0.000000] Machine model: Raspberry Pi 5 Model B Rev 1.1
+[    0.000000] efi: UEFI not found.
+[    0.000000] Reserved memory: created CMA memory pool at 0x0000000002000000, size 64 MiB
+[    0.000000] OF: reserved mem: initialized node linux,cma, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x0000000002000000..0x0000000005ffffff (65536 KiB) map reusable linux,cma
+[    0.000000] OF: reserved mem: 0x0000000000000000..0x000000000007ffff (512 KiB) nomap non-reusable atf@0
+[    0.000000] OF: reserved mem: 0x000000003fd1bf04..0x000000003fd1c068 (0 KiB) nomap non-reusable nvram@0
+[    0.000000] OF: reserved mem: 0x000000003fd29948..0x000000003fd29a4f (0 KiB) nomap non-reusable nvram@1
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] Faking a node at [mem 0x0000000000000000-0x000000000fefffff]
+[    0.000000] Faking a node at [mem 0x000000000ff00000-0x000000001fdfffff]
+[    0.000000] Faking a node at [mem 0x000000001fe00000-0x000000002fcfffff]
+[    0.000000] Faking a node at [mem 0x000000002fd00000-0x000000003fbfffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x0fefd2c0-0x0fefffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x1fdfd2c0-0x1fdfffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x2fcfd2c0-0x2fcfffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x3fb052c0-0x3fb07fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000000000000-0x000000003fbfffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x000000000007ffff]
+[    0.000000]   node   0: [mem 0x0000000000080000-0x000000000fefffff]
+[    0.000000]   node   1: [mem 0x000000000ff00000-0x000000001fdfffff]
+[    0.000000]   node   2: [mem 0x000000001fe00000-0x000000002fcfffff]
+[    0.000000]   node   3: [mem 0x000000002fd00000-0x000000003fbfffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000000fefffff]
+[    0.000000] Initmem setup node 1 [mem 0x000000000ff00000-0x000000001fdfffff]
+[    0.000000] Initmem setup node 2 [mem 0x000000001fe00000-0x000000002fcfffff]
+[    0.000000] Initmem setup node 3 [mem 0x000000002fd00000-0x000000003fbfffff]
+[    0.000000] On node 3, zone DMA: 256 pages in unavailable ranges
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: MIGRATE_INFO_TYPE not supported.
+[    0.000000] psci: SMC Calling Convention v1.2
+[    0.000000] percpu: Embedded 14 pages/cpu s185192 r8192 d35992 u229376
+[    0.000000] Detected PIPT I-cache on CPU0
+[    0.000000] CPU features: detected: Virtualization Host Extensions
+[    0.000000] CPU features: detected: Hardware dirty bit management
+[    0.000000] CPU features: detected: Spectre-v4
+[    0.000000] CPU features: detected: Spectre-BHB
+[    0.000000] CPU features: kernel page table isolation forced ON by KASLR
+[    0.000000] CPU features: detected: Kernel page table isolation (KPTI)
+[    0.000000] CPU features: detected: SSBS not fully self-synchronizing
+[    0.000000] alternatives: applying boot alternatives
+[    0.000000] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe cgroup_disable=memory numa_policy=interleave bcm2708_fb.fbwidth=640 bcm2708_fb.fbheight=480 bcm2708_fb.fbdepth=16 bcm2708_fb.fbswap=1 numa=fake=4 system_heap.max_order=0 iommu_dma_numa_policy=interleave smsc95xx.macaddr=88:A2:9E:82:BB:4D vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  dwc_otg.lpm_enable=0 dm-mod.create="vroot,,,ro,0 630784 verity 1 /dev/mmcblk0p4 /dev/mmcblk0p4 4096 4096 78848 78849 sha256 342ee1df76f908882f4f2a9a660008ddd3461b602935b64e93ccb8c5ff590cec 8b352efce498a95c9c5b9d6e0e49942c026143136bc200d6bde16e270c5caaa6" dm-mod.waitfor=/dev/mmcblk0p4 root=/dev/dm-0 rootfstype=ext4 rootwait ro net.ifnames=0
+[    0.000000] cgroup: Disabling memory control group subsystem
+[    0.000000] mempolicy: NUMA default policy overridden to 'interleave:0-3'
+[    0.000000] Unknown kernel command line parameters "iommu_dma_numa_policy=interleave", will be passed to user space.
+[    0.000000] Fallback order for Node 0: 0 1 2 3 
+[    0.000000] Fallback order for Node 1: 1 2 3 0 
+[    0.000000] Fallback order for Node 2: 2 3 0 1 
+[    0.000000] Fallback order for Node 3: 3 0 1 2 
+[    0.000000] Built 4 zonelists, mobility grouping on.  Total pages: 65024
+[    0.000000] Policy zone: DMA
+[    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+[    0.000000] Memory: 943616K/1044480K available (14656K kernel code, 2280K rwdata, 4800K rodata, 5376K init, 1231K bss, 35328K reserved, 65536K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=4
+[    0.000000] ftrace: allocating 47572 entries in 47 pages
+[    0.000000] ftrace: allocated 47 pages with 5 groups
+[    0.000000] trace event string verifier disabled
+[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU event tracing is enabled.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=4.
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000] 	Rude variant of Tasks RCU enabled.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] Root IRQ handler: gic_handle_irq
+[    0.000000] GIC: Using split EOI/Deactivate mode
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] arch_timer: cp15 timer(s) running at 54.00MHz (phys).
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0xc743ce346, max_idle_ns: 440795203123 ns
+[    0.000000] sched_clock: 56 bits at 54MHz, resolution 18ns, wraps every 4398046511102ns
+[    0.000129] Console: colour dummy device 80x25
+[    0.000133] printk: console [tty0] enabled
+[    0.000306] Calibrating delay loop (skipped), value calculated using timer frequency.. 108.00 BogoMIPS (lpj=216000)
+[    0.000312] pid_max: default: 32768 minimum: 301
+[    0.000356] LSM: initializing lsm=capability,integrity
+[    0.000601] Dentry cache hash table entries: 131072 (order: 6, 1048576 bytes, vmalloc)
+[    0.000694] Inode-cache hash table entries: 65536 (order: 5, 524288 bytes, vmalloc)
+[    0.000706] Mount-cache hash table entries: 2048 (order: 0, 16384 bytes, vmalloc)
+[    0.000711] Mountpoint-cache hash table entries: 2048 (order: 0, 16384 bytes, vmalloc)
+[    0.001245] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.001263] RCU Tasks Rude: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.001279] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.001317] rcu: Hierarchical SRCU implementation.
+[    0.001320] rcu: 	Max phase no-delay instances is 1000.
+[    0.001711] EFI services will not be available.
+[    0.001761] smp: Bringing up secondary CPUs ...
+[    0.001886] Detected PIPT I-cache on CPU1
+[    0.001914] CPU1: Booted secondary processor 0x0000000100 [0x414fd0b1]
+[    0.002043] Detected PIPT I-cache on CPU2
+[    0.002065] CPU2: Booted secondary processor 0x0000000200 [0x414fd0b1]
+[    0.002177] Detected PIPT I-cache on CPU3
+[    0.002196] CPU3: Booted secondary processor 0x0000000300 [0x414fd0b1]
+[    0.002217] smp: Brought up 4 nodes, 4 CPUs
+[    0.002229] SMP: Total of 4 processors activated.
+[    0.002232] CPU features: detected: 32-bit EL0 Support
+[    0.002235] CPU features: detected: Data cache clean to the PoU not required for I/D coherence
+[    0.002238] CPU features: detected: Common not Private translations
+[    0.002240] CPU features: detected: CRC32 instructions
+[    0.002243] CPU features: detected: RCpc load-acquire (LDAPR)
+[    0.002245] CPU features: detected: LSE atomic instructions
+[    0.002248] CPU features: detected: Privileged Access Never
+[    0.002250] CPU features: detected: RAS Extension Support
+[    0.002253] CPU features: detected: Speculative Store Bypassing Safe (SSBS)
+[    0.002279] CPU: All CPU(s) started at EL2
+[    0.002282] alternatives: applying system-wide alternatives
+[    0.003900] devtmpfs: initialized
+[    0.005851] Enabled cp15_barrier support
+[    0.005857] Enabled setend support
+[    0.005921] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.005929] futex hash table entries: 1024 (order: 2, 65536 bytes, vmalloc)
+[    0.006099] pinctrl core: initialized pinctrl subsystem
+[    0.006180] DMI not present or invalid.
+[    0.006292] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.006662] DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+[    0.006692] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    0.006723] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.006740] audit: initializing netlink subsys (disabled)
+[    0.006773] audit: type=2000 audit(0.004:1): state=initialized audit_enabled=0 res=1
+[    0.006866] thermal_sys: Registered thermal governor 'step_wise'
+[    0.006874] cpuidle: using governor menu
+[    0.006932] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.006951] ASID allocator initialised with 32768 entries
+[    0.007149] Serial: AMBA PL011 UART driver
+[    0.007711] bcm2835-mbox 107c013880.mailbox: mailbox enabled
+[    0.007845] 107d001000.serial: ttyAMA10 at MMIO 0x107d001000 (irq = 15, base_baud = 0) is a PL011 rev2
+[    0.007856] printk: console [ttyAMA10] enabled
+[    0.912046] raspberrypi-firmware soc:firmware: Attached to firmware from 2026-09-10T00:06:58, variant start_cd
+[    0.926092] raspberrypi-firmware soc:firmware: Firmware hash is 465206a200000000000000000000000000000000
+[    0.941154] Modules: 2G module region forced by RANDOMIZE_MODULE_REGION_FULL
+[    0.948233] Modules: 0 pages in range for non-PLT usage
+[    0.948235] Modules: 129276 pages in range for PLT usage
+[    0.957875] bcm2835-dma 1000010000.dma: DMA legacy API manager, dmachans=0x1
+[    0.970551] iommu: Default domain type: Translated
+[    0.975361] iommu: DMA domain TLB invalidation policy: strict mode
+[    0.981787] SCSI subsystem initialized
+[    0.985579] usbcore: registered new interface driver usbfs
+[    0.991088] usbcore: registered new interface driver hub
+[    0.996421] usbcore: registered new device driver usb
+[    1.001550] pps_core: LinuxPPS API ver. 1 registered
+[    1.006530] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    1.015702] PTP clock support registered
+[    1.019664] Advanced Linux Sound Architecture Driver Initialized.
+[    1.025946] vgaarb: loaded
+[    1.028744] clocksource: Switched to clocksource arch_sys_counter
+[    1.141534] VFS: Disk quotas dquot_6.6.0
+[    1.145478] VFS: Dquot-cache hash table entries: 2048 (order 0, 16384 bytes)
+[    1.152574] FS-Cache: Loaded
+[    1.155495] CacheFiles: Loaded
+[    1.159450] NET: Registered PF_INET protocol family
+[    1.164385] IP idents hash table entries: 16384 (order: 3, 131072 bytes, vmalloc)
+[    1.172210] tcp_listen_portaddr_hash hash table entries: 1024 (order: 0, 16384 bytes, vmalloc)
+[    1.180867] Table-perturb hash table entries: 65536 (order: 4, 262144 bytes, vmalloc)
+[    1.188730] TCP established hash table entries: 8192 (order: 2, 65536 bytes, vmalloc)
+[    1.196613] TCP bind hash table entries: 8192 (order: 4, 262144 bytes, vmalloc)
+[    1.204032] TCP: Hash tables configured (established 8192 bind 8192)
+[    1.210462] MPTCP token hash table entries: 1024 (order: 0, 24576 bytes, vmalloc)
+[    1.217988] UDP hash table entries: 512 (order: 0, 16384 bytes, vmalloc)
+[    1.224723] UDP-Lite hash table entries: 512 (order: 0, 16384 bytes, vmalloc)
+[    1.231920] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    1.237682] RPC: Registered named UNIX socket transport module.
+[    1.243624] RPC: Registered udp transport module.
+[    1.248341] RPC: Registered tcp transport module.
+[    1.253058] RPC: Registered tcp-with-tls transport module.
+[    1.258561] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    1.265030] PCI: CLS 0 bytes, default 64
+[    1.269079] kvm [1]: IPA Size Limit: 40 bits
+[    1.273371] kvm [1]: GICV region size/alignment is unsafe, using trapping (reduced performance)
+[    1.282120] kvm [1]: vgic interrupt IRQ9
+[    1.286061] kvm [1]: VHE mode initialized successfully
+[    1.291468] Initialise system trusted keyrings
+[    1.295990] workingset: timestamp_bits=42 max_order=16 bucket_order=0
+[    1.302468] zbud: loaded
+[    1.305144] NFS: Registering the id_resolver key type
+[    1.310217] Key type id_resolver registered
+[    1.314412] Key type id_legacy registered
+[    1.318437] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    1.325164] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    1.332615] F2FS not supported on PAGE_SIZE(16384) != 4096
+[    1.338154] Key type asymmetric registered
+[    1.342262] Asymmetric key parser 'x509' registered
+[    1.347163] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 245)
+[    1.354608] io scheduler mq-deadline registered
+[    1.359152] io scheduler kyber registered
+[    1.363183] io scheduler bfq registered
+[    1.367173] irq_brcmstb_l2: registered L2 intc (/soc/intc@7d503000, parent irq: 26)
+[    1.374902] irq_brcmstb_l2: registered L2 intc (/soc/intc@7d508380, parent irq: 27)
+[    1.382618] irq_brcmstb_l2: registered L2 intc (/soc/intc@7d508400, parent irq: 28)
+[    1.390332] irq_brcmstb_l2: registered L2 intc (/soc/intc@7d517b00, parent irq: 29)
+[    1.398832] bcm2708_fb soc:fb: Unable to determine number of FBs. Disabling driver.
+[    1.406523] bcm2708_fb: probe of soc:fb failed with error -2
+[    1.412860] Serial: 8250/16550 driver, 1 ports, IRQ sharing enabled
+[    1.419447] 107d50c000.serial: ttyS0 at MMIO 0x107d50c000 (irq = 31, base_baud = 6000000) is a Broadcom BCM7271 UART
+[    1.430055] serial serial0: tty port ttyS0 registered
+[    1.435317] iproc-rng200 107d208000.rng: hwrng registered
+[    1.440781] vc-mem: phys_addr:0x00000000 mem_base=0x3fc00000 mem_size:0x40000000(1024 MiB)
+[    1.449214] bcm2712-iommu-cache 1000005b00.iommuc: bcm2712_iommu_cache_probe
+[    1.457945] brd: module loaded
+[    1.461949] loop: module loaded
+[    1.465187] bcm2835-power bcm2835-power: Broadcom BCM2835 power domains driver
+[    1.472518] Loading iSCSI transport class v2.0-870.
+[    1.477947] usbcore: registered new device driver r8152-cfgselector
+[    1.484246] usbcore: registered new interface driver r8152
+[    1.489755] usbcore: registered new interface driver lan78xx
+[    1.495442] usbcore: registered new interface driver smsc95xx
+[    1.501241] dwc_otg: version 3.00a 10-AUG-2012 (platform bus)
+[    1.507099] usbcore: registered new interface driver uas
+[    1.512433] usbcore: registered new interface driver usb-storage
+[    1.518520] mousedev: PS/2 mouse device common for all mice
+[    1.526569] rpi-rtc soc:rpi_rtc: registered as rtc0
+[    1.531998] rpi-rtc soc:rpi_rtc: setting system clock to 2026-09-27T18:39:20 UTC (1790534360)
+[    1.540810] bcm2835-wdt bcm2835-wdt: Poweroff handler already present!
+[    1.547363] bcm2835-wdt bcm2835-wdt: Broadcom BCM2835 watchdog timer
+[    1.553787] device-mapper: ioctl: 4.48.0-ioctl (2023-03-01) initialised: dm-devel@redhat.com
+[    1.562570] sdhci: Secure Digital Host Controller Interface driver
+[    1.568775] sdhci: Copyright(c) Pierre Ossman
+[    1.573166] sdhci-pltfm: SDHCI platform and OF driver helper
+[    1.578973] ledtrig-cpu: registered to indicate activity on CPUs
+[    1.585039] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+[    1.591514] hid: raw HID events driver (C) Jiri Kosina
+[    1.596681] usbcore: registered new interface driver usbhid
+[    1.602275] usbhid: USB HID core driver
+[    1.606333] hw perfevents: enabled with armv8_cortex_a76 PMU driver, 7 counters available
+[    1.614853] NET: Registered PF_PACKET protocol family
+[    1.619943] Key type dns_resolver registered
+[    1.627759] registered taskstats version 1
+[    1.631930] Loading compiled-in X.509 certificates
+[    1.638146] Key type .fscrypt registered
+[    1.642080] Key type fscrypt-provisioning registered
+[    1.647509] brcm-pcie 1000120000.pcie: host bridge /axi/pcie@120000 ranges:
+[    1.654506] brcm-pcie 1000120000.pcie:   No bus range found for /axi/pcie@120000, using [bus 00-ff]
+[    1.663905] brcm-pcie 1000120000.pcie:      MEM 0x1f00000000..0x1ffffffffb -> 0x0000000000
+[    1.672209] brcm-pcie 1000120000.pcie:      MEM 0x1c00000000..0x1effffffff -> 0x0400000000
+[    1.680514] brcm-pcie 1000120000.pcie:   IB MEM 0x1f00000000..0x1f003fffff -> 0x0000000000
+[    1.688813] brcm-pcie 1000120000.pcie:   IB MEM 0x0000000000..0x0fffffffff -> 0x1000000000
+[    1.698281] brcm-pcie 1000120000.pcie: Forcing gen 2
+[    1.703401] brcm-pcie 1000120000.pcie: PCI host bridge to bus 0000:00
+[    1.709880] pci_bus 0000:00: Unknown NUMA node; performance will be reduced
+[    1.716876] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.722384] pci_bus 0000:00: root bus resource [mem 0x1f00000000-0x1ffffffffb] (bus address [0x00000000-0xfffffffb])
+[    1.732959] pci_bus 0000:00: root bus resource [mem 0x1c00000000-0x1effffffff pref] (bus address [0x400000000-0x6ffffffff])
+[    1.744152] pci 0000:00:00.0: [14e4:2712] type 01 class 0x060400
+[    1.750200] pci 0000:00:00.0: PME# supported from D0 D3hot
+[    1.860750] brcm-pcie 1000120000.pcie: link up, 5.0 GT/s PCIe x4 (!SSC)
+[    1.867406] pci 0000:01:00.0: [1de4:0001] type 00 class 0x020000
+[    1.873446] pci 0000:01:00.0: reg 0x10: [mem 0xffffc000-0xffffffff]
+[    1.879740] pci 0000:01:00.0: reg 0x14: [mem 0xffc00000-0xffffffff]
+[    1.886035] pci 0000:01:00.0: reg 0x18: [mem 0xffff0000-0xffffffff]
+[    1.892384] pci 0000:01:00.0: supports D1
+[    1.896405] pci 0000:01:00.0: PME# supported from D0 D1 D3hot D3cold
+[    1.912766] pci 0000:00:00.0: BAR 8: assigned [mem 0x1f00000000-0x1f005fffff]
+[    1.919942] pci 0000:01:00.0: BAR 1: assigned [mem 0x1f00000000-0x1f003fffff]
+[    1.927114] pci 0000:01:00.0: BAR 2: assigned [mem 0x1f00400000-0x1f0040ffff]
+[    1.934289] pci 0000:01:00.0: BAR 0: assigned [mem 0x1f00410000-0x1f00413fff]
+[    1.941460] pci 0000:00:00.0: PCI bridge to [bus 01]
+[    1.946450] pci 0000:00:00.0:   bridge window [mem 0x1f00000000-0x1f005fffff]
+[    1.953624] pci 0000:00:00.0: Max Payload Size set to  256/ 512 (was  128), Max Read Rq  512
+[    1.962103] pci 0000:01:00.0: Max Payload Size set to  256/ 256 (was  128), Max Read Rq  512
+[    1.970634] pcieport 0000:00:00.0: enabling device (0000 -> 0002)
+[    1.976788] pcieport 0000:00:00.0: PME: Signaling with IRQ 36
+[    1.982594] pcieport 0000:00:00.0: AER: enabled with IRQ 36
+[    1.988244] rp1 0000:01:00.0: bar0 len 0x4000, start 0x1f00410000, end 0x1f00413fff, flags, 0x40200
+[    1.997334] rp1 0000:01:00.0: bar1 len 0x400000, start 0x1f00000000, end 0x1f003fffff, flags, 0x40200
+[    2.006598] rp1 0000:01:00.0: enabling device (0000 -> 0002)
+[    2.012918] rp1 0000:01:00.0: chip_id 0x20001927
+[    2.021621] genirq: irq_chip rp1_irq_chip did not update eff. affinity mask of irq 98
+[    2.046712] macb 1f00100000.ethernet eth0: Cadence GEM rev 0x00070109 at 0x1f00100000 irq 104 (88:a2:9e:82:bb:4d)
+[    2.057757] dw_axi_dmac_platform 1f00188000.dma: DesignWare AXI DMA Controller, 8 channels
+[    2.066271] xhci-hcd xhci-hcd.0: xHCI Host Controller
+[    2.071345] xhci-hcd xhci-hcd.0: new USB bus registered, assigned bus number 1
+[    2.079023] xhci-hcd xhci-hcd.0: hcc params 0x0240fe6d hci version 0x110 quirks 0x0000008000000810
+[    2.088025] xhci-hcd xhci-hcd.0: irq 129, io mem 0x1f00200000
+[    2.093847] xhci-hcd xhci-hcd.0: xHCI Host Controller
+[    2.098920] xhci-hcd xhci-hcd.0: new USB bus registered, assigned bus number 2
+[    2.106172] xhci-hcd xhci-hcd.0: Host supports USB 3.0 SuperSpeed
+[    2.112324] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+[    2.120623] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    2.127873] usb usb1: Product: xHCI Host Controller
+[    2.132765] usb usb1: Manufacturer: Linux 6.6.63-v8-16k xhci-hcd
+[    2.138795] usb usb1: SerialNumber: xhci-hcd.0
+[    2.143334] hub 1-0:1.0: USB hub found
+[    2.147104] hub 1-0:1.0: 2 ports detected
+[    2.151222] usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.06
+[    2.159521] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    2.166774] usb usb2: Product: xHCI Host Controller
+[    2.171667] usb usb2: Manufacturer: Linux 6.6.63-v8-16k xhci-hcd
+[    2.177756] usb usb2: SerialNumber: xhci-hcd.0
+[    2.182291] hub 2-0:1.0: USB hub found
+[    2.186058] hub 2-0:1.0: 1 port detected
+[    2.190188] xhci-hcd xhci-hcd.1: xHCI Host Controller
+[    2.195363] xhci-hcd xhci-hcd.1: new USB bus registered, assigned bus number 3
+[    2.203039] xhci-hcd xhci-hcd.1: hcc params 0x0240fe6d hci version 0x110 quirks 0x0000008000000810
+[    2.212141] xhci-hcd xhci-hcd.1: irq 134, io mem 0x1f00300000
+[    2.217962] xhci-hcd xhci-hcd.1: xHCI Host Controller
+[    2.223034] xhci-hcd xhci-hcd.1: new USB bus registered, assigned bus number 4
+[    2.230388] xhci-hcd xhci-hcd.1: Host supports USB 3.0 SuperSpeed
+[    2.236530] usb usb3: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+[    2.244926] usb usb3: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    2.252178] usb usb3: Product: xHCI Host Controller
+[    2.257070] usb usb3: Manufacturer: Linux 6.6.63-v8-16k xhci-hcd
+[    2.263195] usb usb3: SerialNumber: xhci-hcd.1
+[    2.267717] hub 3-0:1.0: USB hub found
+[    2.271485] hub 3-0:1.0: 2 ports detected
+[    2.275585] usb usb4: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.06
+[    2.283982] usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    2.291236] usb usb4: Product: xHCI Host Controller
+[    2.296149] usb usb4: Manufacturer: Linux 6.6.63-v8-16k xhci-hcd
+[    2.302282] usb usb4: SerialNumber: xhci-hcd.1
+[    2.306854] hub 4-0:1.0: USB hub found
+[    2.310628] hub 4-0:1.0: 1 port detected
+[    2.315186] bcm2712-iommu 1000005100.iommu: bcm2712_iommu_init: DEBUG_INFO = 0x20804774
+[    2.323783] platform 1000800000.codec: bcm2712_iommu_probe_device: MMU 1000005100.iommu
+[    2.331821] platform 1000800000.codec: bcm2712_iommu_device_group: MMU 1000005100.iommu
+[    2.340062] platform 1000800000.codec: Adding to iommu group 0
+[    2.345922] platform 1000880000.pisp_be: bcm2712_iommu_probe_device: MMU 1000005100.iommu
+[    2.354335] platform 1000880000.pisp_be: bcm2712_iommu_device_group: MMU 1000005100.iommu
+[    2.362546] platform 1000880000.pisp_be: Adding to iommu group 0
+[    2.368593] platform 1000800000.codec: bcm2712_iommu_attach_dev: MMU 1000005100.iommu
+[    2.376642] platform 1000880000.pisp_be: bcm2712_iommu_attach_dev: MMU 1000005100.iommu
+[    2.384701] bcm2712-iommu 1000005100.iommu: bcm2712_iommu_probe: Success
+[    2.392001] bcm2712-iommu 1000005200.iommu: bcm2712_iommu_init: DEBUG_INFO = 0x20804774
+[    2.400415] bcm2712-iommu 1000005200.iommu: bcm2712_iommu_probe: Success
+[    2.407705] bcm2712-iommu 1000005280.iommu: bcm2712_iommu_init: DEBUG_INFO = 0x20804774
+[    2.416103] bcm2712-iommu 1000005280.iommu: bcm2712_iommu_probe: Success
+[    2.423307] sdhci-brcmstb 1000fff000.mmc: Got CD GPIO
+[    2.428492] mmc0: CQHCI version 5.10
+[    2.428628] mmc1: CQHCI version 5.10
+[    2.432339] device-mapper: init: waiting for all devices to be available before creating mapped devices
+[    2.480965] mmc0: SDHCI controller on 1000fff000.mmc [1000fff000.mmc] using ADMA 64-bit
+[    2.603323] mmc0: new ultra high speed SDR104 SDXC card at address 0001
+[    2.610127] mmcblk0: mmc0:0001 SD 58.2 GiB
+[    2.616567] GPT:Primary header thinks Alt. header is not at the end of the disk.
+[    2.623995] GPT:7004193 != 122138623
+[    2.627579] GPT:Alternate GPT header not at the end of the disk.
+[    2.633606] GPT:7004193 != 122138623
+[    2.635274] mmc1: SDHCI controller on 1001100000.mmc [1001100000.mmc] using ADMA 64-bit
+[    2.637187] GPT: Use GNU Parted to correct GPT errors.
+[    2.637192]  mmcblk0: p1 p2 p3 p4 p5
+[    2.654116] mmcblk0: mmc0:0001 SD 58.2 GiB
+[    2.658267] device-mapper: init: waiting for device /dev/mmcblk0p4 ...
+[    2.664835] device-mapper: init: all devices available
+[    2.670068] device-mapper: verity: sha256 using implementation "sha256-generic"
+[    2.677583] device-mapper: ioctl: dm-0 (vroot) is ready
+[    2.682835] of_cfs_init
+[    2.685305] of_cfs_init: OK
+[    2.688578] clk: Disabling unused clocks
+[    2.689532] mmc1: new ultra high speed DDR50 SDIO card at address 0001
+[    2.692662] ALSA device list:
+[    2.702033]   No soundcards found.
+[    2.705485] uart-pl011 107d001000.serial: no DMA platform data
+[    2.734271] EXT4-fs (dm-0): write access unavailable, skipping orphan cleanup
+[    2.741464] EXT4-fs (dm-0): mounted filesystem 05f2a080-22ce-478e-ba50-62bf73ca5726 ro with ordered data mode. Quota mode: none.
+[    2.753100] VFS: Mounted root (ext4 filesystem) readonly on device 254:0.
+[    2.760326] devtmpfs: mounted
+[    2.765804] Freeing unused kernel memory: 5376K
+[    2.770406] Run /sbin/init as init process
+[    3.032015] NET: Registered PF_INET6 protocol family
+[    3.037261] Segment Routing with IPv6
+[    3.040949] In-situ OAM (IOAM) with IPv6
+[    3.068805] systemd[1]: systemd 255.21^ running in system mode (-PAM -AUDIT -SELINUX -APPARMOR +IMA -SMACK +SECCOMP -GCRYPT -GNUTLS -OPENSSL +ACL +BLKID -CURL -ELFUTILS -FIDO2 -IDN2 -IDN -IPTC +KMOD -LIBCRYPTSETUP +LIBFDISK -PCRE2 -PWQUALITY -P11KIT -QRENCODE -TPM2 -BZIP2 -LZ4 -XZ -ZLIB +ZSTD -BPF_FRAMEWORK +XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified)
+[    3.101415] systemd[1]: Detected architecture arm64.
+
+Welcome to [1mPoky (Yocto Project Reference Distro) 5.0.14 (scarthgap)[0m!
+
+[    3.122519] systemd[1]: Hostname set to <raspberrypi5-uboot-tpm>.
+[    3.133237] systemd[1]: Initializing machine ID from random generator.
+[    3.139829] systemd[1]: Installed transient /etc/machine-id file.
+[    3.319475] systemd[1]: Queued start job for default target Multi-User System.
+[    3.349293] systemd[1]: Created slice Slice /system/modprobe.
+[[0;32m  OK  [0m] Created slice [0;1;39mSlice /system/modprobe[0m.
+[    3.368983] systemd[1]: Created slice Slice /system/systemd-fsck.
+[[0;32m  OK  [0m] Created slice [0;1;39mSlice /system/systemd-fsck[0m.
+[    3.388924] systemd[1]: Created slice User and Session Slice.
+[[0;32m  OK  [0m] Created slice [0;1;39mUser and Session Slice[0m.
+[    3.408825] systemd[1]: Started Dispatch Password Requests to Console Directory Watch.
+[[0;32m  OK  [0m] Started [0;1;39mDispatch Password Requests to Console Directory Watch[0m.
+[    3.432796] systemd[1]: Started Forward Password Requests to Wall Directory Watch.
+[[0;32m  OK  [0m] Started [0;1;39mForward Password Requests to Wall Directory Watch[0m.
+[    3.456768] systemd[1]: Expecting device /dev/disk/by-label/data...
+         Expecting device [0;1;39m/dev/disk/by-label/data[0m...
+[    3.476767] systemd[1]: Expecting device /sys/devices/platform/gpu/graphics/fb0...
+         Expecting device [0;1;39m/sys/devices/platform/gpu/graphics/fb0[0m...
+[    3.500770] systemd[1]: Reached target Login Prompts.
+[[0;32m  OK  [0m] Reached target [0;1;39mLogin Prompts[0m.
+[    3.520778] systemd[1]: Reached target Path Units.
+[[0;32m  OK  [0m] Reached target [0;1;39mPath Units[0m.
+[    3.540768] systemd[1]: Reached target Remote File Systems.
+[[0;32m  OK  [0m] Reached target [0;1;39mRemote File Systems[0m.
+[    3.560762] systemd[1]: Reached target Slice Units.
+[[0;32m  OK  [0m] Reached target [0;1;39mSlice Units[0m.
+[    3.580764] systemd[1]: Reached target Swaps.
+[[0;32m  OK  [0m] Reached target [0;1;39mSwaps[0m.
+[    3.618312] systemd[1]: Listening on RPCbind Server Activation Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mRPCbind Server Activation Socket[0m.
+[    3.644793] systemd[1]: Reached target RPC Port Mapper.
+[[0;32m  OK  [0m] Reached target [0;1;39mRPC Port Mapper[0m.
+[    3.664902] systemd[1]: Listening on Syslog Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mSyslog Socket[0m.
+[    3.684816] systemd[1]: Listening on initctl Compatibility Named Pipe.
+[[0;32m  OK  [0m] Listening on [0;1;39minitctl Compatibility Named Pipe[0m.
+[    3.708950] systemd[1]: Listening on Journal Audit Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mJournal Audit Socket[0m.
+[    3.728834] systemd[1]: Listening on Journal Socket (/dev/log).
+[[0;32m  OK  [0m] Listening on [0;1;39mJournal Socket (/dev/log)[0m.
+[    3.748862] systemd[1]: Listening on Journal Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mJournal Socket[0m.
+[    3.768886] systemd[1]: Listening on Network Service Netlink Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mNetwork Service Netlink Socket[0m.
+[    3.789436] systemd[1]: Listening on udev Control Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mudev Control Socket[0m.
+[    3.808830] systemd[1]: Listening on udev Kernel Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mudev Kernel Socket[0m.
+[    3.828872] systemd[1]: Listening on User Database Manager Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mUser Database Manager Socket[0m.
+[    3.848877] systemd[1]: Huge Pages File System was skipped because of an unmet condition check (ConditionPathExists=/sys/kernel/mm/hugepages).
+[    3.880821] systemd[1]: Mounting POSIX Message Queue File System...
+         Mounting [0;1;39mPOSIX Message Queue File System[0m...
+[    3.901346] systemd[1]: Mounting Kernel Debug File System...
+         Mounting [0;1;39mKernel[    3.907811] systemd[1]: Mounting Kernel Trace File System...
+ Debug File System[0m...
+         Mounting [0;1;39mKernel[    3.926121] systemd[1]: Mounting Temporary Directory /tmp...
+ Trace File System[0m...
+         Mounting [0;1;39mTempor[    3.945735] systemd[1]: Starting Create List of Static Device Nodes...
+ary Directory /tmp[0m...
+         Starting [0;1;39mCreate[    3.969689] systemd[1]: Starting Load Kernel Module configfs...
+ List of Static Device Nodes[0m...
+         Starting [0;1;39mLoad K[    3.993679] systemd[1]: Starting Load Kernel Module drm...
+ernel Module configfs[0m...
+         Starting [0;1;39mLoad K[    4.013656] systemd[1]: Starting Load Kernel Module fuse...
+ernel Module drm[0m...
+         Starting [0;1;39mLoad Kernel Mo[    4.034451] systemd[1]: Starting RPC Bind...
+dule fuse[0m...
+         Starting [0;1;39mRPC Bind[0m..[    4.054462] systemd[1]: Starting Journal Service...
+.
+[    4.069607] fuse: init (API version 7.39)
+         Starting [0;1;39mJournal Servic[    4.086564] systemd[1]: Load Kernel Modules was skipped because no trigger condition checks were met.
+e[0m...
+[    4.098535] systemd[1]: Starting Generate network units from Kernel command line...
+         Starting [0;1;39mGenerate network units from Kernel command line[0m...
+[    4.129983] systemd[1]: Starting Remount Root and Kernel File Systems...
+         Starting [0;1;39mRemount Root and Kernel File Systems[0m...
+[    4.143116] systemd-journald[141]: Collecting audit messages is enabled.
+[    4.153577] systemd[1]: Starting Apply Kernel Variables...
+         Starting [0;1;39mApply [    4.159959] systemd[1]: Starting Coldplug All udev Devices...
+Kernel Variables[0m...
+[    4.168866] EXT4-fs (dm-0): re-mounted 05f2a080-22ce-478e-ba50-62bf73ca5726 ro. Quota mode: none.
+         Starting [0;1;39mColdpl[    4.181930] systemd[1]: Started RPC Bind.
+ug All udev Devices[0m...
+[[0;32m  OK  [0m] Started [0;1;39mRPC Bind[0m.
+[    4.212965] systemd[1]: Started Journal Service.
+[[0;32m  OK  [0m] Started [0;1;39mJournal Service[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39mPOSIX Message Queue File System[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39mKernel Debug File System[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39mKernel Trace File System[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39mTemporary Directory /tmp[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mCreate List of Static Device Nodes[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mLoad Kernel Module configfs[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mLoad Kernel Module drm[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mLoad Kernel Module fuse[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mGenerate network units from Kernel command line[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mRemount Root and Kernel File Systems[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mApply Kernel Variables[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mColdplug All udev Devices[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mPreparation for Network[0m.
+         Mounting [0;1;39mFUSE Control File System[0m...
+         Mounting [0;1;39mKernel Configuration File System[0m...
+         Starting [0;1;39mFlush Journal to Persistent Storage[0m...
+         Starting [0;1;39mCreate Static Device Nodes in /dev gracefully[    4.558441] systemd-journald[141]: Received client request to flush runtime journal.
+[0m...
+[[0;32m  OK  [0m] Mounted [0;1;39mFUSE Control File System[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39mKernel Configuration File System[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mFlush Journal to Persistent Storage[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mCreate Static Device Nodes in /dev gracefully[0m.
+         Starting [0;1;39mCreate Static Device Nodes in /dev[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mCreate Static Device Nodes in /dev[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mPreparation for Local File Systems[0m.
+         Mounting [0;1;39m/var/volatile[0m...
+[    4.753107] audit: type=1334 audit(1790534363.719:2): prog-id=6 op=LOAD
+[    4.759843] audit: type=1334 audit(1790534363.723:3): prog-id=7 op=LOAD
+         Starting [0;1;39mRule-based Manager for Device Events and Files[0m...
+[[0;32m  OK  [0m] Mounted [0;1;39m/var/volatile[0m.
+         Starting [0;1;39mBind mount volatile /var/cache[0m...
+         Starting [0;1;39mBind mount volatile /var/lib[0m...
+         Starting [0;1;39mBind mount volatile /var/spool[0m...
+         Starting [0;1;39mBind mount volatile /srv[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mBind mount volatile /var/cache[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mBind mount volatile /var/lib[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mBind mount volatile /var/spool[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mBind mount volatile /srv[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mLocal File Systems[0m.
+         Starting [0;1;39mLoad/Save OS Random Seed[0m...
+         Starting [0;1;39mCreate System Files and Directories[0m...
+[    4.989726] audit: type=1334 audit(1790534363.955:4): prog-id=8 op=LOAD
+[    4.996392] audit: type=1334 audit(1790534363.955:5): prog-id=9 op=LOAD
+[    5.003043] audit: type=1334 audit(1790534363.955:6): prog-id=10 op=LOAD
+         Starting [0;1;39mUser Database Manager[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mLoad/Save OS Random Seed[0m.
+[[0;32m  OK  [0m] Started [0;1;39mUser Database Manager[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mCreate System Files and Directories[0m.
+[    5.082384] audit: type=1334 audit(1790534364.047:7): prog-id=11 op=LOAD
+         Starting [0;1;39mNetwork Name Resolution[0m...
+[    5.137345] audit: type=1334 audit(1790534364.103:8): prog-id=12 op=LOAD
+         Starting [0;1;39mNetwork Time Synchronization[0m...
+         Starting [0;1;39mRecord System Boot/Shutdown in UTMP[0m...
+[[0;32m  OK  [0m] Started [0;1;39mRule-based Manager for Device Events and Files[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mRecord System Boot/Shutdown in UTMP[0m.
+[[0;32m  OK  [0m] Started [0;1;39mNetwork Time Synchronization[0m.
+[[0;32m  OK  [0m] Started [0;1;39mNetwork Name Resolution[0m.
+[    5.263707] tpm_tis_spi spi0.1: 2.0 TPM (device-id 0x1D, rev-id 54)
+[[0;32m  OK  [0m] Reached target [0;1;[    5.273091] rpi-gpiomem 107d508500.gpiomem: window base 0x107d508500 size 0x00000040
+39mHost and Network Name[    5.282949] rp1-firmware rp1_firmware: RP1 Firmware version 658de8ab25a7ec62b6393624a22a35c39a7c3382
+ Lookups[0m.
+[    5.282953] rpi-gpiomem 107d508500.gpiomem: initialised 1 regions as /dev/gpiomem1
+[    5.303047] rpi-gpiomem 107d517c00.gpiomem: window base 0x107d517c00 size 0x00000040
+[[0;32m  OK  [0m] Reached targe[    5.310979] rpi-gpiomem 107d517c00.gpiomem: initialised 1 regions as /dev/gpiomem2
+t [0;1;39mSystem Initia[    5.321422] rpi-gpiomem 107d504100.gpiomem: window base 0x107d504100 size 0x00000020
+lization[0m.
+[    5.322570] rp1-pio 1f00178000.pio: Created instance as pio0
+[    5.331264] rpi-gpiomem 107d504100.gpiomem: initialised 1 regions as /dev/gpiomem3
+[    5.345939] rpi-gpiomem 107d510700.gpiomem: window base 0x107d510700 size 0x00000020
+[    5.353768] rpi-gpiomem 107d510700.gpiomem: initialised 1 regions as /dev/gpiomem4
+[    5.361471] rpi-gpiomem 1f000d0000.gpiomem: window base 0x1f000d0000 size 0x00030000
+[    5.362085] mc: Linux media interface: v0.10
+[    5.369298] rpi-gpiomem 1f000d0000.gpiomem: initialised 1 regions as /dev/gpiomem0
+[[0;32m  OK  [0m] Started [0;1;39mDaily Cleanup of Temporary Directories[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Time Set[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mTimer Units[0m.
+[    5.421932] videodev: Linux video capture interface: v2.00
+[[0;32m  OK  [0m] Listening on [0;1;39mAvahi mDNS/DNS-SD Stack Activation Socket[0m.
+[    5.442473] input: pwr_button as /devices/platform/pwr_button/input/input0
+[[0;32m  OK  [0m] Listening on [0;1;39mD-Bus System Me[    5.460526] pispbe 1000880000.pisp_be: bcm2712_iommu_of_xlate: MMU 1000005100.iommu
+ssage Bus Socket[0m.
+[    5.471346] pispbe 1000880000.pisp_be: Runtime PM usage count underflow!
+[    5.482764] rpivid_hevc: module is from the staging directory, the quality is unknown, you have been warned.
+[    5.493235] rpivid 1000800000.codec: bcm2712_iommu_of_xlate: MMU 1000005100.iommu
+[    5.502660] rpivid 1000800000.codec: Device registered as /dev/video19
+[    5.527679] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[[0;32m  OK  [0m] Listening on [0;1;39[    5.538612] Loaded X.509 cert 'benh@debian.org: 577e021cb980e0e820821ba7b54b4961b8b4fadf'
+mdropbear.socket[0m.
+[    5.548584] Loaded X.509 cert 'romain.perier@gmail.com: 3abbc6ec146e09d1b6016ab9d6cf71dd233f0328'
+[    5.550538] Bluetooth: Core ver 2.22
+[    5.559542] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[    5.562967] NET: Registered PF_BLUETOOTH protocol family
+[    5.568811] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[    5.573945] Bluetooth: HCI device and connection manager initialized
+[[0;32m  OK  [0m] Reached targe[    5.587764] Bluetooth: HCI socket layer initialized
+t [0;1;39mSocket Units[    5.595615] Bluetooth: L2CAP socket layer initialized
+[0m.
+[    5.602749] Bluetooth: SCO socket layer initialized
+[[0;32m  OK  [0m] Reached target [0;1;[    5.614721] Bluetooth: HCI UART driver ver 2.3
+39mBasic System[0m.
+[    5.620944] Bluetooth: HCI UART protocol H4 registered
+[    5.628142] Bluetooth: HCI UART protocol Three-wire (H5) registered
+[    5.634551] hci_uart_bcm serial0-0: supply vbat not found, using dummy regulator
+[    5.642000] Bluetooth: HCI UART protocol Broadcom registered
+[    5.642200] hci_uart_bcm serial0-0: supply vddio not found, using dummy regulator
+[    5.656369] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    5.666062] usbcore: registered new interface driver brcmfmac
+         Starting [0;1;39mAvahi mDNS/DNS-SD Stack[0m...
+[[0;32m  OK  [0m] Started [0;1;39mKernel Logging Service[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSystem Logging Service[0m.
+         Starting [0;1;39mD-Bus System Message Bus[0m...
+         Starting [0;1;39mTelephony service[0m...
+[    5.762446] audit: type=1334 audit(1790534364.727:9): prog-id=13 op=LOAD
+[    5.769212] audit: type=1334 audit(1790534364.727:10): prog-id=14 op=LOAD
+[    5.776034] audit: type=1334 audit(1790534364.727:11): prog-id=15 op=LOAD
+         Starting [0;1;39mUser Login Management[0m...
+[    5.798336] audit: type=1334 audit(1790534364.763:12): prog-id=16 op=LOAD
+         Starting [0;1;39mNetwork Configuration[0m...
+[[0;32m  OK  [0m] Found device [0;1;39m/dev/disk/by-label/data[0m.
+[[0;32m  OK  [0m] Started [0;1;39mUser Login Management[0m.
+[[0;32m  OK  [0m] Started [0;1;39mD-Bus System Message Bus[0m.
+[    5.905067] brcmfmac: brcmf_c_process_txcap_blob: no txcap_blob available (err=-2)
+[    5.913654] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4345/6 wl0: Aug 29 2023 01:47:08 version 7.45.265 (28bca26 CY) FWID 01-b677b91b
+[    5.933590] spi_gpio: probe of spi-gpio failed with error -16
+         Starting [0;1;39mFile System Check on /dev/disk/by-label/data[0m...
+[    5.971150] macb 1f00100000.ethernet eth0: PHY [1f00100000.ethernet-ffffffff:01] driver [Broadcom BCM54213PE] (irq=POLL)
+[    5.983251] macb 1f00100000.ethernet eth0: configuring for phy/rgmii-id link mode
+[[0;32m  OK  [0m] Started [0;1[    5.993598] pps pps0: new PPS source ptp0
+;39mNetwork Configuration[0m.
+[    6.000335] macb 1f00100000.ethernet: gem-ptp-timer ptp clock registered.
+[[0;32m  OK  [0m] Started [0;1;[    6.010800] Bluetooth: hci0: BCM: chip id 107
+39mTelephony service[0m[    6.017671] Bluetooth: hci0: BCM: features 0x2f
+.
+[[0;32m  OK  [0m] Started [0;1;39mAvahi m[    6.025820] Bluetooth: hci0: BCM4345C0
+DNS/DNS-SD Stack[0m.
+[    6.031709] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
+[    6.041451] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.hcd' Patch
+[[0;32m  OK  [0m] Reached target [0;1;39mMulti-User System[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mNetwork[0m.
+         Starting [0;1;39mRecord Runlevel Change in UTMP[0m...
+         Starting [0;1;39mVirtual Console Setup[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mFile System Check on /dev/disk/by-label/data[0m.
+[[0;32m  OK  [0m] Created slice [0;1;39mSlice /system/bthelper[0m.
+[[0;32m  OK  [0m] Listening on [0;1;39mLoad/Save RF Kill Switch Status /dev/rfkill Watch[0m.
+         Mounting [0;1;39m/data[0m...
+         Starting [0;1;39mRaspberry Pi bluetooth helper[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mVirtual Console Setup[0m.
+         Starting [0;1;39mLoad/Save RF Kill Switch Status[0m...
+[    6.300692] EXT4-fs (mmcblk0p5): mounted filesystem 3924175a-14b0-4a0f-bd47-0e87a1c1c592 r/w with ordered data mode. Quota mode: none.
+[[0;32m  OK  [0m] Finished [0;1;39mRecord Runlevel Change in UTMP[0m.
+[[0;32m  OK  [0m] Started [0;1;39mLoad/Save RF Kill Switch Status[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39m/data[0m.
+[    6.725342] Bluetooth: hci0: BCM: features 0x2f
+[    6.731216] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+-0190
+[    6.737423] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0382
+[    6.743661] Bluetooth: hci0: BCM: Using default device address (43:45:c0:00:1f:ac)
+[[0;32m  OK  [0m] Finished [0;1;39mRaspberry Pi bluetooth helper[0m.
+         Starting [0;1;39mBluetooth service[0m...
+[[0;32m  OK  [0m] Started [0;1;39mBluetooth service[0m.
+[    6.882105] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+[[0;32m  OK  [0m] Reached targe[    6.887875] Bluetooth: BNEP filters: protocol multicast
+t [0;1;39mBluetooth Sup[    6.896004] Bluetooth: BNEP socket layer initialized
+port[0m.
+[    6.907118] Bluetooth: MGMT ver 1.22
+[    6.913549] NET: Registered PF_ALG protocol family
+[    6.918390] audit: type=1334 audit(1790534365.883:13): prog-id=17 op=LOAD
+[    6.925283] audit: type=1334 audit(1790534365.891:14): prog-id=18 op=LOAD
+[    6.932601] audit: type=1334 audit(1790534365.895:15): prog-id=19 op=LOAD
+[    6.946192] Bluetooth: RFCOMM TTY layer initialized
+[    6.951115] Bluetooth: RFCOMM socket layer initialized
+[    6.956282] Bluetooth: RFCOMM ver 1.11
+         Starting [0;1;39mHostname Service[0m...
+[[0;32m  OK  [0m] Started [0;1;39mHostname Service[0m.
+[    9.077770] macb 1f00100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control tx
+[[0m[0;31m*     [0m] A start job is running for /sys/dev…m/gpu/graphics/fb0 (5s / 1min 30s)
+M[K[[0;1;31m*[0m[0;31m*    [0m] A start job is running for /sys/dev…m/gpu/graphics/fb0 (6s / 1min 30s)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] A start job is running for /sys/dev…m/gpu/graphics/fb0 (6s / 1min 30s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] A start job is running for /sys/dev…m/gpu/graphics/fb0 (7s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] A start job is running for /sys/dev…m/gpu/graphics/fb0 (8s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] A start job is running for /sys/dev…m/gpu/graphics/fb0 (8s / 1min 30s)
+M[K[[0;32m  OK  [0m] Created slice [0;1;39mSlice /system/dropbear[0m.
+[K[[0;32m  OK  [0m] Started [0;1;39mSSH Per-Connection Server (192.168.10.224:36674)[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSSH Per-Connection Server (192.168.10.224:36686)[0m.

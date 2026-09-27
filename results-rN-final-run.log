@@ -1,0 +1,19 @@
+=== START 19:34:41 board: "partition": 1 "tryboot": false "counter": 19 
+=== 1. attested reboot
+  fresh round rc 0: ATTESTATION PASSED evidence: fresh (resetCount 355 -> 360: restarted since the last round) 
+  second round rc 1: ATTESTATION FAILED evidence: stale (resetCount 360 unchanged: NOT restarted since the last round) 
+=== 2. modified boot image through the update service
+  update rc 1: [update] up: partition 1 tryboot True counter 19 [update] NOT on the trial pair: the trial fell back or never happened; not committing 
+  now: "partition": 1 "tryboot": true "counter": 19 
+  after reboot: "partition": 1 "tryboot": false "counter": 19 
+=== 3. modified devicetree under a valid signature
+  update rc 1: [update] PCR0 predicted on the host from the enrolled devicetree digest: 52132441c175f880... [update] health check = attestation round [update] attestation FAILED on the trial: not committing; a plain reboot returns to the committed pair 
+  now: "partition": 2 "tryboot": true "counter": 19 
+  after reboot: "partition": 1 "tryboot": false "counter": 19 
+=== 4a. replay of r18 as itself
+  rc 1: [update] install REFUSED: release version 18 is below this board's anti-rollback counter 19 
+=== 4b. replay of r18 with a manifest claiming version 19
+  update rc 1: [update] up: partition 1 tryboot False counter 19 [update] NOT on the trial pair: the trial fell back or never happened; not committing 
+  now: "partition": 1 "tryboot": false "counter": 19 
+  after reboot: "partition": 1 "tryboot": false "counter": 19 
+=== END 19:43:51 board: "partition": 1 "tryboot": false "counter": 19 

@@ -1,0 +1,9 @@
+{
+  "version": 19,
+  "tamper": "boot.img modified at offset 1 MiB after signing; boot.sig is the original",
+  "sha256": {
+    "boot.img": "e80758599768df0f1d6321e1f54913a35a98aef9f46fde0f0013a6af24956201",
+    "boot.sig": "aaf68cdbbb54c99da950e8f20788f57b19ecad4dfbb67aaee2a2b02cdb744313",
+    "rootfs.img": "18c9c860e94a31bac68bb73a5cf4aab93bb9d4971d2b2be43f946f3bf030ee2e"
+  }
+}

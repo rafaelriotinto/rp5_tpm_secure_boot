@@ -1,0 +1,21 @@
+Copying Image
+Copying bcm2712-rpi-5-b.dtb
+Copying boot.scr
+Copying cmdline.txt
+Copying config.txt
+Copying config.txt.pre-fwkey
+Copying kernel_2712.img
+Copying overlays
+Copying overlay_map.dtb
+Copying letstrust-tpm-uboot.dtbo
+Copying letstrust-tpm.dtbo
+Copying bcm2712d0.dtbo
+{
+  "version": 19,
+  "tamper": "base devicetree gpio-line-names entry BT_CTS->XT_CTS inside boot.img; re-signed with the owner key",
+  "sha256": {
+    "boot.img": "db38a2e371750ff62cfe4e18364b513006efb7cd7dfa5aed7f522be8d6c278b8",
+    "boot.sig": "c9368afa8fed8e47a4cde7f353d8915af69d485993e8afe45797636e7451987b",
+    "rootfs.img": "18c9c860e94a31bac68bb73a5cf4aab93bb9d4971d2b2be43f946f3bf030ee2e"
+  }
+}

@@ -1,0 +1,23 @@
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/tamper-dtb-r19/goldens.json (release tamper-dtb-r19)
+[server] nonce = 497d500fc069a60c64fddfb5da5aa8953f281606157e09de16c4512dd4f07c84
+  [info] device: partition 2 tryboot True counter 19
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [FAIL] PCR state == golden (release)
+  [PASS] meas-cert freshness (nonce)
+  [FAIL] boot record (measured-boot NV == golden for slot)
+  [PASS] NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))
+  [info] TPM clock=2575995742 resetCount=368 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 363 -> 368)
+
+[server] ATTESTATION FAILED — device REJECTED
+[server] evidence: fresh (resetCount 363 -> 368: restarted since the last round)
+[update] release version 19
+[update] board: committed pair 1, target 2, counter 19
+[update] installed into pair 2: {'root': '/dev/mmcblk0p4', 'boot': '/dev/mmcblk0p2'}
+[update] trial boot requested; waiting
+[update] up: partition 2 tryboot True counter 19
+[update] PCR0 predicted on the host from the enrolled devicetree digest: 52132441c175f880...
+[update] health check = attestation round
+[update] attestation FAILED on the trial: not committing; a plain reboot returns to the committed pair

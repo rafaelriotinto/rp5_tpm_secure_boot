@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "verb": "status",
+  "partition": 2,
+  "tryboot": true,
+  "counter": 19,
+  "committed": 1,
+  "target": 2,
+  "root": "/dev/mmcblk0p4",
+  "pcr": {
+    "0": "3410b0c122799d93a15433b946efc32975c541a4c21f962043b6667e7dc103ca",
+    "1": "5c43faa286a9c90c354b707ca8017bab82e8e21bf3ee273489e0c36de38a6fc4",
+    "8": "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253",
+    "9": "cfc7d8042593e188c59d2fd523f07a95d06dd3160f0955d8c34b0eb067f517b6"
+  },
+  "staged": {
+    "version": 19,
+    "factory": false,
+    "cmdline": "dwc_otg.lpm_enable=0 dm-mod.create=\"vroot,,,ro,0 630784 verity 1 @ROOTDEV@ @ROOTDEV@ 4096 4096 78848 78849 sha256 342ee1df76f908882f4f2a9a660008ddd3461b602935b64e93ccb8c5ff590cec 8b352efce498a95c9c5b9d6e0e49942c026143136bc200d6bde16e270c5caaa6\" dm-mod.waitfor=@ROOTDEV@ root=/dev/dm-0 rootfstype=ext4 rootwait ro net.ifnames=0",
+    "sha256": {
+      "boot.img": "db38a2e371750ff62cfe4e18364b513006efb7cd7dfa5aed7f522be8d6c278b8",
+      "boot.sig": "c9368afa8fed8e47a4cde7f353d8915af69d485993e8afe45797636e7451987b",
+      "rootfs.img": "18c9c860e94a31bac68bb73a5cf4aab93bb9d4971d2b2be43f946f3bf030ee2e"
+    },
+    "rootfs": {
+      "root_hash": "342ee1df76f908882f4f2a9a660008ddd3461b602935b64e93ccb8c5ff590cec",
+      "size": 325513216
+    },
+    "uboot_version_string": "U-Boot 2024.04 (Sep 27 2026 - 17:29:54 +0000)",
+    "goldens": {
+      "pcr0": null,
+      "pcr1": {
+        "A": "dc5bbdaaf7bb95e7a6cfcde4c4d9744a2430babcc4c7a7603cb2d3b5a6f039a8",
+        "B": "5c43faa286a9c90c354b707ca8017bab82e8e21bf3ee273489e0c36de38a6fc4"
+      },
+      "pcr8": "3ae0490066c34deff861442e5207c8e31cd9a50c293220e5ebbb8b15f32b7253"
+    },
+    "tamper": "base devicetree gpio-line-names entry BT_CTS->XT_CTS inside boot.img; re-signed with the owner key"
+  }
+}
