@@ -69,7 +69,8 @@ def main():
     shutil.copy(verity, f"{a.out}/rootfs.img")
     shutil.rmtree(work)
 
-    image = open(f"{a.bootfs}/Image", "rb").read() if os.path.exists(f"{a.bootfs}/Image") else open(f"{a.deploy}/Image", "rb").read()
+    # predict PCR 8 from the kernel actually packed into boot.img (the deployed one when it exists)
+    image = open(f"{a.deploy}/Image", "rb").read() if os.path.exists(f"{a.deploy}/Image") else open(f"{a.bootfs}/Image", "rb").read()
     pcr1 = {}
     for slot, dev in (("A", b"/dev/mmcblk0p3"), ("B", b"/dev/mmcblk0p4")):
         s = FW_PREFIX + cmdline.encode().replace(b"@ROOTDEV@", dev) + b"\0"
