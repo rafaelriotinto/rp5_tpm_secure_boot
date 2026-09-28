@@ -1,0 +1,43 @@
+[update] release version 21
+[update] board: committed pair 2, target 1, counter 20
+[update] installed into pair 1: {'root': '/dev/mmcblk0p3', 'boot': '/dev/mmcblk0p1'}
+[update] trial boot requested; waiting
+[update] up: partition 1 tryboot True counter 20
+[update] PCR0 predicted on the host from the enrolled devicetree digest: 1085645e7a017f53...
+[update] health check = attestation round
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/ab-r21/goldens.json (release ab-r21)
+[server] nonce = bf8fdbb8e84b367a0257d94bd983bba15c3744831f93c40853f7da7dc45a0e11
+  [info] device: partition 1 tryboot True counter 20
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [PASS] PCR state == golden (release)
+  [info] active root slot: A (/dev/mmcblk0p3)
+  [PASS] meas-cert freshness (nonce)
+  [PASS] boot record (measured-boot NV == golden for slot)
+  [PASS] NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))
+  [info] TPM clock=2596175468 resetCount=384 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 382 -> 384)
+
+[server] ATTESTATION PASSED — device trusted
+[server] evidence: fresh (resetCount 382 -> 384: restarted since the last round)
+[update] committed pair 1; rebooting
+[update] up: partition 1 tryboot False counter 21
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/ab-r21/goldens.json (release ab-r21)
+[server] nonce = 2e319c5490b178102525320e8279056cedad12a6e91b82094e4c013e70c4940d
+  [info] device: partition 1 tryboot False counter 21
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [PASS] PCR state == golden (release)
+  [info] active root slot: A (/dev/mmcblk0p3)
+  [PASS] meas-cert freshness (nonce)
+  [PASS] boot record (measured-boot NV == golden for slot)
+  [PASS] NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))
+  [info] TPM clock=2596213650 resetCount=385 restartCount=0 safe=1
+  [PASS] restart evidence (resetCount 384 -> 385)
+
+[server] ATTESTATION PASSED — device trusted
+[server] evidence: fresh (resetCount 384 -> 385: restarted since the last round)
+[update] goldens of release 21 are now current (/home/rafaelrt/projs/MsCS/rp5_tpm_secure_boot/agents/server/../../attestation/boards/192.168.10.198/current-goldens.json)
+[update] DONE
