@@ -1,0 +1,18 @@
+[Unit]
+Description=Disable kernel module loading until the next reboot
+# Runs once the drivers of the hardware present at boot are loaded (the SPI
+# controller of the TPM among them) and before sysinit.target, so before any
+# network-facing service. The kernel accepts only 1 for this setting: once set,
+# no module can be loaded, from any source, until the next reboot.
+DefaultDependencies=no
+Wants=systemd-udev-settle.service dev-tpmrm0.device
+After=systemd-udev-settle.service systemd-modules-load.service dev-tpmrm0.device
+Before=sysinit.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'echo 1 > /proc/sys/kernel/modules_disabled'
+
+[Install]
+WantedBy=sysinit.target

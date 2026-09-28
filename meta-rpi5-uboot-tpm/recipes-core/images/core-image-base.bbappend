@@ -29,7 +29,7 @@ IMAGE_CLASSES += "dm-verity-img"
 IMAGE_FSTYPES:append = " ext4"
 do_image_wic[depends] += "rpi-autoboot:do_deploy"
 
-IMAGE_INSTALL:append = " cryptsetup attest-user rp5-data-partition rp5-agents"
+IMAGE_INSTALL:append = " cryptsetup attest-user rp5-data-partition rp5-agents rp5-modules-lock"
 
 # Lock the attest user's password: login by SSH key only. (root is left as
 # debug-tweaks sets it, for now.)
