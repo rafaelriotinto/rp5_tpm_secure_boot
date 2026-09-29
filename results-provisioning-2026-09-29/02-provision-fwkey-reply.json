@@ -1,0 +1,17 @@
+{
+ "ok": true,
+ "verb": "provision-fwkey",
+ "dt_digest": "3a9831624c5e751d48047ec6ae668c6a9df7a61af8a8a9c877c22af79179b6e9",
+ "meas_index": "0x01800000",
+ "meas_name": "000b3f0a5d6c707abbb4ff0c5a7b024ace82e189e33c7bc7d5d35f665bdd21c90604",
+ "counter_index": "0x01800002",
+ "counter_name": "000b5155a8dcd778c701af79c7c8a8457e2763489f00b7153fbb4fad51db7702e524",
+ "counter": 13,
+ "ak_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBC\u2026",
+ "anchor": "fwkey",
+ "fw_pubkey_der": "3059301306072a8648ce3d020106082a8648ce3d03010703420004cb32f3ccd6\u2026",
+ "fw_key_name": "000b3a08e66fc6efeecd7186ebaf05b7cdb28bd440432ce16f488e3f5ce47deb82be",
+ "meas_policy": "e12aedd033c6fa2e26e40a55e7ab1937147dd5b54a2c54ac65e7790234921e3b",
+ "counter_policy": "413964cbd1806c140d884318537fb29d289c58358ae1d3cf1aa92f61b5ec324e",
+ "reprovisioned": false
+}

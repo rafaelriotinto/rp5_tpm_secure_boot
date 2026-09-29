@@ -1,0 +1,24 @@
+[server] goldens from /home/rafaelrt/LINUX_YOCTO_RP5_TPM_ENV/releases/ab-r22/goldens.json (release ab-r22)
+[server] nonce = e55103b25b7cc5cf615e47fc800dbb2c1b0e71b4899b3f37d2c6fe6154a13757
+  [info] device: partition 2 tryboot True counter 13
+  [PASS] AK signature on quote
+  [PASS] AK signature on meas cert
+  [PASS] quote freshness (nonce)
+  [PASS] PCR state == golden (release)
+  [info] active root slot: B (/dev/mmcblk0p4)
+  [PASS] meas-cert freshness (nonce)
+  [PASS] boot record (measured-boot NV == golden for slot)
+  [PASS] NV commits to the quoted PCRs (NV == SHA256(0*32 || pcrDigest))
+  [info] TPM clock=309257 resetCount=1 restartCount=0 safe=1
+  [FAIL] restart evidence (resetCount 166 -> 1)
+
+[server] ATTESTATION FAILED — device REJECTED
+[server] evidence: stale (resetCount 1 unchanged: NOT restarted since the last round)
+[update] release version 22
+[update] board: committed pair 1, target 2, counter 13
+[update] installed into pair 2: {'root': '/dev/mmcblk0p4', 'boot': '/dev/mmcblk0p2'}
+[update] trial boot requested; waiting
+[update] up: partition 2 tryboot True counter 13
+[update] PCR0 predicted on the host from the enrolled devicetree digest: a08ff4a970919dad...
+[update] health check = attestation round
+[update] attestation FAILED on the trial: not committing; a plain reboot returns to the committed pair

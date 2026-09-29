@@ -20,7 +20,7 @@
   "fw_key_name": "000b3a08e66fc6efeecd7186ebaf05b7cdb28bd440432ce16f488e3f5ce47deb82be",
   "meas_policy": "e12aedd033c6fa2e26e40a55e7ab1937147dd5b54a2c54ac65e7790234921e3b",
   "counter_policy": "413964cbd1806c140d884318537fb29d289c58358ae1d3cf1aa92f61b5ec324e",
-  "captured_pcr0": "c1edbf969dc7262bac3accf2d76f00d3f653c39ffd772a8e15cafd56edc9ff7c",
+  "captured_pcr0": "db2fad56f34ea352a858a57ccab84a4ed8dceac06ab370b84c64ba360a3e3067",
   "meas_name_unwritten": "000bfc503e6c029dba7144195fe1783a851f101dfe694f28d3a451b3dff71d955683",
   "counter_name_unwritten": "000b5155a8dcd778c701af79c7c8a8457e2763489f00b7153fbb4fad51db7702e524",
   "names_note": "written-state Names (TPMA_NV_WRITTEN set), computed from index, attributes, policy and size"
